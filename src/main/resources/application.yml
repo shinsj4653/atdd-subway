@@ -1,7 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:~/test;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    #    url: jdbc:h2:~/atdd-study4;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    url: jdbc:h2:tcp://localhost/~/atdd-study
     username: sa
+
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -23,3 +25,7 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.orm.jdbc.bind: trace
