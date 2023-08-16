@@ -3,6 +3,7 @@ package kuit.subway.controller;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.CreateStationRequest;
 import kuit.subway.dto.response.CreateStationResponse;
+import kuit.subway.dto.response.DeleteStationResponse;
 import kuit.subway.dto.response.StationDto;
 import kuit.subway.service.StationService;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,9 @@ public class StationController {
     }
 
     @DeleteMapping("/stations/{id}")
-    public void deleteStation(@PathVariable("id") Long id) {
-        stationService.deleteStation(id);
+    public ResponseEntity<DeleteStationResponse> deleteStation(@PathVariable("id") Long id) {
+        DeleteStationResponse res = stationService.deleteStation(id);
+        return ResponseEntity.ok(res);
     }
-
 
 }

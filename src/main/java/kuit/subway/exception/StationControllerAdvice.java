@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.sql.SQLException;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ControllerAdvice
 public class StationControllerAdvice {
@@ -21,4 +22,10 @@ public class StationControllerAdvice {
     public ResponseEntity<String> sqlExceptionHandle() {
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
     }
+    @ExceptionHandler(RuntimeException.class)
+    public  ResponseEntity<String> runTimeHandle()  {
+        return ResponseEntity.status(NOT_FOUND).build();
+    }
+
+
 }
