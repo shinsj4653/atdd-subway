@@ -1,4 +1,4 @@
-package kuit.subway.response;
+package kuit.subway.dto.response;
 
 import lombok.Data;
 

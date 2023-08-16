@@ -1,6 +1,7 @@
 package kuit.subway.service;
 
 import kuit.subway.domain.Station;
+import kuit.subway.dto.response.CreateStationResponse;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +17,9 @@ public class StationService {
     private final StationRepository stationRepository;
 
     @Transactional
-    public Long addStation(Station station) {
+    public CreateStationResponse addStation(Station station) {
         stationRepository.save(station);
-        return station.getId();
+        return new CreateStationResponse(station.getId());
     }
 
     @Transactional

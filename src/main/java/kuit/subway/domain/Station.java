@@ -1,11 +1,11 @@
 package kuit.subway.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class Station {
 
     @Id
@@ -14,10 +14,6 @@ public class Station {
 
     @Column(length = 20, nullable = false)
     private String name;
-
-    public Station() {
-
-    }
 
     public Station(String name) {
         this.name = name;
