@@ -1,6 +1,8 @@
 package kuit.subway.controller;
 
 import kuit.subway.domain.Station;
+import kuit.subway.request.CreateStationRequest;
+import kuit.subway.response.CreateStationResponse;
 import kuit.subway.service.StationService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -34,16 +36,7 @@ public class StationController {
         stationService.deleteStation(id);
     }
 
-    @Data
-    static class CreateStationRequest {
-        private String name;
-    }
 
-    @Data
-    static class CreateStationResponse {
-        private Long id;
-        public CreateStationResponse(Long id) {
-            this.id = id;
-        }
-    }
+
+
 }
