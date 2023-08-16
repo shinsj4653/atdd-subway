@@ -3,6 +3,7 @@ package kuit.subway.controller;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.CreateStationRequest;
 import kuit.subway.dto.response.CreateStationResponse;
+import kuit.subway.dto.response.StationDto;
 import kuit.subway.service.StationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,8 @@ public class StationController {
     private final StationService stationService;
 
     @GetMapping("/stations")
-    public List<Station> getStations() {
-        return stationService.findStations();
+    public ResponseEntity<List<StationDto>> getStations() {
+        return ResponseEntity.ok(stationService.findStations());
     }
 
     @PostMapping("/stations")
