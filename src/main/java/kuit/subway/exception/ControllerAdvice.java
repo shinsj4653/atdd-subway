@@ -1,15 +1,19 @@
 package kuit.subway.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLException;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@org.springframework.web.bind.annotation.ControllerAdvice
+@RestControllerAdvice
 public class ControllerAdvice {
 
     @ExceptionHandler(DataAccessException.class)
@@ -22,9 +26,16 @@ public class ControllerAdvice {
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
     }
     @ExceptionHandler(RuntimeException.class)
-    public  ResponseEntity<String> runTimeHandle()  {
+    public  ResponseEntity<String> runTimeExceptionHandle()  {
         return ResponseEntity.status(NOT_FOUND).build();
     }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public  ResponseEntity<String> entityNotFoundExceptionHandle(EntityNotFoundException e)  {
+
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 
 
 }
