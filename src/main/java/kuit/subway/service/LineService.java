@@ -5,13 +5,19 @@ import kuit.subway.domain.Line;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.CreateLineRequest;
 import kuit.subway.dto.response.line.CreateLineResponse;
+import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.dto.response.station.CreateStationResponse;
+import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +39,33 @@ public class LineService {
         lineRepository.save(line);
 
         return new CreateLineResponse(line.getId());
+    }
+
+    @Transactional
+    public LineDto findLineById(Long id) {
+
+        // 존재하지 않는 노선을 조회했을 때 예외처리
+        Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        
+        // 존재하지 않는 역일 때도 예외처리
+        Station downStation = stationRepository.findById(line.getDownStationId()).orElseThrow(EntityNotFoundException::new);
+        Station upStation = stationRepository.findById(line.getUpStationId()).orElseThrow(EntityNotFoundException::new);
+
+        List<Station> stations = new ArrayList<>();
+        stations.add(downStation);
+        stations.add(upStation);
+
+
+        LineDto result = LineDto.builder()
+                .id(line.getId())
+                .name(line.getName())
+                .color(line.getColor())
+                .stations(stations)
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .build();
+
+        return result;
     }
 
 
