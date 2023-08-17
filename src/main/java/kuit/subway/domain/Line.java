@@ -1,10 +1,15 @@
 package kuit.subway.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class Line {
 
     @Id
@@ -16,13 +21,8 @@ public class Line {
 
     private int distance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id")
-    private Station downStation;
+    private Long downStationId;
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "station_id")
-    private Station upStation;
+    private Long upStationId;
 
 }

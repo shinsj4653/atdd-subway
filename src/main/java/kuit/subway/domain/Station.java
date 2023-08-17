@@ -18,9 +18,6 @@ public class Station {
     @Column(length = 20, nullable = false)
     private String name;
 
-    @OneToOne(mappedBy = "station", fetch = LAZY)
-    private Line line;
-
     public Station(String name) {
         this.name = name;
     }
