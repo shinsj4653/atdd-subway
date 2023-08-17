@@ -5,24 +5,14 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.domain.Station;
 import kuit.subway.dto.request.CreateStationRequest;
-import kuit.subway.repository.StationRepository;
-import org.apache.http.HttpStatus;
-import org.checkerframework.checker.units.qual.C;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StationTest extends AcceptanceTest {
+public class StationAcceptanceTest extends AcceptanceTest {
 
     private static final String STATION_PATH = "/stations";
 
@@ -45,7 +35,7 @@ public class StationTest extends AcceptanceTest {
         ExtractableResponse<Response> res = 지하철_노선_생성_요청(new CreateStationRequest("강남역"));
 
         // then
-        assertEquals(200, res.statusCode());
+        assertEquals(201, res.statusCode());
     }
 
     @DisplayName("지하철역 목록 조회 인수 테스트")
