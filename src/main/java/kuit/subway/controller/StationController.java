@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,8 @@ public class StationController {
         station.setName(request.getName());
 
         CreateStationResponse res = stationService.addStation(station);
-        return ResponseEntity.ok(res);
+        return ResponseEntity.created(URI.create("/stations/" + res.getId()))
+                            .body(res);
     }
 
     @DeleteMapping("/{id}")
