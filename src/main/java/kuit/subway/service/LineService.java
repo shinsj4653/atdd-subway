@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,21 +47,12 @@ public class LineService {
 
         // 존재하지 않는 노선을 조회했을 때 예외처리
         Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        
-        // 존재하지 않는 역일 때도 예외처리
-        Station downStation = stationRepository.findById(line.getDownStationId()).orElseThrow(EntityNotFoundException::new);
-        Station upStation = stationRepository.findById(line.getUpStationId()).orElseThrow(EntityNotFoundException::new);
-
-        List<Station> stations = new ArrayList<>();
-        stations.add(downStation);
-        stations.add(upStation);
-
 
         LineDto result = LineDto.builder()
                 .id(line.getId())
                 .name(line.getName())
                 .color(line.getColor())
-                .stations(stations)
+                .stations(createStationList(line.getDownStationId(), line.getUpStationId()))
                 .createdDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
                 .build();
@@ -68,5 +60,32 @@ public class LineService {
         return result;
     }
 
+    @Transactional
+    public List<LineDto> findAllLines() {
+
+        List<Line> findLines = lineRepository.findAll();
+        List<LineDto> result = findLines.stream()
+                .map(line -> LineDto.builder()
+                        .id(line.getId())
+                        .name(line.getName())
+                        .color(line.getColor())
+                        .stations(createStationList(line.getDownStationId(), line.getUpStationId()))
+                        .createdDate(LocalDateTime.now())
+                        .modifiedDate(LocalDateTime.now())
+                        .build())
+                .collect(Collectors.toList());
+        return result;
+    }
+
+    // 노선의 역 리스트 생성 함수
+    private List<Station> createStationList(Long downStationId, Long upStationId) {
+        Station downStation = stationRepository.findById(downStationId).get();
+        Station upStation = stationRepository.findById(upStationId).get();
+
+        List<Station> stations = new ArrayList<>();
+        stations.add(downStation);
+        stations.add(upStation);
+        return stations;
+    }
 
 }

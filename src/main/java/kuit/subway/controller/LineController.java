@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,5 +31,10 @@ public class LineController {
     @GetMapping("/{id}")
     public ResponseEntity<LineDto> getLineById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(lineService.findLineById(id));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<LineDto>> getLines() {
+        return ResponseEntity.ok(lineService.findAllLines());
     }
 }
