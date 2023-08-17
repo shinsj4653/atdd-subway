@@ -10,22 +10,32 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import static kuit.subway.study.common.CommonRestAssured.STATION_PATH;
-import static kuit.subway.study.common.CommonRestAssured.지하철_노선_생성_요청;
+import java.util.HashMap;
+import java.util.Map;
+
+import static kuit.subway.study.common.CommonRestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StationAcceptanceTest extends AcceptanceTest {
 
 
+    public static final String STATION_PATH = "/stations";
 
+    public static ExtractableResponse<Response> 지하철_노선_생성_요청(String url, Map params) {
+        return post(url, params);
+    }
 
 
     @DisplayName("지하철역 생성 인수 테스트")
     @Test
     void createStation() {
 
-        // given, when
-        ExtractableResponse<Response> res = 지하철_노선_생성_요청(new CreateStationRequest("강남역"));
+        // given
+        Map<String, String> station = new HashMap<>();
+        station.put("name", "강남역");
+
+        // when
+        ExtractableResponse<Response> res = 지하철_노선_생성_요청(STATION_PATH, station);
 
         // then
         assertEquals(201, res.statusCode());
@@ -36,15 +46,20 @@ public class StationAcceptanceTest extends AcceptanceTest {
     @Test
     void getAllStations() {
 
-        지하철_노선_생성_요청(new CreateStationRequest("강남역"));
-        지하철_노선_생성_요청(new CreateStationRequest("성수역"));
+        // given
+        Map<String, String> station1 = new HashMap<>();
+        station1.put("name", "강남역");
 
-        ExtractableResponse<Response> res = RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().get(STATION_PATH)
-                .then().log().all()
-                .extract();
+        Map<String, String> station2 = new HashMap<>();
+        station1.put("name", "성수역");
 
+        지하철_노선_생성_요청(STATION_PATH, station1);
+        지하철_노선_생성_요청(STATION_PATH, station2);
+
+        // when
+        ExtractableResponse<Response> res = get(STATION_PATH);
+
+        // then
         assertEquals(2, res.jsonPath().getList("").size());
     }
 
@@ -52,16 +67,18 @@ public class StationAcceptanceTest extends AcceptanceTest {
     @Test
     void deleteStation() {
 
-        ExtractableResponse<Response> res = 지하철_노선_생성_요청(new CreateStationRequest("강남역"));
+        // given
+        Map<String, String> station = new HashMap<>();
+        station.put("name", "강남역");
+
+        ExtractableResponse<Response> res = 지하철_노선_생성_요청(STATION_PATH, station);
         Long id = res.jsonPath().getLong("id");
 
-        ExtractableResponse<Response> extract = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .when().delete(STATION_PATH + "/" + id)
-                .then().log().all()
-                .extract();
+        // when
+        ExtractableResponse<Response> deleteResponse = delete(STATION_PATH + id);
 
-        assertEquals(200, extract.statusCode());
+        // then
+        assertEquals(200, deleteResponse.statusCode());
 
     }
 

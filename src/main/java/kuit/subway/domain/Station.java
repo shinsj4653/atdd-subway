@@ -3,8 +3,10 @@ package kuit.subway.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
-@Getter @Setter
+@Data
 @NoArgsConstructor
 public class Station {
 
@@ -16,7 +18,7 @@ public class Station {
     @Column(length = 20, nullable = false)
     private String name;
 
-
+    @OneToOne(mappedBy = "station", fetch = LAZY)
     private Line line;
 
     public Station(String name) {

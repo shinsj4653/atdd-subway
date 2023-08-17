@@ -6,14 +6,46 @@ import io.restassured.response.Response;
 import kuit.subway.dto.request.CreateStationRequest;
 import org.springframework.http.MediaType;
 
-public class CommonRestAssured {
-    public static final String STATION_PATH = "/stations";
+import java.util.Map;
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(CreateStationRequest req) {
+public class CommonRestAssured {
+    public static ExtractableResponse<Response> post(String url, Map params) {
+
+        return RestAssured.given().log().all()
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .post(url)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> get(String url) {
+
+        return RestAssured.given().log().all()
+                .when()
+                .get(url)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> delete(String url) {
+
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(req)
-                .when().post(STATION_PATH)
+                .when()
+                .delete(url)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> put(String url, Map params) {
+
+        return RestAssured.given().log().all()
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .put(url)
                 .then().log().all()
                 .extract();
     }
