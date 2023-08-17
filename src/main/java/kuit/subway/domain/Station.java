@@ -1,6 +1,7 @@
 package kuit.subway.domain;
 
 import jakarta.persistence.*;
+import kuit.subway.dto.BaseTimeEntity;
 import lombok.*;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -18,6 +19,7 @@ public class Station {
     @Column(length = 20, nullable = false)
     private String name;
 
+    @Builder
     public Station(String name) {
         this.name = name;
     }
