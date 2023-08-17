@@ -24,6 +24,11 @@ public class StationController {
         return ResponseEntity.ok(stationService.findStations());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<StationDto> getStationById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(stationService.findStationById(id));
+    }
+
     @PostMapping()
     public ResponseEntity<CreateStationResponse> saveStation(@RequestBody CreateStationRequest request) {
 
