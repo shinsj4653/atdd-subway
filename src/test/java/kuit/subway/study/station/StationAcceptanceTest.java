@@ -1,4 +1,4 @@
-package kuit.subway.study;
+package kuit.subway.study.station;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -10,20 +10,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static kuit.subway.study.common.CommonRestAssured.STATION_PATH;
+import static kuit.subway.study.common.CommonRestAssured.지하철_노선_생성_요청;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StationAcceptanceTest extends AcceptanceTest {
 
-    private static final String STATION_PATH = "/stations";
 
-    public static ExtractableResponse<Response> 지하철_노선_생성_요청(CreateStationRequest req) {
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(req)
-                .when().post(STATION_PATH)
-                .then().log().all()
-                .extract();
-    }
 
 
 

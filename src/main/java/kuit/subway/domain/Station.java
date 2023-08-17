@@ -16,6 +16,9 @@ public class Station {
     @Column(length = 20, nullable = false)
     private String name;
 
+
+    private Line line;
+
     public Station(String name) {
         this.name = name;
     }

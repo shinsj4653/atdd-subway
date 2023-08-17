@@ -16,5 +16,13 @@ public class Line {
 
     private int distance;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "station_id")
+    private Station downStation;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "station_id")
+    private Station upStation;
 
 }
