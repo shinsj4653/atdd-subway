@@ -14,16 +14,17 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/stations")
 public class StationController {
 
     private final StationService stationService;
 
-    @GetMapping("/stations")
+    @GetMapping()
     public ResponseEntity<List<StationDto>> getStations() {
         return ResponseEntity.ok(stationService.findStations());
     }
 
-    @PostMapping("/stations")
+    @PostMapping()
     public ResponseEntity<CreateStationResponse> saveStation(@RequestBody CreateStationRequest request) {
 
         Station station = new Station();
@@ -33,7 +34,7 @@ public class StationController {
         return ResponseEntity.ok(res);
     }
 
-    @DeleteMapping("/stations/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<DeleteStationResponse> deleteStation(@PathVariable("id") Long id) {
         DeleteStationResponse res = stationService.deleteStation(id);
         return ResponseEntity.ok(res);
