@@ -2,7 +2,6 @@ package kuit.subway.exception;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.sql.SQLException;
@@ -10,8 +9,8 @@ import java.sql.SQLException;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@ControllerAdvice
-public class StationControllerAdvice {
+@org.springframework.web.bind.annotation.ControllerAdvice
+public class ControllerAdvice {
 
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<String> dataExceptionHandle() {

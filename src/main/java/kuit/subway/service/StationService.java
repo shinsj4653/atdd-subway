@@ -1,6 +1,7 @@
 package kuit.subway.service;
 
 import kuit.subway.domain.Station;
+import kuit.subway.dto.request.CreateStationRequest;
 import kuit.subway.dto.response.CreateStationResponse;
 import kuit.subway.dto.response.DeleteStationResponse;
 import kuit.subway.dto.response.StationDto;
@@ -22,7 +23,8 @@ public class StationService {
     private final StationRepository stationRepository;
 
     @Transactional
-    public CreateStationResponse addStation(Station station) {
+    public CreateStationResponse addStation(CreateStationRequest res) {
+        Station station = new Station(res.getName());
         stationRepository.save(station);
         return new CreateStationResponse(station.getId());
     }
