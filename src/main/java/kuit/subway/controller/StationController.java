@@ -1,10 +1,9 @@
 package kuit.subway.controller;
 
-import kuit.subway.domain.Station;
-import kuit.subway.dto.request.CreateStationRequest;
-import kuit.subway.dto.response.CreateStationResponse;
-import kuit.subway.dto.response.DeleteStationResponse;
-import kuit.subway.dto.response.StationDto;
+import kuit.subway.dto.request.station.CreateStationRequest;
+import kuit.subway.dto.response.station.CreateStationResponse;
+import kuit.subway.dto.response.station.DeleteStationResponse;
+import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.service.StationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

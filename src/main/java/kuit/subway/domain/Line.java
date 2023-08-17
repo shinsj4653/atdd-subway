@@ -9,7 +9,6 @@ import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Data
-@NoArgsConstructor
 public class Line {
 
     @Id
@@ -21,8 +20,17 @@ public class Line {
 
     private int distance;
 
+    private String name;
+
     private Long downStationId;
 
     private Long upStationId;
 
+    public Line(String color, int distance, String name, Long downStationId, Long upStationId) {
+        this.color = color;
+        this.distance = distance;
+        this.name = name;
+        this.downStationId = downStationId;
+        this.upStationId = upStationId;
+    }
 }

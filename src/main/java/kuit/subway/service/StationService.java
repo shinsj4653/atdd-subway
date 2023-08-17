@@ -1,19 +1,16 @@
 package kuit.subway.service;
 
 import kuit.subway.domain.Station;
-import kuit.subway.dto.request.CreateStationRequest;
-import kuit.subway.dto.response.CreateStationResponse;
-import kuit.subway.dto.response.DeleteStationResponse;
-import kuit.subway.dto.response.StationDto;
+import kuit.subway.dto.request.station.CreateStationRequest;
+import kuit.subway.dto.response.station.CreateStationResponse;
+import kuit.subway.dto.response.station.DeleteStationResponse;
+import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

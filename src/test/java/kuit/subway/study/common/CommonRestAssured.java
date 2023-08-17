@@ -3,7 +3,6 @@ package kuit.subway.study.common;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import kuit.subway.dto.request.CreateStationRequest;
 import org.springframework.http.MediaType;
 
 import java.util.Map;

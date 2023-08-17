@@ -1,4 +1,4 @@
-package kuit.subway.dto.request;
+package kuit.subway.dto.request.station;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
