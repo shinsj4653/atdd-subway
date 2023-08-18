@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static io.restassured.RestAssured.put;
 import static kuit.subway.study.common.CommonRestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,9 +52,9 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         CreateStationRequest station1 = new CreateStationRequest("강남역");
         CreateStationRequest station2 = new CreateStationRequest("성수역");
+        ExtractableResponse<Response> res = createDummyLine(station1, station2);
 
         // when
-        ExtractableResponse<Response> res = createDummyLine(station1, station2);
         ExtractableResponse<Response> failedRes = get(LINE_PATH + "/" + 2);
         ExtractableResponse<Response> successRes = get(LINE_PATH + "/" + res.jsonPath().getLong("id"));
 
@@ -77,11 +76,11 @@ public class LineAcceptanceTest extends AcceptanceTest {
         CreateStationRequest station3 = new CreateStationRequest("논현역");
         CreateStationRequest station4 = new CreateStationRequest("이수역");
 
-        // when
         createDummyLine(station1, station2);
         createDummyLine(station3, station4);
-        ExtractableResponse<Response> res = get(LINE_PATH);
 
+        // when
+        ExtractableResponse<Response> res = get(LINE_PATH);
 
         // then
         assertEquals(200, res.statusCode());
@@ -95,17 +94,38 @@ public class LineAcceptanceTest extends AcceptanceTest {
         CreateStationRequest station1 = new CreateStationRequest("강남역");
         CreateStationRequest station2 = new CreateStationRequest("성수역");
         ExtractableResponse createdRes = createDummyLine(station1, station2);
+        CreateLineRequest req = new CreateLineRequest("red", 15, "신분당선", 2L, 1L);
 
         // when
         ExtractableResponse<Response> failedRes = get(LINE_PATH + "/" + 2);
-        CreateLineRequest req = new CreateLineRequest("red", 15, "신분당선", 2L, 1L);
-        ExtractableResponse<Response> updateRes = CommonRestAssured.put(LINE_PATH + "/" + createdRes.jsonPath().getLong("id"), req);
+        ExtractableResponse<Response> updateRes = put(LINE_PATH + "/" + createdRes.jsonPath().getLong("id"), req);
 
         // then
         assertAll(
                 // 존재하지 않는 노선 조회 시 에러
                 () -> { assertEquals(400, failedRes.statusCode()); },
                 () -> { assertEquals(200, updateRes.statusCode()); }
+        );
+    }
+
+    @DisplayName("지하철 노선 삭제 인수 테스트")
+    @Test
+    void deleteLine() {
+
+        // given
+        CreateStationRequest station1 = new CreateStationRequest("강남역");
+        CreateStationRequest station2 = new CreateStationRequest("성수역");
+        ExtractableResponse createdRes = createDummyLine(station1, station2);
+
+        // when
+        ExtractableResponse<Response> failedRes = delete(LINE_PATH + "/" + 2);
+        ExtractableResponse<Response> deleteRes = delete(LINE_PATH + "/" + createdRes.jsonPath().getLong("id"));
+
+        // then
+        assertAll(
+                // 존재하지 않는 노선 조회 시 에러
+                () -> { assertEquals(400, failedRes.statusCode()); },
+                () -> { assertEquals(200, deleteRes.statusCode()); }
         );
     }
 
