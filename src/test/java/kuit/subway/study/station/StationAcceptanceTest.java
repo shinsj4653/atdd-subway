@@ -17,7 +17,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
 
     public static final String STATION_PATH = "/stations";
 
-    public static ExtractableResponse<Response> 더미_데이터_생성_요청(String url, Map params) {
+    public static ExtractableResponse<Response> 지하철_역_생성_요청(String url, Map params) {
         return post(url, params);
     }
 
@@ -31,7 +31,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         station.put("name", "강남역");
 
         // when
-        ExtractableResponse<Response> res = 더미_데이터_생성_요청(STATION_PATH, station);
+        ExtractableResponse<Response> res = 지하철_역_생성_요청(STATION_PATH, station);
 
         // then
         assertEquals(201, res.statusCode());
@@ -49,8 +49,8 @@ public class StationAcceptanceTest extends AcceptanceTest {
         Map<String, String> station2 = new HashMap<>();
         station2.put("name", "성수역");
 
-        더미_데이터_생성_요청(STATION_PATH, station1);
-        더미_데이터_생성_요청(STATION_PATH, station2);
+        지하철_역_생성_요청(STATION_PATH, station1);
+        지하철_역_생성_요청(STATION_PATH, station2);
 
         // when
         ExtractableResponse<Response> res = get(STATION_PATH);
@@ -67,7 +67,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         Map<String, String> station = new HashMap<>();
         station.put("name", "강남역");
 
-        ExtractableResponse<Response> res = 더미_데이터_생성_요청(STATION_PATH, station);
+        ExtractableResponse<Response> res = 지하철_역_생성_요청(STATION_PATH, station);
         Long id = res.jsonPath().getLong("id");
 
         // when

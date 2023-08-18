@@ -1,6 +1,7 @@
 package kuit.subway.study.common;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.MediaType;
@@ -8,11 +9,11 @@ import org.springframework.http.MediaType;
 import java.util.Map;
 
 public class CommonRestAssured {
-    public static ExtractableResponse<Response> post(String url, Map params) {
+    public static ExtractableResponse<Response> post(String url, Object params) {
 
         return RestAssured.given().log().all()
                 .body(params)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(ContentType.JSON)
                 .when()
                 .post(url)
                 .then().log().all()
@@ -38,7 +39,7 @@ public class CommonRestAssured {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> put(String url, Map params) {
+    public static ExtractableResponse<Response> put(String url, Object params) {
 
         return RestAssured.given().log().all()
                 .body(params)
