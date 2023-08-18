@@ -39,7 +39,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         CreateStationRequest station2 = new CreateStationRequest("성수역");
 
         // when
-        ExtractableResponse<Response> res = createDummyLine(station1, station2);
+        ExtractableResponse<Response> res = 지하철_노선_생성_요청(station1, station2);
 
         // then
         assertEquals(201, res.statusCode());
@@ -52,7 +52,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         CreateStationRequest station1 = new CreateStationRequest("강남역");
         CreateStationRequest station2 = new CreateStationRequest("성수역");
-        ExtractableResponse<Response> res = createDummyLine(station1, station2);
+        ExtractableResponse<Response> res = 지하철_노선_생성_요청(station1, station2);
 
         // when
         ExtractableResponse<Response> failedRes = get(LINE_PATH + "/" + 2);
@@ -76,8 +76,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         CreateStationRequest station3 = new CreateStationRequest("논현역");
         CreateStationRequest station4 = new CreateStationRequest("이수역");
 
-        createDummyLine(station1, station2);
-        createDummyLine(station3, station4);
+        지하철_노선_생성_요청(station1, station2);
+        지하철_노선_생성_요청(station3, station4);
 
         // when
         ExtractableResponse<Response> res = get(LINE_PATH);
@@ -93,7 +93,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         CreateStationRequest station1 = new CreateStationRequest("강남역");
         CreateStationRequest station2 = new CreateStationRequest("성수역");
-        ExtractableResponse createdRes = createDummyLine(station1, station2);
+        ExtractableResponse createdRes = 지하철_노선_생성_요청(station1, station2);
         CreateLineRequest req = new CreateLineRequest("red", 15, "신분당선", 2L, 1L);
 
         // when
@@ -115,7 +115,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         CreateStationRequest station1 = new CreateStationRequest("강남역");
         CreateStationRequest station2 = new CreateStationRequest("성수역");
-        ExtractableResponse createdRes = createDummyLine(station1, station2);
+        ExtractableResponse createdRes = 지하철_노선_생성_요청(station1, station2);
 
         // when
         ExtractableResponse<Response> failedRes = delete(LINE_PATH + "/" + 2);
@@ -130,7 +130,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
     }
 
 
-    private ExtractableResponse<Response> createDummyLine(CreateStationRequest downStation, CreateStationRequest upStation) {
+    private ExtractableResponse<Response> 지하철_노선_생성_요청(CreateStationRequest downStation, CreateStationRequest upStation) {
 
 
         ExtractableResponse<Response> stationRes1 = 더미_데이터_생성_요청(STATION_PATH, downStation);
