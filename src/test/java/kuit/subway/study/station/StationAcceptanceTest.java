@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import static kuit.subway.study.common.CommonRestAssured.*;
 import static kuit.subway.utils.fixtures.StationFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 @DisplayName("지하철역 인수 테스트")
 public class StationAcceptanceTest extends AcceptanceTest {
     @DisplayName("강남역을 등록하고 201 OK를 반환한다.")
@@ -18,10 +20,10 @@ public class StationAcceptanceTest extends AcceptanceTest {
 
         // given
         // when
-        ExtractableResponse<Response> 역_등록_결과 = 역_등록("강남역");
+        ExtractableResponse<Response> 지하철_역_등록_결과 = 지하철_역_등록("강남역");
 
         // then
-        assertEquals(201, 역_등록_결과.statusCode());
+        assertEquals(201, 지하철_역_등록_결과.statusCode());
     }
 
     @DisplayName("등록된 강남역과 성수역을 모두 조회하고 200 OK를 반환한다.")
@@ -29,15 +31,17 @@ public class StationAcceptanceTest extends AcceptanceTest {
     void getAllStations() {
 
         // given
-        역_등록("강남역");
-        역_등록("성수역");
+        지하철_역_등록("강남역");
+        지하철_역_등록("성수역");
 
         // when
-        ExtractableResponse<Response> 역_조회_결과 = 역_조회();
+        ExtractableResponse<Response> 지하철_역_조회_결과 = 지하철_역_조회();
 
         // then
-        assertEquals(200, 역_조회_결과.statusCode());
-        assertEquals(2, 역_조회_결과.jsonPath().getList("").size());
+        assertAll(
+                () -> {assertEquals(200, 지하철_역_조회_결과.statusCode());},
+                () -> {assertEquals(2, 지하철_역_조회_결과.jsonPath().getList("").size());}
+        );
     }
 
     @DisplayName("등록된 강남역을 삭제하고 200 OK를 반환한다.")
@@ -45,14 +49,14 @@ public class StationAcceptanceTest extends AcceptanceTest {
     void deleteStation() {
 
         // given
-        ExtractableResponse<Response> res = 역_등록("강남역");
+        ExtractableResponse<Response> res = 지하철_역_등록("강남역");
         Long id = res.jsonPath().getLong("id");
 
         // when
-        ExtractableResponse<Response> 역_삭제_결과 = 역_삭제(id);
+        ExtractableResponse<Response> 지하철_역_삭제_결과 = 지하철_역_삭제(id);
 
         // then
-        assertEquals(200, 역_삭제_결과.statusCode());
+        assertEquals(200, 지하철_역_삭제_결과.statusCode());
 
     }
 
