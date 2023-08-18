@@ -29,7 +29,11 @@ public class Line extends BaseTimeEntity {
 
     private Long upStationId;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "section_id")
+    private Section section;
 
+    @Builder
     public Line(String color, int distance, String name, Long downStationId, Long upStationId) {
         this.color = color;
         this.distance = distance;
