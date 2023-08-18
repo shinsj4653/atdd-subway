@@ -2,20 +2,12 @@ package kuit.subway.study.line;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import jakarta.persistence.EntityNotFoundException;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.CreateLineRequest;
 import kuit.subway.dto.request.station.CreateStationRequest;
-import kuit.subway.dto.response.line.UpdateLineResponse;
-import kuit.subway.study.common.CommonRestAssured;
-import org.checkerframework.checker.units.qual.C;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static kuit.subway.study.common.CommonRestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,11 +18,20 @@ public class LineAcceptanceTest extends AcceptanceTest {
     public static final String STATION_PATH = "/stations";
     public static final String LINE_PATH = "/lines";
 
-    public static ExtractableResponse<Response> 더미_데이터_생성_요청(String url, Object req) {
-        return post(url, req);
+    private ExtractableResponse<Response> 지하철_노선_생성_요청(CreateStationRequest downStation, CreateStationRequest upStation) {
+
+
+        ExtractableResponse<Response> stationRes1 = post(STATION_PATH, downStation);
+        ExtractableResponse<Response> stationRes2 = post(STATION_PATH, upStation);
+
+        Long downStationId = stationRes1.jsonPath().getLong("id");
+        Long upStationId = stationRes2.jsonPath().getLong("id");
+
+        CreateLineRequest req = new CreateLineRequest("green", 10, "경춘선", downStationId, upStationId);
+        return post(LINE_PATH, req);
     }
 
-    @DisplayName("지하철 노선 생성 인수 테스트")
+    @DisplayName("지하철 노선 생성 후 201 OK를 반환한다.")
     @Test
     void createLine() {
 
@@ -45,7 +46,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         assertEquals(201, res.statusCode());
     }
 
-    @DisplayName("지하철 노선 아이디 기반 조회 인수 테스트")
+    @DisplayName("등록한 지하철 노선을 조회하면 200 OK를 반환한다. 그렇지 않으면, 400 Bad Request를 반환한다.")
     @Test
     void getLineById() {
 
@@ -66,7 +67,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("지하철 노선 전체 목록 조회 인수 테스트")
+    @DisplayName("등록된 모든 지하철 노선을 조회하고 200 OK를 반환한다.")
     @Test
     void getAllLines() {
 
@@ -86,7 +87,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         assertEquals(200, res.statusCode());
     }
 
-    @DisplayName("지하철 노선 수정 인수 테스트")
+    @DisplayName("등록된 지하철 노선을 수정하고 200 OK를 반환하다. 등록되어 있지 않으면 400 Bad Request를 반환한다.")
     @Test
     void updateLine() {
 
@@ -108,7 +109,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("지하철 노선 삭제 인수 테스트")
+    @DisplayName("등록된 지하철 노선을 삭제 후 200 OK를 반환한다. 등록되어 있지 않으면 400 Bad Request를 반환한다.")
     @Test
     void deleteLine() {
 
@@ -127,20 +128,6 @@ public class LineAcceptanceTest extends AcceptanceTest {
                 () -> { assertEquals(400, failedRes.statusCode()); },
                 () -> { assertEquals(200, deleteRes.statusCode()); }
         );
-    }
-
-
-    private ExtractableResponse<Response> 지하철_노선_생성_요청(CreateStationRequest downStation, CreateStationRequest upStation) {
-
-
-        ExtractableResponse<Response> stationRes1 = 더미_데이터_생성_요청(STATION_PATH, downStation);
-        ExtractableResponse<Response> stationRes2 = 더미_데이터_생성_요청(STATION_PATH, upStation);
-
-        Long downStationId = stationRes1.jsonPath().getLong("id");
-        Long upStationId = stationRes2.jsonPath().getLong("id");
-
-        CreateLineRequest req = new CreateLineRequest("green", 10, "경춘선", downStationId, upStationId);
-        return 더미_데이터_생성_요청(LINE_PATH, req);
     }
 
 }
