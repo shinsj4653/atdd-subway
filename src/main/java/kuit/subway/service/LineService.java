@@ -80,11 +80,16 @@ public class LineService {
 
     @Transactional
     public UpdateLineResponse updateLine(Long id, CreateLineRequest req) {
-        // 존재하지 않는 노선을 조회했을 때 예외처리
+        // 존재하지 않는 노선을 수정하려 했을때 예외처리
         Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         line.setColor(req.getName());
         line.setDistance(req.getDistance());
         line.setName(req.getName());
+
+        // 존재하지 않는 station_id로 변경하려 했을 때 예외처리
+        stationRepository.findById(req.getDownStationId()).orElseThrow(EntityNotFoundException::new);
+        stationRepository.findById(req.getUpStationId()).orElseThrow(EntityNotFoundException::new);
+
         line.setDownStationId(req.getDownStationId());
         line.setUpStationId(req.getUpStationId());
 
