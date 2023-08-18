@@ -51,6 +51,8 @@ public class DatabaseCleanup implements InitializingBean {
                 return "station_id";
             case "line":
                 return "line_id";
+            case "section" :
+                return "section_id";
             default:
                 return null;
         }
