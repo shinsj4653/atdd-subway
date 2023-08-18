@@ -4,6 +4,7 @@ import kuit.subway.dto.request.line.CreateLineRequest;
 import kuit.subway.dto.request.station.CreateStationRequest;
 import kuit.subway.dto.response.line.CreateLineResponse;
 import kuit.subway.dto.response.line.LineDto;
+import kuit.subway.dto.response.line.UpdateLineResponse;
 import kuit.subway.dto.response.station.CreateStationResponse;
 import kuit.subway.service.LineService;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +37,10 @@ public class LineController {
     @GetMapping()
     public ResponseEntity<List<LineDto>> getLines() {
         return ResponseEntity.ok(lineService.findAllLines());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateLineResponse> updateLine(@PathVariable("id") Long id, @RequestBody CreateLineRequest req) {
+        return ResponseEntity.ok(lineService.updateLine(id, req));
     }
 }
