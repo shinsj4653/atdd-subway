@@ -6,6 +6,7 @@ import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.CreateLineRequest;
 import kuit.subway.dto.response.line.CreateLineResponse;
 import kuit.subway.dto.response.line.LineDto;
+import kuit.subway.dto.response.line.UpdateLineResponse;
 import kuit.subway.dto.response.station.CreateStationResponse;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.repository.LineRepository;
@@ -75,6 +76,24 @@ public class LineService {
                         .build())
                 .collect(Collectors.toList());
         return result;
+    }
+
+    @Transactional
+    public UpdateLineResponse updateLine(Long id, CreateLineRequest req) {
+        // 존재하지 않는 노선을 조회했을 때 예외처리
+        Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        line.setColor(req.getName());
+        line.setDistance(req.getDistance());
+        line.setName(req.getName());
+        line.setDownStationId(req.getDownStationId());
+        line.setUpStationId(req.getUpStationId());
+
+        return UpdateLineResponse.builder()
+                .color(req.getColor())
+                .distance(req.getDistance())
+                .name(req.getName())
+                .downStationId(req.getDownStationId())
+                .upStationId(req.getUpStationId()).build();
     }
 
     // 노선의 역 리스트 생성 함수
