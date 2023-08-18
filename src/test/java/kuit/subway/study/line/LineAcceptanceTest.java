@@ -33,17 +33,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         Station station1 = new Station("강남역");
         Station station2 = new Station("성수역");
 
-
-        ExtractableResponse<Response> stationRes1 = 더미_데이터_생성_요청(STATION_PATH, station1);
-        ExtractableResponse<Response> stationRes2 = 더미_데이터_생성_요청(STATION_PATH, station2);
-
-        Long downStationId = stationRes1.jsonPath().getLong("id");
-        Long upStationId = stationRes2.jsonPath().getLong("id");
-
-        CreateLineRequest req = new CreateLineRequest("green", 10, "경춘선", downStationId, upStationId);
-
         // when
-        ExtractableResponse<Response> res = 더미_데이터_생성_요청(LINE_PATH, req);
+        ExtractableResponse<Response> res = createDummyLine(station1, station2);
 
         // then
         assertEquals(201, res.statusCode());
@@ -57,21 +48,24 @@ public class LineAcceptanceTest extends AcceptanceTest {
         Station station1 = new Station("강남역");
         Station station2 = new Station("성수역");
 
-        ExtractableResponse<Response> stationRes1 = 더미_데이터_생성_요청(STATION_PATH, station1);
-        ExtractableResponse<Response> stationRes2 = 더미_데이터_생성_요청(STATION_PATH, station2);
-
-        Long downStationId = stationRes1.jsonPath().getLong("id");
-        Long upStationId = stationRes2.jsonPath().getLong("id");
-
-        CreateLineRequest req = new CreateLineRequest("green", 10, "경춘선", downStationId, upStationId);
-
         // when
-        ExtractableResponse<Response> res = 더미_데이터_생성_요청(LINE_PATH, req);
+        ExtractableResponse<Response> res = createDummyLine(station1, station2);
 
         // then
         assertEquals(201, res.statusCode());
     }
 
+    private ExtractableResponse<Response> createDummyLine(Station downStation, Station upStation) {
 
+
+        ExtractableResponse<Response> stationRes1 = 더미_데이터_생성_요청(STATION_PATH, downStation);
+        ExtractableResponse<Response> stationRes2 = 더미_데이터_생성_요청(STATION_PATH, upStation);
+
+        Long downStationId = stationRes1.jsonPath().getLong("id");
+        Long upStationId = stationRes2.jsonPath().getLong("id");
+
+        CreateLineRequest req = new CreateLineRequest("green", 10, "경춘선", downStationId, upStationId);
+        return 더미_데이터_생성_요청(LINE_PATH, req);
+    }
 
 }
