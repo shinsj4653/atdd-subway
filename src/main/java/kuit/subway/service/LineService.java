@@ -35,8 +35,7 @@ public class LineService {
     public CreateLineResponse addLine(CreateLineRequest res) {
 
         // 존재하지 않는 station_id를 추가하려고 하면 예외발생
-        stationRepository.findById(res.getDownStationId()).orElseThrow(EntityNotFoundException::new);
-        stationRepository.findById(res.getUpStationId()).orElseThrow(EntityNotFoundException::new);
+        validateStations(res.getDownStationId(), res.getUpStationId());
 
         // 만약, 둘 다 존재하는 역이라면 노선 생성
         Line line = new Line(res.getColor(), res.getDistance(), res.getName(), res.getDownStationId(), res.getUpStationId());
@@ -86,8 +85,7 @@ public class LineService {
         Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         // 존재하지 않는 station_id로 변경하려 했을 때 예외처리
-        stationRepository.findById(req.getDownStationId()).orElseThrow(EntityNotFoundException::new);
-        stationRepository.findById(req.getUpStationId()).orElseThrow(EntityNotFoundException::new);
+        validateStations(req.getDownStationId(), req.getUpStationId());
 
         // 존재한다면, request 대로 노선 수정
         line.setColor(req.getColor());
@@ -124,6 +122,12 @@ public class LineService {
         stations.add(downStation);
         stations.add(upStation);
         return stations;
+    }
+
+    // 존재하지 않는 지하철 역 조회 시 예외처리
+    private void validateStations(Long downStationId, Long upStationId) {
+        stationRepository.findById(downStationId).orElseThrow(EntityNotFoundException::new);
+        stationRepository.findById(upStationId).orElseThrow(EntityNotFoundException::new);
     }
 
 }

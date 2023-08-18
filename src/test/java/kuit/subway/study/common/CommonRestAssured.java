@@ -13,7 +13,7 @@ public class CommonRestAssured {
 
         return RestAssured.given().log().all()
                 .body(params)
-                .contentType(ContentType.JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
                 .post(url)
                 .then().log().all()

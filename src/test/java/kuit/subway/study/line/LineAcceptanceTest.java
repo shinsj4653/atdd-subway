@@ -3,6 +3,7 @@ package kuit.subway.study.line;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
+import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.CreateLineRequest;
 import kuit.subway.dto.request.station.CreateStationRequest;
 import org.junit.jupiter.api.DisplayName;
@@ -29,11 +30,9 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void createLine() {
 
         // given
-        Map<String, String> station1 = new HashMap<>();
-        station1.put("name", "강남역");
+        Station station1 = new Station("강남역");
+        Station station2 = new Station("성수역");
 
-        Map<String, String> station2 = new HashMap<>();
-        station2.put("name", "성수역");
 
         ExtractableResponse<Response> stationRes1 = 더미_데이터_생성_요청(STATION_PATH, station1);
         ExtractableResponse<Response> stationRes2 = 더미_데이터_생성_요청(STATION_PATH, station2);
@@ -49,6 +48,30 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // then
         assertEquals(201, res.statusCode());
     }
+
+    @DisplayName("지하철 노선 조회 인수 테스트")
+    @Test
+    void getLineById() {
+
+        // given
+        Station station1 = new Station("강남역");
+        Station station2 = new Station("성수역");
+
+        ExtractableResponse<Response> stationRes1 = 더미_데이터_생성_요청(STATION_PATH, station1);
+        ExtractableResponse<Response> stationRes2 = 더미_데이터_생성_요청(STATION_PATH, station2);
+
+        Long downStationId = stationRes1.jsonPath().getLong("id");
+        Long upStationId = stationRes2.jsonPath().getLong("id");
+
+        CreateLineRequest req = new CreateLineRequest("green", 10, "경춘선", downStationId, upStationId);
+
+        // when
+        ExtractableResponse<Response> res = 더미_데이터_생성_요청(LINE_PATH, req);
+
+        // then
+        assertEquals(201, res.statusCode());
+    }
+
 
 
 }
