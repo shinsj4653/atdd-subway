@@ -2,18 +2,22 @@ package kuit.subway.study.line;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import jakarta.persistence.EntityNotFoundException;
 import kuit.subway.AcceptanceTest;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.CreateLineRequest;
 import kuit.subway.dto.request.station.CreateStationRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static kuit.subway.study.common.CommonRestAssured.get;
 import static kuit.subway.study.common.CommonRestAssured.post;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("지하철 노선 인수 테스트")
 public class LineAcceptanceTest extends AcceptanceTest {
@@ -30,8 +34,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void createLine() {
 
         // given
-        Station station1 = new Station("강남역");
-        Station station2 = new Station("성수역");
+        CreateStationRequest station1 = new CreateStationRequest("강남역");
+        CreateStationRequest station2 = new CreateStationRequest("성수역");
 
         // when
         ExtractableResponse<Response> res = createDummyLine(station1, station2);
@@ -45,17 +49,21 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void getLineById() {
 
         // given
-        Station station1 = new Station("강남역");
-        Station station2 = new Station("성수역");
+        CreateStationRequest station1 = new CreateStationRequest("강남역");
+        CreateStationRequest station2 = new CreateStationRequest("성수역");
 
         // when
         ExtractableResponse<Response> res = createDummyLine(station1, station2);
-
         // then
-        assertEquals(201, res.statusCode());
-    }
+        ExtractableResponse<Response> failedRes = get(LINE_PATH + "/" + 2);
+        assertEquals(400, failedRes.statusCode());
 
-    private ExtractableResponse<Response> createDummyLine(Station downStation, Station upStation) {
+        ExtractableResponse<Response> successRes = get(LINE_PATH + "/" + res.jsonPath().getLong("id"));
+        assertEquals(200, successRes.statusCode());
+    }
+    
+
+    private ExtractableResponse<Response> createDummyLine(CreateStationRequest downStation, CreateStationRequest upStation) {
 
 
         ExtractableResponse<Response> stationRes1 = 더미_데이터_생성_요청(STATION_PATH, downStation);
