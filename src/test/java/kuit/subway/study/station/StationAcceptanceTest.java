@@ -47,7 +47,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         station1.put("name", "강남역");
 
         Map<String, String> station2 = new HashMap<>();
-        station1.put("name", "성수역");
+        station2.put("name", "성수역");
 
         더미_데이터_생성_요청(STATION_PATH, station1);
         더미_데이터_생성_요청(STATION_PATH, station2);
@@ -71,7 +71,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         Long id = res.jsonPath().getLong("id");
 
         // when
-        ExtractableResponse<Response> deleteResponse = delete(STATION_PATH + id);
+        ExtractableResponse<Response> deleteResponse = delete(STATION_PATH + "/" + id);
 
         // then
         assertEquals(200, deleteResponse.statusCode());
