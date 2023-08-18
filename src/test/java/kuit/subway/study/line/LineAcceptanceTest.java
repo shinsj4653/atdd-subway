@@ -3,13 +3,12 @@ package kuit.subway.study.line;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.dto.request.line.CreateLineRequest;
-import kuit.subway.dto.request.station.CreateStationRequest;
+import kuit.subway.dto.request.line.LineCreateRequest;
+import kuit.subway.dto.request.station.StationCreateRequest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static kuit.subway.study.common.CommonRestAssured.*;
 import static kuit.subway.utils.fixtures.LineFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,8 +20,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void createLine() {
 
         // given
-        CreateStationRequest station1 = new CreateStationRequest("강남역");
-        CreateStationRequest station2 = new CreateStationRequest("성수역");
+        StationCreateRequest station1 = new StationCreateRequest("강남역");
+        StationCreateRequest station2 = new StationCreateRequest("성수역");
 
         // when
         ExtractableResponse<Response> 지하철_노선_등록_결과 = 지하철_노선_등록(station1, station2);
@@ -36,8 +35,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void getLineById() {
 
         // given
-        CreateStationRequest station1 = new CreateStationRequest("강남역");
-        CreateStationRequest station2 = new CreateStationRequest("성수역");
+        StationCreateRequest station1 = new StationCreateRequest("강남역");
+        StationCreateRequest station2 = new StationCreateRequest("성수역");
         ExtractableResponse<Response> res = 지하철_노선_등록(station1, station2);
         Long id = res.jsonPath().getLong("id");
 
@@ -58,10 +57,10 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void getAllLines() {
 
         // given
-        CreateStationRequest station1 = new CreateStationRequest("강남역");
-        CreateStationRequest station2 = new CreateStationRequest("성수역");
-        CreateStationRequest station3 = new CreateStationRequest("논현역");
-        CreateStationRequest station4 = new CreateStationRequest("이수역");
+        StationCreateRequest station1 = new StationCreateRequest("강남역");
+        StationCreateRequest station2 = new StationCreateRequest("성수역");
+        StationCreateRequest station3 = new StationCreateRequest("논현역");
+        StationCreateRequest station4 = new StationCreateRequest("이수역");
 
         지하철_노선_등록(station1, station2);
         지하철_노선_등록(station3, station4);
@@ -78,10 +77,10 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void updateLine() {
 
         // given
-        CreateStationRequest station1 = new CreateStationRequest("강남역");
-        CreateStationRequest station2 = new CreateStationRequest("성수역");
+        StationCreateRequest station1 = new StationCreateRequest("강남역");
+        StationCreateRequest station2 = new StationCreateRequest("성수역");
         ExtractableResponse createdRes = 지하철_노선_등록(station1, station2);
-        CreateLineRequest 지하철_노선_변경_요청 = new CreateLineRequest("red", 15, "신분당선", 2L, 1L);
+        LineCreateRequest 지하철_노선_변경_요청 = new LineCreateRequest("red", 15, "신분당선", 2L, 1L);
         Long id = createdRes.jsonPath().getLong("id");
 
         // when
@@ -101,8 +100,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
     void deleteLine() {
 
         // given
-        CreateStationRequest station1 = new CreateStationRequest("강남역");
-        CreateStationRequest station2 = new CreateStationRequest("성수역");
+        StationCreateRequest station1 = new StationCreateRequest("강남역");
+        StationCreateRequest station2 = new StationCreateRequest("성수역");
         ExtractableResponse createdRes = 지하철_노선_등록(station1, station2);
         Long id = createdRes.jsonPath().getLong("id");
 

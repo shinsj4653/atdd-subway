@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateLineRequest {
+public class LineCreateRequest {
 
     private String color;
     private int distance;

@@ -1,14 +1,11 @@
 package kuit.subway.controller;
 
-import kuit.subway.dto.request.line.CreateLineRequest;
-import kuit.subway.dto.request.station.CreateStationRequest;
-import kuit.subway.dto.response.line.CreateLineResponse;
-import kuit.subway.dto.response.line.DeleteLineResponse;
+import kuit.subway.dto.request.line.LineCreateRequest;
+import kuit.subway.dto.response.line.LineCreateResponse;
+import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineDto;
-import kuit.subway.dto.response.line.UpdateLineResponse;
-import kuit.subway.dto.response.station.CreateStationResponse;
+import kuit.subway.dto.response.line.LineUpdateResponse;
 import kuit.subway.service.LineService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +21,9 @@ public class LineController {
     private final LineService lineService;
 
     @PostMapping()
-    public ResponseEntity<CreateLineResponse> saveLine(@RequestBody CreateLineRequest request) {
+    public ResponseEntity<LineCreateResponse> saveLine(@RequestBody LineCreateRequest request) {
 
-        CreateLineResponse res = lineService.addLine(request);
+        LineCreateResponse res = lineService.addLine(request);
         return ResponseEntity.created(URI.create("/lines/" + res.getId()))
                 .body(res);
     }
@@ -42,12 +39,12 @@ public class LineController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateLineResponse> updateLine(@PathVariable("id") Long id, @RequestBody CreateLineRequest req) {
+    public ResponseEntity<LineUpdateResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineCreateRequest req) {
         return ResponseEntity.ok(lineService.updateLine(id, req));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DeleteLineResponse> deleteLine(@PathVariable("id") Long id) {
+    public ResponseEntity<LineDeleteResponse> deleteLine(@PathVariable("id") Long id) {
         return ResponseEntity.ok(lineService.deleteLine(id));
     }
 }

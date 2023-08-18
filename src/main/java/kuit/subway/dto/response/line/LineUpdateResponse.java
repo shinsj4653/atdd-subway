@@ -1,15 +1,10 @@
 package kuit.subway.dto.response.line;
 
-import kuit.subway.domain.Station;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Data
-public class UpdateLineResponse {
+public class LineUpdateResponse {
     private String color;
     private int distance;
     private String name;
@@ -17,7 +12,7 @@ public class UpdateLineResponse {
     private Long upStationId;
 
     @Builder
-    public UpdateLineResponse(String color, int distance, String name, Long downStationId, Long upStationId) {
+    public LineUpdateResponse(String color, int distance, String name, Long downStationId, Long upStationId) {
         this.color = color;
         this.distance = distance;
         this.name = name;

@@ -1,8 +1,8 @@
 package kuit.subway.controller;
 
-import kuit.subway.dto.request.station.CreateStationRequest;
-import kuit.subway.dto.response.station.CreateStationResponse;
-import kuit.subway.dto.response.station.DeleteStationResponse;
+import kuit.subway.dto.request.station.StationCreateRequest;
+import kuit.subway.dto.response.station.StationCreateResponse;
+import kuit.subway.dto.response.station.StationDeleteResponse;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.service.StationService;
 import lombok.RequiredArgsConstructor;
@@ -30,16 +30,16 @@ public class StationController {
     }
 
     @PostMapping()
-    public ResponseEntity<CreateStationResponse> saveStation(@RequestBody CreateStationRequest request) {
+    public ResponseEntity<StationCreateResponse> saveStation(@RequestBody StationCreateRequest request) {
 
-        CreateStationResponse res = stationService.addStation(request);
+        StationCreateResponse res = stationService.addStation(request);
         return ResponseEntity.created(URI.create("/stations/" + res.getId()))
                             .body(res);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DeleteStationResponse> deleteStation(@PathVariable("id") Long id) {
-        DeleteStationResponse res = stationService.deleteStation(id);
+    public ResponseEntity<StationDeleteResponse> deleteStation(@PathVariable("id") Long id) {
+        StationDeleteResponse res = stationService.deleteStation(id);
         return ResponseEntity.ok(res);
     }
 

@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class DeleteStationResponse {
+public class StationCreateResponse {
     private Long id;
 }

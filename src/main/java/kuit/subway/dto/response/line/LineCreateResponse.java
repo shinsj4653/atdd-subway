@@ -1,10 +1,10 @@
-package kuit.subway.dto.response.station;
+package kuit.subway.dto.response.line;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CreateStationResponse {
+public class LineCreateResponse {
     private Long id;
 }

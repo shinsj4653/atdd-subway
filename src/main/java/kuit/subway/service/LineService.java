@@ -3,25 +3,20 @@ package kuit.subway.service;
 import jakarta.persistence.EntityNotFoundException;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Station;
-import kuit.subway.dto.request.line.CreateLineRequest;
-import kuit.subway.dto.response.line.CreateLineResponse;
-import kuit.subway.dto.response.line.DeleteLineResponse;
+import kuit.subway.dto.request.line.LineCreateRequest;
+import kuit.subway.dto.response.line.LineCreateResponse;
+import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineDto;
-import kuit.subway.dto.response.line.UpdateLineResponse;
-import kuit.subway.dto.response.station.CreateStationResponse;
-import kuit.subway.dto.response.station.DeleteStationResponse;
-import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.dto.response.line.LineUpdateResponse;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +27,7 @@ public class LineService {
     private final StationRepository stationRepository;
 
     @Transactional
-    public CreateLineResponse addLine(CreateLineRequest res) {
+    public LineCreateResponse addLine(LineCreateRequest res) {
 
         // 존재하지 않는 station_id를 추가하려고 하면 예외발생
         validateStations(res.getDownStationId(), res.getUpStationId());
@@ -41,7 +36,7 @@ public class LineService {
         Line line = new Line(res.getColor(), res.getDistance(), res.getName(), res.getDownStationId(), res.getUpStationId());
         lineRepository.save(line);
 
-        return new CreateLineResponse(line.getId());
+        return new LineCreateResponse(line.getId());
     }
 
     @Transactional
@@ -80,7 +75,7 @@ public class LineService {
     }
 
     @Transactional
-    public UpdateLineResponse updateLine(Long id, CreateLineRequest req) {
+    public LineUpdateResponse updateLine(Long id, LineCreateRequest req) {
         // 존재하지 않는 노선을 수정하려 했을때 예외처리
         Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
@@ -94,7 +89,7 @@ public class LineService {
         line.setDownStationId(req.getDownStationId());
         line.setUpStationId(req.getUpStationId());
 
-        return UpdateLineResponse.builder()
+        return LineUpdateResponse.builder()
                 .color(req.getColor())
                 .distance(req.getDistance())
                 .name(req.getName())
@@ -103,14 +98,14 @@ public class LineService {
     }
 
     @Transactional
-    public DeleteLineResponse deleteLine(Long id) {
+    public LineDeleteResponse deleteLine(Long id) {
 
         // 존재하지 않는 노선을 삭제하려고 할시, 예외처리
         Line line = lineRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
         lineRepository.delete(line);
-        return new DeleteLineResponse(line.getId());
+        return new LineDeleteResponse(line.getId());
     }
 
     // 노선의 역 리스트 생성 함수

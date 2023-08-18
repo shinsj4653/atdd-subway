@@ -2,9 +2,9 @@ package kuit.subway.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import kuit.subway.domain.Station;
-import kuit.subway.dto.request.station.CreateStationRequest;
-import kuit.subway.dto.response.station.CreateStationResponse;
-import kuit.subway.dto.response.station.DeleteStationResponse;
+import kuit.subway.dto.request.station.StationCreateRequest;
+import kuit.subway.dto.response.station.StationCreateResponse;
+import kuit.subway.dto.response.station.StationDeleteResponse;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,10 +21,10 @@ public class StationService {
     private final StationRepository stationRepository;
 
     @Transactional
-    public CreateStationResponse addStation(CreateStationRequest res) {
+    public StationCreateResponse addStation(StationCreateRequest res) {
         Station station = new Station(res.getName());
         stationRepository.save(station);
-        return new CreateStationResponse(station.getId());
+        return new StationCreateResponse(station.getId());
     }
 
     @Transactional
@@ -50,11 +49,11 @@ public class StationService {
     }
 
     @Transactional
-    public DeleteStationResponse deleteStation(Long id) {
+    public StationDeleteResponse deleteStation(Long id) {
         Station station = stationRepository.findById(id)
                 .orElseThrow(RuntimeException::new);
 
         stationRepository.delete(station);
-        return new DeleteStationResponse(station.getId());
+        return new StationDeleteResponse(station.getId());
     }
 }

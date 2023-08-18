@@ -2,8 +2,8 @@ package kuit.subway.utils.fixtures;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import kuit.subway.dto.request.line.CreateLineRequest;
-import kuit.subway.dto.request.station.CreateStationRequest;
+import kuit.subway.dto.request.line.LineCreateRequest;
+import kuit.subway.dto.request.station.StationCreateRequest;
 
 import static kuit.subway.study.common.CommonRestAssured.*;
 import static kuit.subway.utils.fixtures.StationFixtures.STATION_PATH;
@@ -12,7 +12,7 @@ public class LineFixtures {
 
     public static final String LINE_PATH = "/lines";
 
-    public static ExtractableResponse<Response> 지하철_노선_등록(CreateStationRequest downStation, CreateStationRequest upStation) {
+    public static ExtractableResponse<Response> 지하철_노선_등록(StationCreateRequest downStation, StationCreateRequest upStation) {
 
         ExtractableResponse<Response> stationRes1 = post(STATION_PATH, downStation);
         ExtractableResponse<Response> stationRes2 = post(STATION_PATH, upStation);
@@ -20,7 +20,7 @@ public class LineFixtures {
         Long downStationId = stationRes1.jsonPath().getLong("id");
         Long upStationId = stationRes2.jsonPath().getLong("id");
 
-        CreateLineRequest req = new CreateLineRequest("green", 10, "경춘선", downStationId, upStationId);
+        LineCreateRequest req = new LineCreateRequest("green", 10, "경춘선", downStationId, upStationId);
         return post(LINE_PATH, req);
     }
 
@@ -32,7 +32,7 @@ public class LineFixtures {
         return get(LINE_PATH);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_수정(Long id, CreateLineRequest 지하철_변경_요청) {
+    public static ExtractableResponse<Response> 지하철_노선_수정(Long id, LineCreateRequest 지하철_변경_요청) {
         return put(LINE_PATH + "/" + id, 지하철_변경_요청);
     }
 

@@ -3,11 +3,9 @@ package kuit.subway.study.station;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.dto.request.station.CreateStationRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static kuit.subway.study.common.CommonRestAssured.*;
 import static kuit.subway.utils.fixtures.StationFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
