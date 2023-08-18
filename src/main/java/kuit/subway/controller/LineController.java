@@ -3,10 +3,12 @@ package kuit.subway.controller;
 import kuit.subway.dto.request.line.CreateLineRequest;
 import kuit.subway.dto.request.station.CreateStationRequest;
 import kuit.subway.dto.response.line.CreateLineResponse;
+import kuit.subway.dto.response.line.DeleteLineResponse;
 import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.dto.response.line.UpdateLineResponse;
 import kuit.subway.dto.response.station.CreateStationResponse;
 import kuit.subway.service.LineService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +44,10 @@ public class LineController {
     @PutMapping("/{id}")
     public ResponseEntity<UpdateLineResponse> updateLine(@PathVariable("id") Long id, @RequestBody CreateLineRequest req) {
         return ResponseEntity.ok(lineService.updateLine(id, req));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<DeleteLineResponse> deleteLine(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(lineService.deleteLine(id));
     }
 }

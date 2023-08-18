@@ -5,9 +5,11 @@ import kuit.subway.domain.Line;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.CreateLineRequest;
 import kuit.subway.dto.response.line.CreateLineResponse;
+import kuit.subway.dto.response.line.DeleteLineResponse;
 import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.dto.response.line.UpdateLineResponse;
 import kuit.subway.dto.response.station.CreateStationResponse;
+import kuit.subway.dto.response.station.DeleteStationResponse;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
@@ -99,6 +101,17 @@ public class LineService {
                 .name(req.getName())
                 .downStationId(req.getDownStationId())
                 .upStationId(req.getUpStationId()).build();
+    }
+
+    @Transactional
+    public DeleteLineResponse deleteLine(Long id) {
+
+        // 존재하지 않는 노선을 삭제하려고 할시, 예외처리
+        Line line = lineRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        lineRepository.delete(line);
+        return new DeleteLineResponse(line.getId());
     }
 
     // 노선의 역 리스트 생성 함수
