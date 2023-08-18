@@ -8,25 +8,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static kuit.subway.study.common.CommonRestAssured.*;
+import static kuit.subway.utils.fixtures.StationFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("지하철역 인수 테스트")
 public class StationAcceptanceTest extends AcceptanceTest {
-
-
-    public static final String STATION_PATH = "/stations";
-
     @DisplayName("강남역을 등록하고 201 OK를 반환한다.")
     @Test
     void createStation() {
 
         // given
-        CreateStationRequest req = new CreateStationRequest("강남역");
-
         // when
-        ExtractableResponse<Response> res = post(STATION_PATH, req);
+        ExtractableResponse<Response> 역_등록_결과 = 역_등록("강남역");
 
         // then
-        assertEquals(201, res.statusCode());
+        assertEquals(201, 역_등록_결과.statusCode());
     }
 
     @DisplayName("등록된 강남역과 성수역을 모두 조회하고 200 OK를 반환한다.")
@@ -34,17 +29,15 @@ public class StationAcceptanceTest extends AcceptanceTest {
     void getAllStations() {
 
         // given
-        CreateStationRequest station1 = new CreateStationRequest("강남역");
-        CreateStationRequest station2 = new CreateStationRequest("성수역");
-        post(STATION_PATH, station1);
-        post(STATION_PATH, station2);
+        역_등록("강남역");
+        역_등록("성수역");
 
         // when
-        ExtractableResponse<Response> res = get(STATION_PATH);
+        ExtractableResponse<Response> 역_조회_결과 = 역_조회();
 
         // then
-        assertEquals(200, res.statusCode());
-        assertEquals(2, res.jsonPath().getList("").size());
+        assertEquals(200, 역_조회_결과.statusCode());
+        assertEquals(2, 역_조회_결과.jsonPath().getList("").size());
     }
 
     @DisplayName("등록된 강남역을 삭제하고 200 OK를 반환한다.")
@@ -52,15 +45,14 @@ public class StationAcceptanceTest extends AcceptanceTest {
     void deleteStation() {
 
         // given
-        CreateStationRequest station = new CreateStationRequest("강남역");
-        ExtractableResponse<Response> res = post(STATION_PATH, station);
+        ExtractableResponse<Response> res = 역_등록("강남역");
         Long id = res.jsonPath().getLong("id");
 
         // when
-        ExtractableResponse<Response> deleteResponse = delete(STATION_PATH + "/" + id);
+        ExtractableResponse<Response> 역_삭제_결과 = 역_삭제(id);
 
         // then
-        assertEquals(200, deleteResponse.statusCode());
+        assertEquals(200, 역_삭제_결과.statusCode());
 
     }
 
