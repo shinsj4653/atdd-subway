@@ -6,6 +6,8 @@ import kuit.subway.dto.request.station.CreateStationRequest;
 import kuit.subway.dto.response.station.CreateStationResponse;
 import kuit.subway.dto.response.station.DeleteStationResponse;
 import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.exception.notfound.NotFoundException;
+import kuit.subway.exception.notfound.NotFoundStationException;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,8 +41,7 @@ public class StationService {
 
     @Transactional
     public StationDto findStationById(Long id) {
-        Station station = stationRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+        Station station = validateStation(id);
 
         StationDto result = StationDto.builder()
                 .id(id)
@@ -51,10 +52,15 @@ public class StationService {
 
     @Transactional
     public DeleteStationResponse deleteStation(Long id) {
-        Station station = stationRepository.findById(id)
-                .orElseThrow(RuntimeException::new);
+        Station station = validateStation(id);
 
         stationRepository.delete(station);
         return new DeleteStationResponse(station.getId());
+    }
+
+    // 존재하는 역인지 판별해주는 함수
+    private Station validateStation(Long id) {
+        return stationRepository.findById(id)
+                .orElseThrow(NotFoundStationException::new);
     }
 }
