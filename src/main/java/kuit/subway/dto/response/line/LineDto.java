@@ -33,5 +33,7 @@ public class LineDto extends BaseTimeEntity {
         this.color = color;
         this.name = name;
         this.stations = stations;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
     }
 }

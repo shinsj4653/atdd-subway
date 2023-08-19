@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
-@Data
+@Getter @Setter
 @NoArgsConstructor
-public class Station {
+public class Station extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +22,8 @@ public class Station {
     private String name;
 
     @Builder
-    public Station(String name) {
+    public Station(String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+        super(createdDate, modifiedDate);
         this.name = name;
     }
 }

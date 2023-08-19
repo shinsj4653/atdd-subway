@@ -2,18 +2,16 @@ package kuit.subway.domain;
 
 import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 import static jakarta.persistence.FetchType.*;
 
 @Entity
-@Data
+@Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class Line {
+public class Line extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +29,8 @@ public class Line {
     private Long upStationId;
 
     @Builder
-    public Line(String color, int distance, String name, Long downStationId, Long upStationId) {
+    public Line(String color, int distance, String name, Long downStationId, Long upStationId, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+        super(createdDate, modifiedDate);
         this.color = color;
         this.distance = distance;
         this.name = name;

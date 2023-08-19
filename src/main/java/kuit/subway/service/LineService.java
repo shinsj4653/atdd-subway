@@ -48,13 +48,21 @@ public class LineService {
         validateSameStation(downStationId, upStationId);
 
         // 만약, 둘 다 존재하는 역이라면 노선 생성
-        Line line = new Line(res.getColor(), res.getDistance(), res.getName(), downStationId, upStationId);
+        Line line = Line.builder()
+                        .color(res.getColor())
+                        .distance(res.getDistance())
+                        .name(res.getName())
+                        .downStationId(res.getDownStationId())
+                        .upStationId(res.getUpStationId())
+                        .createdDate(LocalDateTime.now())
+                        .modifiedDate(LocalDateTime.now()).build();
+
         lineRepository.save(line);
 
         return new CreateLineResponse(line.getId());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public LineDto findLineById(Long id) {
 
         // 존재하지 않는 노선을 조회했을 때 예외처리
@@ -65,14 +73,14 @@ public class LineService {
                 .name(line.getName())
                 .color(line.getColor())
                 .stations(createStationList(line.getDownStationId(), line.getUpStationId()))
-                .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
+                .createdDate(line.getCreatedDate())
+                .modifiedDate(line.getModifiedDate())
                 .build();
 
         return result;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<LineDto> findAllLines() {
 
         List<Line> findLines = lineRepository.findAll();
@@ -82,8 +90,8 @@ public class LineService {
                         .name(line.getName())
                         .color(line.getColor())
                         .stations(createStationList(line.getDownStationId(), line.getUpStationId()))
-                        .createdDate(LocalDateTime.now())
-                        .modifiedDate(LocalDateTime.now())
+                        .createdDate(line.getCreatedDate())
+                        .modifiedDate(line.getModifiedDate())
                         .build())
                 .collect(Collectors.toList());
         return result;
@@ -107,6 +115,7 @@ public class LineService {
         line.setName(req.getName());
         line.setDownStationId(req.getDownStationId());
         line.setUpStationId(req.getUpStationId());
+        line.setModifiedDate(LocalDateTime.now());
 
         return UpdateLineResponse.builder()
                 .color(req.getColor())

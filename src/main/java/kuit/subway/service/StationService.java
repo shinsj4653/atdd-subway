@@ -40,8 +40,8 @@ public class StationService {
                 .map(station -> StationDto.builder()
                         .id(station.getId())
                         .name(station.getName())
-                        .createdDate(LocalDateTime.now())
-                        .modifiedDate(LocalDateTime.now()).build())
+                        .createdDate(station.getCreatedDate())
+                        .modifiedDate(station.getModifiedDate()).build())
                 .collect(Collectors.toList());
         return result;
     }
@@ -53,8 +53,8 @@ public class StationService {
         StationDto result = StationDto.builder()
                 .id(station.getId())
                 .name(station.getName())
-                .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now()).build();
+                .createdDate(station.getCreatedDate())
+                .modifiedDate(station.getModifiedDate()).build();
 
         return result;
     }
