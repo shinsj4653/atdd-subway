@@ -9,7 +9,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Entity
 @Data
 @NoArgsConstructor
-public class Station extends BaseTimeEntity {
+public class Station {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

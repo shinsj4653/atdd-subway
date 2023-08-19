@@ -4,9 +4,7 @@ import jakarta.persistence.Entity;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.BaseTimeEntity;
 import kuit.subway.dto.response.station.StationDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -15,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter @Setter
 public class LineDto extends BaseTimeEntity {
     private Long id;
     private String name;
@@ -30,11 +28,10 @@ public class LineDto extends BaseTimeEntity {
 
     @Builder
     public LineDto(Long id, String name, String color, List<Station> stations, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+        super(createdDate, modifiedDate);
         this.id = id;
         this.color = color;
         this.name = name;
         this.stations = stations;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
     }
 }

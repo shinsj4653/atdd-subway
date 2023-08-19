@@ -12,7 +12,8 @@ import static jakarta.persistence.FetchType.*;
 @Entity
 @Data
 @NoArgsConstructor
-public class Line extends BaseTimeEntity {
+@AllArgsConstructor
+public class Line {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +30,7 @@ public class Line extends BaseTimeEntity {
 
     private Long upStationId;
 
-
+    @Builder
     public Line(String color, int distance, String name, Long downStationId, Long upStationId) {
         this.color = color;
         this.distance = distance;

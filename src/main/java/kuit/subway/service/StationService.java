@@ -10,9 +10,11 @@ import kuit.subway.exception.notfound.NotFoundException;
 import kuit.subway.exception.notfound.NotFoundStationException;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,27 +27,34 @@ public class StationService {
 
     @Transactional
     public CreateStationResponse addStation(CreateStationRequest res) {
-        Station station = new Station(res.getName());
+        Station station = Station.builder()
+                        .name(res.getName()).build();
         stationRepository.save(station);
-        return new CreateStationResponse(station.getId());
-    }
 
-    @Transactional
+        return new CreateStationResponse("지하철 역 추가 완료", station.getId());
+    }
+    @Transactional(readOnly = true)
     public List<StationDto> findStations() {
         List<Station> findStations = stationRepository.findAll();
         List<StationDto> result = findStations.stream()
-                .map(m -> new StationDto(m.getId(), m.getName()))
+                .map(station -> StationDto.builder()
+                        .id(station.getId())
+                        .name(station.getName())
+                        .createdDate(LocalDateTime.now())
+                        .modifiedDate(LocalDateTime.now()).build())
                 .collect(Collectors.toList());
         return result;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public StationDto findStationById(Long id) {
         Station station = validateStationExist(id);
 
         StationDto result = StationDto.builder()
-                .id(id)
-                .name(station.getName()).build();
+                .id(station.getId())
+                .name(station.getName())
+                .createdDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now()).build();
 
         return result;
     }
@@ -55,7 +64,7 @@ public class StationService {
         Station station = validateStationExist(id);
 
         stationRepository.delete(station);
-        return new DeleteStationResponse(station.getId());
+        return new DeleteStationResponse("지하철 역 삭제 완료", station.getId());
     }
 
     // 존재하는 역인지 판별해주는 함수

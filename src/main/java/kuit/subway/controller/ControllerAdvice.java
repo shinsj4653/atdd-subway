@@ -37,6 +37,11 @@ public class ControllerAdvice {
         return ResponseEntity.badRequest().body(new ErrorResponse(code, message));
     }
 
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<ErrorResponse> sqlExceptionHandle(SubwayException e) {
+        return ResponseEntity.status(e.getHttpStatus()).body(new ErrorResponse(e.getCode(), e.getMessage()));
+    }
+
     @ExceptionHandler(SubwayException.class)
     public ResponseEntity<ErrorResponse> handleSubwayException(SubwayException e) {
         return ResponseEntity.status(e.getHttpStatus()).body(new ErrorResponse(e.getCode(), e.getMessage()));
@@ -58,10 +63,7 @@ public class ControllerAdvice {
 //        return ResponseEntity.badRequest().build();
 //    }
 //
-//    @ExceptionHandler(SQLException.class)
-//    public ResponseEntity<String> sqlExceptionHandle() {
-//        return ResponseEntity.status(INTERNAL_SERVER_ERROR).build();
-//    }
+
 //    @ExceptionHandler(RuntimeException.class)
 //    public ResponseEntity<String> runTimeExceptionHandle()  {
 //        return ResponseEntity.status(NOT_FOUND).build();

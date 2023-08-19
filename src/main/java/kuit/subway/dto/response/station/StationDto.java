@@ -1,17 +1,18 @@
 package kuit.subway.dto.response.station;
 
 import kuit.subway.dto.BaseTimeEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter @Setter
 public class StationDto extends BaseTimeEntity {
     private Long id;
     private String name;
 
     @Builder
-    public StationDto(Long id, String name) {
+    public StationDto(Long id, String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+        super(createdDate, modifiedDate);
         this.id = id;
         this.name = name;
     }
