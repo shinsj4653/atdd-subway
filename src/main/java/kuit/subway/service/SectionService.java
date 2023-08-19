@@ -7,6 +7,8 @@ import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.dto.response.section.SectionCreateResponse;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.InvalidLineStationException;
+import kuit.subway.exception.badrequest.InvalidSectionCreateDownStationException;
+import kuit.subway.exception.badrequest.InvalidSectionCreateUpStationException;
 import kuit.subway.exception.notfound.NotFoundLineException;
 import kuit.subway.exception.notfound.NotFoundStationException;
 import kuit.subway.repository.LineRepository;
@@ -43,7 +45,11 @@ public class SectionService {
 
         // 새로운 구간의 상행역은 해당 노선에 등록되어 있는 하행 종점역이어야 한다.
         // 새로운 구간의 하행역은 해당 노선에 등록되어있는 역일 수 없다.
-        if (validateNewUpStation(upStationId, stations) && validateNewDownStation(downStationId, stations)) {
+        if (!validateNewUpStation(upStationId, stations)) {
+            throw new InvalidSectionCreateUpStationException();
+        } else if(!validateNewDownStation(downStationId, stations)) {
+            throw new InvalidSectionCreateDownStationException();
+        } else {
             line.addStation(stationRepository.findById(downStationId).get());
         }
 
@@ -94,7 +100,12 @@ public class SectionService {
 
     private Boolean validateNewDownStation(Long downStationId, List<Station> stations) {
 
-        return !stations.contains(validateStationExist(downStationId));
+        for (Station station : stations) {
+            if (station.getId() == downStationId) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // 노선으로 등록할 두 역이 같은 역인지 판별해주는 함수
