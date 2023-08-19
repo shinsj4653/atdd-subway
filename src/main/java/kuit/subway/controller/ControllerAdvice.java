@@ -58,22 +58,22 @@ public class ControllerAdvice {
                 .body(new ErrorResponse(9999, "일시적으로 접속이 원활하지 않습니다. 지하철 서비스 팀에 문의 부탁드립니다."));
     }
 
-//    @ExceptionHandler(DataAccessException.class)
-//    public ResponseEntity<String> dataExceptionHandle() {
-//        return ResponseEntity.badRequest().build();
-//    }
-//
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<String> dataExceptionHandle() {
+        return ResponseEntity.badRequest().build();
+    }
 
-//    @ExceptionHandler(RuntimeException.class)
-//    public ResponseEntity<String> runTimeExceptionHandle()  {
-//        return ResponseEntity.status(NOT_FOUND).build();
-//    }
-//
-//    @ExceptionHandler(EntityNotFoundException.class)
-//    public  ResponseEntity<String> entityNotFoundExceptionHandle(EntityNotFoundException e)  {
-//
-//        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> runTimeExceptionHandle()  {
+        return ResponseEntity.status(NOT_FOUND).build();
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public  ResponseEntity<String> entityNotFoundExceptionHandle(EntityNotFoundException e)  {
+
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 
 
 

@@ -28,7 +28,7 @@ public class Line extends BaseTimeEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "line")
+    @OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
     private List<Station> stations = new ArrayList<>();
 
     @Builder
@@ -52,7 +52,12 @@ public class Line extends BaseTimeEntity {
     }
 
     public void updateStations(List<Station> stations) {
-        this.stations = stations;
+        // Remove the existing stations from the line's list
+        this.stations.forEach(station -> station.removeLine(this));
+        // Clear the existing stations list
+        this.stations.clear();
+
+        this.stations = new ArrayList<>(stations);
         addStations(stations);
     }
 

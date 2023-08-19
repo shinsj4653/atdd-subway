@@ -62,7 +62,7 @@ public class LineService {
         line.addStations(stations);
         lineRepository.save(line);
 
-        return new CreateLineResponse(line.getId());
+        return new CreateLineResponse("지하철 노선 생성 완료", line.getId());
     }
 
     @Transactional(readOnly = true)
@@ -113,7 +113,6 @@ public class LineService {
         stations.add(upStation);
         stations.add(downStation);
 
-
         // 상행역과 하행역이 같으면 예외처리
         validateSameStation(req.getDownStationId(), req.getUpStationId());
 
@@ -136,7 +135,7 @@ public class LineService {
         Line line = validateLineExist(id);
 
         lineRepository.delete(line);
-        return new DeleteLineResponse(line.getId());
+        return new DeleteLineResponse("지하철 노선 삭제 완료", line.getId());
     }
 
     // 노선의 역 리스트 생성 함수

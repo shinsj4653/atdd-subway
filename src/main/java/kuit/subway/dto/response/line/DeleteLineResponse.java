@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class DeleteLineResponse {
+    private String message;
     private Long id;
 }

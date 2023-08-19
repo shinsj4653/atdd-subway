@@ -6,5 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CreateLineResponse {
+    private String message;
     private Long id;
 }

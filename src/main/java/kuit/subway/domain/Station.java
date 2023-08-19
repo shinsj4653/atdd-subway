@@ -35,4 +35,8 @@ public class Station extends BaseTimeEntity {
         this.line = line;
         line.getStations().add(this);
     }
+
+    public void removeLine(Line line) {
+        this.line = null;
+    }
 }
