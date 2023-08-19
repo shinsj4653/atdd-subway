@@ -12,6 +12,7 @@ import kuit.subway.dto.response.station.CreateStationResponse;
 import kuit.subway.dto.response.station.DeleteStationResponse;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.InvalidLineStationException;
+import kuit.subway.exception.notfound.NotFoundLineException;
 import kuit.subway.exception.notfound.NotFoundStationException;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
@@ -57,7 +58,7 @@ public class LineService {
     public LineDto findLineById(Long id) {
 
         // 존재하지 않는 노선을 조회했을 때 예외처리
-        Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Line line = validateLineExist(id);
 
         LineDto result = LineDto.builder()
                 .id(line.getId())
@@ -91,11 +92,14 @@ public class LineService {
     @Transactional
     public UpdateLineResponse updateLine(Long id, CreateLineRequest req) {
         // 존재하지 않는 노선을 수정하려 했을때 예외처리
-        Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Line line = validateLineExist(id);
 
         // 존재하지 않는 station_id로 변경하려 했을 때 예외처리
         validateStationExist(req.getDownStationId());
         validateStationExist(req.getUpStationId());
+
+        // 상행역과 하행역이 같으면 예외처리
+        validateSameStation(req.getDownStationId(), req.getUpStationId());
 
         // 존재한다면, request 대로 노선 수정
         line.setColor(req.getColor());
@@ -116,8 +120,7 @@ public class LineService {
     public DeleteLineResponse deleteLine(Long id) {
 
         // 존재하지 않는 노선을 삭제하려고 할시, 예외처리
-        Line line = lineRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+        Line line = validateLineExist(id);
 
         lineRepository.delete(line);
         return new DeleteLineResponse(line.getId());
@@ -134,12 +137,6 @@ public class LineService {
         return stations;
     }
 
-//    // 존재하지 않는 지하철 역 조회 시 예외처리
-//    private void validateStations(Long downStationId, Long upStationId) {
-//        stationRepository.findById(downStationId).orElseThrow(EntityNotFoundException::new);
-//        stationRepository.findById(upStationId).orElseThrow(EntityNotFoundException::new);
-//    }
-
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {
         return stationRepository.findById(id)
@@ -151,6 +148,12 @@ public class LineService {
         if (downStationId == upStationId) {
             throw new InvalidLineStationException();
         }
+    }
+
+    // 존재하는 노선인지 판별해주는 함수
+    private Line validateLineExist(Long id) {
+        return lineRepository.findById(id)
+                .orElseThrow(NotFoundLineException::new);
     }
 
 

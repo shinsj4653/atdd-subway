@@ -1,11 +1,12 @@
 package kuit.subway.dto.response.station;
 
+import kuit.subway.dto.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class StationDto {
+public class StationDto extends BaseTimeEntity {
     private Long id;
     private String name;
 

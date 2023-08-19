@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class LineDto {
+public class LineDto extends BaseTimeEntity {
     private Long id;
     private String name;
     private String color;
