@@ -31,6 +31,7 @@ public class Line extends BaseTimeEntity {
     @OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
     private List<Station> stations = new ArrayList<>();
 
+
     @Builder
     public Line(String color, int distance, String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         super(createdDate, modifiedDate);
@@ -40,6 +41,9 @@ public class Line extends BaseTimeEntity {
     }
 
     // 연관관계 메서드
+    public void addStation(Station station) {
+        station.addLine(this);
+    }
     public void addStations(List<Station> stations) {
         stations.forEach(station -> station.addLine(this));
     }

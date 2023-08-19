@@ -7,17 +7,11 @@ import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineDto;
-<<<<<<< HEAD
 import kuit.subway.dto.response.line.LineUpdateResponse;
-=======
-import kuit.subway.dto.response.line.UpdateLineResponse;
-import kuit.subway.dto.response.station.CreateStationResponse;
-import kuit.subway.dto.response.station.DeleteStationResponse;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.InvalidLineStationException;
 import kuit.subway.exception.notfound.NotFoundLineException;
 import kuit.subway.exception.notfound.NotFoundStationException;
->>>>>>> week1-step2
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
@@ -64,11 +58,7 @@ public class LineService {
         line.addStations(stations);
         lineRepository.save(line);
 
-<<<<<<< HEAD
-        return new LineCreateResponse(line.getId());
-=======
-        return new CreateLineResponse("지하철 노선 생성 완료", line.getId());
->>>>>>> week1-step2
+        return new LineCreateResponse("지하철 노선 생성 완료", line.getId());
     }
 
     @Transactional(readOnly = true)
@@ -141,11 +131,7 @@ public class LineService {
         Line line = validateLineExist(id);
 
         lineRepository.delete(line);
-<<<<<<< HEAD
-        return new LineDeleteResponse(line.getId());
-=======
-        return new DeleteLineResponse("지하철 노선 삭제 완료", line.getId());
->>>>>>> week1-step2
+        return new LineDeleteResponse("지하철 노선 삭제 완료", line.getId());
     }
 
     // 노선의 역 리스트 생성 함수
