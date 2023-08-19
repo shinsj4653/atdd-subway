@@ -41,8 +41,12 @@ public class LineService {
         Long upStationId = res.getUpStationId();
 
         // 존재하지 않는 station_id를 추가하려고 하면 예외발생
-        validateStationExist(downStationId);
-        validateStationExist(upStationId);
+        Station downStation = validateStationExist(downStationId);
+        Station upStation = validateStationExist(upStationId);
+
+        List<Station> stations = new ArrayList<>();
+        stations.add(upStation);
+        stations.add(downStation);
 
         // 상행역과 하행역 둘 다 같은 역이면 예외발생
         validateSameStation(downStationId, upStationId);
@@ -52,11 +56,10 @@ public class LineService {
                         .color(res.getColor())
                         .distance(res.getDistance())
                         .name(res.getName())
-                        .downStationId(res.getDownStationId())
-                        .upStationId(res.getUpStationId())
                         .createdDate(LocalDateTime.now())
                         .modifiedDate(LocalDateTime.now()).build();
 
+        line.addStations(stations);
         lineRepository.save(line);
 
         return new CreateLineResponse(line.getId());
@@ -72,7 +75,7 @@ public class LineService {
                 .id(line.getId())
                 .name(line.getName())
                 .color(line.getColor())
-                .stations(createStationList(line.getDownStationId(), line.getUpStationId()))
+                .stations(createStationDtoList(line.getStations()))
                 .createdDate(line.getCreatedDate())
                 .modifiedDate(line.getModifiedDate())
                 .build();
@@ -89,7 +92,7 @@ public class LineService {
                         .id(line.getId())
                         .name(line.getName())
                         .color(line.getColor())
-                        .stations(createStationList(line.getDownStationId(), line.getUpStationId()))
+                        .stations(createStationDtoList(line.getStations()))
                         .createdDate(line.getCreatedDate())
                         .modifiedDate(line.getModifiedDate())
                         .build())
@@ -103,19 +106,20 @@ public class LineService {
         Line line = validateLineExist(id);
 
         // 존재하지 않는 station_id로 변경하려 했을 때 예외처리
-        validateStationExist(req.getDownStationId());
-        validateStationExist(req.getUpStationId());
+        Station downStation = validateStationExist(req.getDownStationId());
+        Station upStation = validateStationExist(req.getUpStationId());
+
+        List<Station> stations = new ArrayList<>();
+        stations.add(upStation);
+        stations.add(downStation);
+
 
         // 상행역과 하행역이 같으면 예외처리
         validateSameStation(req.getDownStationId(), req.getUpStationId());
 
         // 존재한다면, request 대로 노선 수정
-        line.setColor(req.getColor());
-        line.setDistance(req.getDistance());
-        line.setName(req.getName());
-        line.setDownStationId(req.getDownStationId());
-        line.setUpStationId(req.getUpStationId());
-        line.setModifiedDate(LocalDateTime.now());
+        line.updateLine(req.getColor(), req.getDistance(), req.getName(), LocalDateTime.now());
+        line.updateStations(stations);
 
         return UpdateLineResponse.builder()
                 .color(req.getColor())
@@ -136,14 +140,20 @@ public class LineService {
     }
 
     // 노선의 역 리스트 생성 함수
-    private List<Station> createStationList(Long downStationId, Long upStationId) {
-        Station downStation = stationRepository.findById(downStationId).get();
-        Station upStation = stationRepository.findById(upStationId).get();
+    private List<StationDto> createStationDtoList(List<Station> stations) {
 
-        List<Station> stations = new ArrayList<>();
-        stations.add(downStation);
-        stations.add(upStation);
-        return stations;
+        List<StationDto> result = stations.stream()
+                .map(station -> createStationDto(station)).collect(Collectors.toList());
+        return result;
+    }
+    
+    // Station에서 StationDto로 변환해주는 함수
+    private StationDto createStationDto(Station station) {
+        return StationDto.builder()
+                .id(station.getId())
+                .name(station.getName())
+                .createdDate(station.getCreatedDate())
+                .modifiedDate(station.getModifiedDate()).build();
     }
 
     // 존재하는 역인지 판별해주는 함수

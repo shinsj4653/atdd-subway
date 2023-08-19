@@ -18,7 +18,7 @@ public class LineDto extends BaseTimeEntity {
     private Long id;
     private String name;
     private String color;
-    private List<Station> stations;
+    private List<StationDto> stations;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -27,7 +27,7 @@ public class LineDto extends BaseTimeEntity {
     private LocalDateTime modifiedDate;
 
     @Builder
-    public LineDto(Long id, String name, String color, List<Station> stations, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public LineDto(Long id, String name, String color, List<StationDto> stations, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         super(createdDate, modifiedDate);
         this.id = id;
         this.color = color;

@@ -21,9 +21,18 @@ public class Station extends BaseTimeEntity {
     @Column(length = 20, nullable = false)
     private String name;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "line_id")
+    private Line line;
+
     @Builder
     public Station(String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         super(createdDate, modifiedDate);
         this.name = name;
+    }
+
+    public void addLine(Line line) {
+        this.line = line;
+        line.getStations().add(this);
     }
 }

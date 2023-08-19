@@ -1,15 +1,19 @@
 package kuit.subway.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class Line extends BaseTimeEntity {
 
@@ -24,17 +28,32 @@ public class Line extends BaseTimeEntity {
 
     private String name;
 
-    private Long downStationId;
-
-    private Long upStationId;
+    @OneToMany(mappedBy = "line")
+    private List<Station> stations = new ArrayList<>();
 
     @Builder
-    public Line(String color, int distance, String name, Long downStationId, Long upStationId, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public Line(String color, int distance, String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         super(createdDate, modifiedDate);
         this.color = color;
         this.distance = distance;
         this.name = name;
-        this.downStationId = downStationId;
-        this.upStationId = upStationId;
     }
+
+    // 연관관계 메서드
+    public void addStations(List<Station> stations) {
+        stations.forEach(station -> station.addLine(this));
+    }
+
+    public void updateLine(String color, int distance, String name, LocalDateTime modifiedDate) {
+        this.color = color;
+        this.distance = distance;
+        this.name = name;
+        this.setModifiedDate(modifiedDate);
+    }
+
+    public void updateStations(List<Station> stations) {
+        this.stations = stations;
+        addStations(stations);
+    }
+
 }
