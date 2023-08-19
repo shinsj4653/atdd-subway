@@ -11,6 +11,8 @@ import kuit.subway.dto.response.line.UpdateLineResponse;
 import kuit.subway.dto.response.station.CreateStationResponse;
 import kuit.subway.dto.response.station.DeleteStationResponse;
 import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.exception.badrequest.InvalidLineStationException;
+import kuit.subway.exception.notfound.NotFoundStationException;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +36,18 @@ public class LineService {
     @Transactional
     public CreateLineResponse addLine(CreateLineRequest res) {
 
+        Long downStationId = res.getDownStationId();
+        Long upStationId = res.getUpStationId();
+
         // 존재하지 않는 station_id를 추가하려고 하면 예외발생
-        validateStations(res.getDownStationId(), res.getUpStationId());
+        validateStationExist(downStationId);
+        validateStationExist(upStationId);
+
+        // 상행역과 하행역 둘 다 같은 역이면 예외발생
+        validateSameStation(downStationId, upStationId);
 
         // 만약, 둘 다 존재하는 역이라면 노선 생성
-        Line line = new Line(res.getColor(), res.getDistance(), res.getName(), res.getDownStationId(), res.getUpStationId());
+        Line line = new Line(res.getColor(), res.getDistance(), res.getName(), downStationId, upStationId);
         lineRepository.save(line);
 
         return new CreateLineResponse(line.getId());
@@ -85,7 +94,8 @@ public class LineService {
         Line line = lineRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         // 존재하지 않는 station_id로 변경하려 했을 때 예외처리
-        validateStations(req.getDownStationId(), req.getUpStationId());
+        validateStationExist(req.getDownStationId());
+        validateStationExist(req.getUpStationId());
 
         // 존재한다면, request 대로 노선 수정
         line.setColor(req.getColor());
@@ -124,10 +134,25 @@ public class LineService {
         return stations;
     }
 
-    // 존재하지 않는 지하철 역 조회 시 예외처리
-    private void validateStations(Long downStationId, Long upStationId) {
-        stationRepository.findById(downStationId).orElseThrow(EntityNotFoundException::new);
-        stationRepository.findById(upStationId).orElseThrow(EntityNotFoundException::new);
+//    // 존재하지 않는 지하철 역 조회 시 예외처리
+//    private void validateStations(Long downStationId, Long upStationId) {
+//        stationRepository.findById(downStationId).orElseThrow(EntityNotFoundException::new);
+//        stationRepository.findById(upStationId).orElseThrow(EntityNotFoundException::new);
+//    }
+
+    // 존재하는 역인지 판별해주는 함수
+    private Station validateStationExist(Long id) {
+        return stationRepository.findById(id)
+                .orElseThrow(NotFoundStationException::new);
     }
+
+    // 노선으로 등록할 두 역이 같은 역인지 판별해주는 함수
+    private void validateSameStation(Long downStationId, Long upStationId) {
+        if (downStationId == upStationId) {
+            throw new InvalidLineStationException();
+        }
+    }
+
+
 
 }

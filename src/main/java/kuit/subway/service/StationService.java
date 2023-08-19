@@ -41,7 +41,7 @@ public class StationService {
 
     @Transactional
     public StationDto findStationById(Long id) {
-        Station station = validateStation(id);
+        Station station = validateStationExist(id);
 
         StationDto result = StationDto.builder()
                 .id(id)
@@ -52,14 +52,14 @@ public class StationService {
 
     @Transactional
     public DeleteStationResponse deleteStation(Long id) {
-        Station station = validateStation(id);
+        Station station = validateStationExist(id);
 
         stationRepository.delete(station);
         return new DeleteStationResponse(station.getId());
     }
 
     // 존재하는 역인지 판별해주는 함수
-    private Station validateStation(Long id) {
+    private Station validateStationExist(Long id) {
         return stationRepository.findById(id)
                 .orElseThrow(NotFoundStationException::new);
     }
