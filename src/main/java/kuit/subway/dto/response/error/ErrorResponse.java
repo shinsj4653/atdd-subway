@@ -1,13 +1,14 @@
-package kuit.subway.dto.request.station;
+package kuit.subway.dto.response.error;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class CreateStationRequest {
-    private String name;
+public class ErrorResponse {
+    private int code;
+    private String message;
 }
