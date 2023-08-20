@@ -44,6 +44,10 @@ public class Line extends BaseTimeEntity {
     public void addStation(Station station) {
         station.addLine(this);
     }
+
+    public void deleteStation(Station station) {
+        station.removeLine(this);
+    }
     public void addStations(List<Station> stations) {
         stations.forEach(station -> station.addLine(this));
     }

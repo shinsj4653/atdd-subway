@@ -2,6 +2,7 @@ package kuit.subway.controller;
 
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
+import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.service.SectionService;
@@ -24,5 +25,12 @@ public class SectionController {
         LineDto res = sectionService.addSection(lineId, request);
         return ResponseEntity.created(URI.create("/sections/" + res.getId()))
                 .body(res);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<LineDto> deleteSection(@PathVariable("id") Long lineId, @RequestBody SectionDeleteRequest request) {
+
+        LineDto res = sectionService.deleteSection(lineId, request);
+        return ResponseEntity.ok().body(res);
     }
 }
