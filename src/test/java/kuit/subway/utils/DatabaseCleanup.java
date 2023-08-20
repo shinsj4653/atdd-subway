@@ -38,7 +38,7 @@ public class DatabaseCleanup implements InitializingBean {
 
             if (primaryKeyColumnName != null) {
                 entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
-                entityManager.createNativeQuery("ALTER TABLE " + tableName + " ALTER COLUMN " + primaryKeyColumnName + " RESTART WITH 1").executeUpdate();
+                entityManager.createNativeQuery("ALTER TABLE " + tableName + " ALTER COLUMN " + tableName + "_id" + " RESTART WITH 1").executeUpdate();
             }
         }
 
