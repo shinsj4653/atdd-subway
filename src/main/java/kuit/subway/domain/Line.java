@@ -60,9 +60,9 @@ public class Line extends BaseTimeEntity {
     }
 
     public void updateStations(List<Station> stations) {
-        // Remove the existing stations from the line's list
+        // 현재 노선에 존재하고 있는 역들을 제거
         this.stations.forEach(station -> station.removeLine(this));
-        // Clear the existing stations list
+        // stations 리스트 clear()
         this.stations.clear();
 
         this.stations = new ArrayList<>(stations);

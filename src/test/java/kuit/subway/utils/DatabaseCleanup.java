@@ -34,27 +34,10 @@ public class DatabaseCleanup implements InitializingBean {
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
 
         for (String tableName : tableNames) {
-            String primaryKeyColumnName = determinePrimaryKeyColumnName(tableName);
-
-            if (primaryKeyColumnName != null) {
                 entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
                 entityManager.createNativeQuery("ALTER TABLE " + tableName + " ALTER COLUMN " + tableName + "_id" + " RESTART WITH 1").executeUpdate();
-            }
         }
 
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
-    }
-
-    private String determinePrimaryKeyColumnName(String tableName) {
-        switch (tableName) {
-            case "station":
-                return "station_id";
-            case "line":
-                return "line_id";
-            case "section" :
-                return "section_id";
-            default:
-                return null;
-        }
     }
 }
