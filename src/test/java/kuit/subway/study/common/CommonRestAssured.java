@@ -38,6 +38,17 @@ public class CommonRestAssured {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> deleteWithParam(String url, Object params) {
+
+        return RestAssured.given().log().all()
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .delete(url)
+                .then().log().all()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> put(String url, Object params) {
 
         return RestAssured.given().log().all()
