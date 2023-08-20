@@ -79,7 +79,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         StationCreateRequest station1 = new StationCreateRequest("강남역");
         StationCreateRequest station2 = new StationCreateRequest("성수역");
-        ExtractableResponse createdRes = 지하철_노선_등록(station1, station2);
+        ExtractableResponse<Response> createdRes = 지하철_노선_등록(station1, station2);
         LineCreateRequest 지하철_노선_변경_요청 = new LineCreateRequest("red", 15, "신분당선", 2L, 1L);
         Long id = createdRes.jsonPath().getLong("id");
 
