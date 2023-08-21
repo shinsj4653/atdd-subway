@@ -5,6 +5,7 @@ import kuit.subway.dto.BaseTimeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -21,9 +22,9 @@ public class Station extends BaseTimeEntity {
     @Column(length = 20, nullable = false)
     private String name;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "line_id")
-    private Line line;
+    @OneToMany(fetch = LAZY)
+    @JoinColumn(name = "section_id")
+    private List<Section> sections;
 
     @Builder
     public Station(String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
@@ -31,12 +32,12 @@ public class Station extends BaseTimeEntity {
         this.name = name;
     }
 
-    public void addLine(Line line) {
-        this.line = line;
-        line.getStations().add(this);
-    }
-
-    public void removeLine(Line line) {
-        this.line = null;
-    }
+//    public void addLine(Line line) {
+//        this.section = line;
+//        line.getStations().add(this);
+//    }
+//
+//    public void removeLine(Line line) {
+//        this.line = null;
+//    }
 }

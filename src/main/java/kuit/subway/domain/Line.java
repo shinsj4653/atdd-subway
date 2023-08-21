@@ -29,8 +29,7 @@ public class Line extends BaseTimeEntity {
     private String name;
 
     @OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
-    private List<Station> stations = new ArrayList<>();
-
+    private List<Section> sections = new ArrayList<>();
 
     @Builder
     public Line(String color, int distance, String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
@@ -41,32 +40,32 @@ public class Line extends BaseTimeEntity {
     }
 
     // 연관관계 메서드
-    public void addStation(Station station) {
-        station.addLine(this);
+    public void addSection(Section section) {
+        sections.add(section);
     }
-
-    public void deleteStation(Station station) {
-        station.removeLine(this);
-    }
-    public void addStations(List<Station> stations) {
-        stations.forEach(station -> station.addLine(this));
-    }
-
-    public void updateLine(String color, int distance, String name, LocalDateTime modifiedDate) {
-        this.color = color;
-        this.distance = distance;
-        this.name = name;
-        this.setModifiedDate(modifiedDate);
-    }
-
-    public void updateStations(List<Station> stations) {
-        // 현재 노선에 존재하고 있는 역들을 제거
-        this.stations.forEach(station -> station.removeLine(this));
-        // stations 리스트 clear()
-        this.stations.clear();
-
-        this.stations = new ArrayList<>(stations);
-        addStations(stations);
-    }
+//
+//    public void deleteStation(Station station) {
+//        station.removeLine(this);
+//    }
+//    public void addStations(List<Station> stations) {
+//        stations.forEach(station -> station.addLine(this));
+//    }
+//
+//    public void updateLine(String color, int distance, String name, LocalDateTime modifiedDate) {
+//        this.color = color;
+//        this.distance = distance;
+//        this.name = name;
+//        this.setModifiedDate(modifiedDate);
+//    }
+//
+//    public void updateStations(List<Station> stations) {
+//        // 현재 노선에 존재하고 있는 역들을 제거
+//        this.stations.forEach(station -> station.removeLine(this));
+//        // stations 리스트 clear()
+//        this.stations.clear();
+//
+//        this.stations = new ArrayList<>(stations);
+//        addStations(stations);
+//    }
 
 }
