@@ -14,7 +14,9 @@ import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Line extends BaseTimeEntity {
 
     @Id
@@ -31,14 +33,13 @@ public class Line extends BaseTimeEntity {
     @OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
     private List<Section> sections = new ArrayList<>();
 
-    @Builder
-    public Line(String color, int distance, String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        super(createdDate, modifiedDate);
-        this.color = color;
-        this.distance = distance;
-        this.name = name;
+    public static Line createLine(String color, int distance, String name) {
+        return Line.builder()
+                .color(color)
+                .distance(distance)
+                .name(name)
+                .build();
     }
-
     // 연관관계 메서드
     public void addSection(Section section) {
         sections.add(section);

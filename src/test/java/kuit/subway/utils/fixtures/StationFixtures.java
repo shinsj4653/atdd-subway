@@ -5,13 +5,14 @@ import io.restassured.response.Response;
 import kuit.subway.dto.request.station.StationCreateRequest;
 
 import static kuit.subway.study.common.CommonRestAssured.*;
+import static kuit.subway.utils.steps.StationStep.지하철_역_생성_요청;
 
 public class StationFixtures {
 
     public static final String STATION_PATH = "/stations";
 
     public static ExtractableResponse<Response> 지하철_역_등록(String name) {
-        StationCreateRequest req = new StationCreateRequest(name);
+        StationCreateRequest req = 지하철_역_생성_요청(name);
         return post(STATION_PATH, req);
     }
 
