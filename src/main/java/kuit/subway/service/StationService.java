@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StationService {
 
     private final StationRepository stationRepository;
@@ -32,7 +33,6 @@ public class StationService {
 
         return new StationCreateResponse("지하철 역 추가 완료", station.getId());
     }
-    @Transactional(readOnly = true)
     public List<StationDto> findStations() {
         List<Station> findStations = stationRepository.findAll();
         List<StationDto> result = findStations.stream()
@@ -45,7 +45,6 @@ public class StationService {
         return result;
     }
 
-    @Transactional(readOnly = true)
     public StationDto findStationById(Long id) {
         Station station = validateStationExist(id);
 

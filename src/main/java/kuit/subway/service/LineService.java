@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LineService {
 
     private final LineRepository lineRepository;
@@ -63,25 +64,23 @@ public class LineService {
         return new LineCreateResponse("지하철 노선 생성 완료", line.getId());
     }
 
-//    @Transactional(readOnly = true)
-//    public LineDto findLineById(Long id) {
-//
-//        // 존재하지 않는 노선을 조회했을 때 예외처리
-//        Line line = validateLineExist(id);
-//
-//        LineDto result = LineDto.builder()
-//                .id(line.getId())
-//                .name(line.getName())
-//                .color(line.getColor())
-//                .stations(createStationDtoList(line.getStations()))
-//                .createdDate(line.getCreatedDate())
-//                .modifiedDate(line.getModifiedDate())
-//                .build();
-//
-//        return result;
-//    }
-//
-//    @Transactional(readOnly = true)
+    public LineDto findLineById(Long id) {
+
+        // 존재하지 않는 노선을 조회했을 때 예외처리
+        Line line = validateLineExist(id);
+
+        LineDto result = LineDto.builder()
+                .id(line.getId())
+                .name(line.getName())
+                .color(line.getColor())
+                .stations(createStationDtoList(line.getStations()))
+                .createdDate(line.getCreatedDate())
+                .modifiedDate(line.getModifiedDate())
+                .build();
+
+        return result;
+    }
+
 //    public List<LineDto> findAllLines() {
 //
 //        List<Line> findLines = lineRepository.findAll();
