@@ -25,16 +25,21 @@ public class Sections {
     public void addSection(Section section) {
         // 구간을 처음 추가하는 경우는 validate 할 필요 X
         if(sections.size() > 0) {
-            //validateSectionCreateUpStation(section);
-            //validateSectionCreateDownStation(section);
+            // 구간 추가 시, 고려해야 할 예외사항 먼저 체크
             validateSectionCreateBothNotExist(section);
             validateSectionCreateBothExist(section);
             validateSectionCreateLengthLonger(section);
+        } else if (validateSectionCreateFirstStation(section)) {
+            // 새로운 역을 상행 종점으로 등록할 경우
+            this.sections.add(0, section);
         } else if (validateSectionCreateFinalStation(section)) {
+            // 새로운 역을 하행 종점으로 등록할 경우
             this.sections.add(section);
-        } else if (validateSectionCreateFinalStation(section)) {
-            this.sections.add(section);
+        } else {
+            // 사이에 끼울 경우, 각 기존 구간의 상행역 & 하행역을 신규 구간 정보로 잘 변경
+            
         }
+        this.sections.add(section);
     }
 
     public List<StationDto> getStationDtoList() {
@@ -71,10 +76,9 @@ public class Sections {
     }
 
     // 새로운 구간의 상행역이 등록되어있는 하행 종점역이면, 새로운 역을 하행 종점으로 등록할 경우
-    private boolean validateSectionCreateFinalStation(Section section) {
-        Section lastSection = sections.get(sections.size() - 1);
-        if(lastSection.getDownStation().equals(section.getUpStation())) {
-            //throw new InvalidSectionCreateUpStationException();
+    private boolean validateSectionCreateFirstStation(Section section) {
+        Section firstSection = sections.get(0);
+        if(firstSection.getUpStation().equals(section.getDownStation())) {
             return true;
         }
     }
@@ -83,7 +87,6 @@ public class Sections {
     private boolean validateSectionCreateFinalStation(Section section) {
         Section lastSection = sections.get(sections.size() - 1);
         if(lastSection.getDownStation().equals(section.getUpStation())) {
-            //throw new InvalidSectionCreateUpStationException();
             return true;
         }
     }
