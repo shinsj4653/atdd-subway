@@ -30,6 +30,7 @@ public class Line extends BaseTimeEntity {
 
     private int distance;
 
+    @Embedded
     private Sections sections;
 
     public static Line createLine(String name, String color, int distance) {
