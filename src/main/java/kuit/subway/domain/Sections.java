@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothExistException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateDownStationException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateUpStationException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteLastStationException;
@@ -81,17 +82,29 @@ public class Sections {
 
     // 상행역과 하행역 둘 중 하나도 포함되어있지 않으면 추가 불가
     private void validateSectionCreateBothNotExist(Section section) {
-
+        boolean upStationExist = sections.stream().anyMatch(existedSection ->
+                existedSection.getUpStation().equals(section.getUpStation()) || existedSection.getDownStation().equals(section.getUpStation()));
+        boolean downStationExist =sections.stream().anyMatch(existedSection ->
+                existedSection.getUpStation().equals(section.getDownStation()) || existedSection.getDownStation().equals(section.getDownStation()));
+        if (!upStationExist && !downStationExist) {
+            throw new InvalidSectionCreateBothExistException();
+        }
     }
 
     // 상행역과 하행역이 이미 노선에 모두 등록되어 있다면 추가 불가
     private void validateSectionCreateBothExist(Section section) {
-
+        boolean upStationExist = sections.stream().anyMatch(existedSection ->
+                existedSection.getUpStation().equals(section.getUpStation()) || existedSection.getDownStation().equals(section.getUpStation()));
+        boolean downStationExist =sections.stream().anyMatch(existedSection ->
+                existedSection.getUpStation().equals(section.getDownStation()) || existedSection.getDownStation().equals(section.getDownStation()));
+        if (upStationExist && downStationExist) {
+            throw new InvalidSectionCreateBothExistException();
+        }
     }
 
     // 역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 추가 불가
     private void validateSectionCreateLengthLonger(Section section) {
-
+        
     }
 
     // 지하철 노선에 등록된 역(하행 종점역)만 제거할 수 있다. 즉, 마지막 구간만 제거할 수 있다.
