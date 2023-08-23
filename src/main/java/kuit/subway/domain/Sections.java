@@ -4,10 +4,10 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import kuit.subway.dto.response.station.StationDto;
-import kuit.subway.exception.badrequest.section.InvalidSectionCreateDownStationException;
-import kuit.subway.exception.badrequest.section.InvalidSectionCreateUpStationException;
-import kuit.subway.exception.badrequest.section.InvalidSectionDeleteLastStationException;
-import kuit.subway.exception.badrequest.section.InvalidSectionDeleteOnlyTwoStationsException;
+import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateDownStationException;
+import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateUpStationException;
+import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteLastStationException;
+import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,7 @@ public class Sections {
         if(sections.size() > 0) {
             validateSectionCreateUpStation(section);
             validateSectionCreateDownStation(section);
+
         }
         this.sections.add(section);
     }
@@ -75,6 +76,21 @@ public class Sections {
         if (isExist) {
             throw new InvalidSectionCreateDownStationException();
         }
+
+    }
+
+    // 상행역과 하행역 둘 중 하나도 포함되어있지 않으면 추가 불가
+    private void validateSectionCreateBothNotExist(Section section) {
+
+    }
+
+    // 상행역과 하행역이 이미 노선에 모두 등록되어 있다면 추가 불가
+    private void validateSectionCreateBothExist(Section section) {
+
+    }
+
+    // 역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 추가 불가
+    private void validateSectionCreateLengthLonger(Section section) {
 
     }
 

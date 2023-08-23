@@ -1,4 +1,4 @@
-package kuit.subway.exception.badrequest.section;
+package kuit.subway.exception.badrequest.section.create;
 
 import kuit.subway.exception.badrequest.BadRequestException;
 import lombok.Getter;
