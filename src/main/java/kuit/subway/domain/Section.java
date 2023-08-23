@@ -46,27 +46,16 @@ public class Section extends BaseTimeEntity {
         this.downStation = downStation;
     }
 
+    public void updateSection(Station upStation, Station downStation, int distance) {
+        this.upStation = upStation;
+        this.downStation = downStation;
+        this.distance = distance;
+    }
+
     public void removeLineAndStations() {
         this.line = null;
         this.upStation = null;
         this.downStation = null;
     }
-
-//    @Builder
-//    public Section(LocalDateTime createdDate, LocalDateTime modifiedDate) {
-//        super(createdDate, modifiedDate);
-//    }
-//
-//    // 연관관계 메서드
-//    public void addStations(Station upStation, Station downStation) {
-//        this.upStation = upStation;
-//        this.downStation = downStation;
-//        upStation.getSections().add(this);
-//        downStation.getSections().add(this);
-//    }
-//
-//    public void addLine(Line line) {
-//        this.line = line;
-//    }
 
 }
