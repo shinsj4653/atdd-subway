@@ -94,11 +94,8 @@ public class LineService {
         // 모든 예외조건 패스할 시, request 대로 노선 수정
         line.updateLine(req.getName(), req.getColor(), req.getDistance());
         
-        // 기존의 Sections 정보 비워주기
+        // 기존의 Sections 정보 업데이트
         line.getSections().updateSections(upStation, downStation);
-        
-//        // 새로운 구간 만들어서 노선에 넣어주기
-//        lineRepository.save(line);
 
         return LineUpdateResponse.createLineUpdateResponse(
                 line.getId(),
@@ -108,26 +105,16 @@ public class LineService {
                 line.getSections().getStationDtoList()
         );
     }
-//
-//    @Transactional
-//    public LineDeleteResponse deleteLine(Long id) {
-//
-//        // 존재하지 않는 노선을 삭제하려고 할시, 예외처리
-//        Line line = validateLineExist(id);
-//
-//        lineRepository.delete(line);
-//        return new LineDeleteResponse("지하철 노선 삭제 완료", line.getId());
-//    }
-    
-    // Station에서 StationDto로 변환해주는 함수
-//    private StationDto createStationDto(Station station) {
-//        return StationDto.builder()
-//                .id(station.getId())
-//                .name(station.getName())
-//                .createdDate(station.getCreatedDate())
-//                .modifiedDate(station.getModifiedDate()).build();
-//    }
 
+    @Transactional
+    public LineDeleteResponse deleteLine(Long id) {
+
+        // 존재하지 않는 노선을 삭제하려고 할시, 예외처리
+        Line line = validateLineExist(id);
+
+        lineRepository.delete(line);
+        return new LineDeleteResponse("지하철 노선 삭제 완료", line.getId());
+    }
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {
         return stationRepository.findById(id)
@@ -146,7 +133,4 @@ public class LineService {
         return lineRepository.findById(id)
                 .orElseThrow(NotFoundLineException::new);
     }
-
-
-
 }
