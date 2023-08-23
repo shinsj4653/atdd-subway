@@ -63,33 +63,17 @@ public class LineService {
         // 존재하지 않는 노선을 조회했을 때 예외처리
         Line line = validateLineExist(id);
 
-        LineDto result = LineDto.builder()
-                .id(line.getId())
-                .name(line.getName())
-                .color(line.getColor())
-                .stations(line.getSections().getStationDtoList())
-                .createdDate(line.getCreatedDate())
-                .modifiedDate(line.getModifiedDate())
-                .build();
-
-        return result;
+        return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getSections().getStationDtoList());
     }
 
-//    public List<LineDto> findAllLines() {
-//
-//        List<Line> findLines = lineRepository.findAll();
-//        List<LineDto> result = findLines.stream()
-//                .map(line -> LineDto.builder()
-//                        .id(line.getId())
-//                        .name(line.getName())
-//                        .color(line.getColor())
-//                        .stations(createStationDtoList(line.getStations()))
-//                        .createdDate(line.getCreatedDate())
-//                        .modifiedDate(line.getModifiedDate())
-//                        .build())
-//                .collect(Collectors.toList());
-//        return result;
-//    }
+    public List<LineDto> findAllLines() {
+
+        List<Line> findLines = lineRepository.findAll();
+        List<LineDto> result = findLines.stream()
+                .map(line -> LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getSections().getStationDtoList()))
+                .collect(Collectors.toList());
+        return result;
+    }
 //
 //    @Transactional
 //    public LineUpdateResponse updateLine(Long id, LineCreateRequest req) {

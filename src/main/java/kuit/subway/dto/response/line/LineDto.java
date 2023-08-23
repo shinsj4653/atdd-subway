@@ -18,22 +18,18 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class LineDto extends BaseTimeEntity {
+public class LineDto {
     private Long id;
     private String name;
     private String color;
     private List<StationDto> stations;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedDate;
-
-    @Builder
-    public LineDto(Long id, String name, String color) {
-        this.id = id;
-        this.color = color;
-        this.name = name;
+    public static LineDto createLineDto(Long id, String name, String color, List<StationDto> stations) {
+        return LineDto.builder()
+                .id(id)
+                .name(name)
+                .color(color)
+                .stations(stations)
+                .build();
     }
 }

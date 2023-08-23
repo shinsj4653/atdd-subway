@@ -33,10 +33,10 @@ public class LineController {
         return ResponseEntity.ok(lineService.findLineById(id));
     }
 
-//    @GetMapping()
-//    public ResponseEntity<List<LineDto>> getLines() {
-//        return ResponseEntity.ok(lineService.findAllLines());
-//    }
+    @GetMapping()
+    public ResponseEntity<List<LineDto>> getLines() {
+        return ResponseEntity.ok(lineService.findAllLines());
+    }
 //
 //    @PutMapping("/{id}")
 //    public ResponseEntity<LineUpdateResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineCreateRequest req) {
