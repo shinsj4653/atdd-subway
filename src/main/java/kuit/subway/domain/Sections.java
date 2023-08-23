@@ -4,10 +4,10 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import kuit.subway.dto.response.station.StationDto;
-import kuit.subway.exception.badrequest.InvalidSectionCreateDownStationException;
-import kuit.subway.exception.badrequest.InvalidSectionCreateUpStationException;
-import kuit.subway.exception.badrequest.InvalidSectionDeleteLastStationException;
-import kuit.subway.exception.badrequest.InvalidSectionDeleteOnlyTwoStationsException;
+import kuit.subway.exception.badrequest.section.InvalidSectionCreateDownStationException;
+import kuit.subway.exception.badrequest.section.InvalidSectionCreateUpStationException;
+import kuit.subway.exception.badrequest.section.InvalidSectionDeleteLastStationException;
+import kuit.subway.exception.badrequest.section.InvalidSectionDeleteOnlyTwoStationsException;
 
 import java.util.ArrayList;
 import java.util.List;

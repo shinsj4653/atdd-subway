@@ -1,6 +1,5 @@
 package kuit.subway.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
 import kuit.subway.domain.Sections;
@@ -10,17 +9,15 @@ import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.dto.response.line.LineUpdateResponse;
-import kuit.subway.dto.response.station.StationDto;
-import kuit.subway.exception.badrequest.InvalidLineStationException;
-import kuit.subway.exception.notfound.NotFoundLineException;
-import kuit.subway.exception.notfound.NotFoundStationException;
+import kuit.subway.exception.badrequest.station.InvalidLineStationException;
+import kuit.subway.exception.notfound.line.NotFoundLineException;
+import kuit.subway.exception.notfound.station.NotFoundStationException;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -2,27 +2,18 @@ package kuit.subway.service;
 
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
-import kuit.subway.domain.Sections;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.LineDto;
-import kuit.subway.dto.response.section.SectionCreateResponse;
-import kuit.subway.dto.response.station.StationDto;
-import kuit.subway.exception.badrequest.*;
-import kuit.subway.exception.notfound.NotFoundLineException;
-import kuit.subway.exception.notfound.NotFoundStationException;
+import kuit.subway.exception.badrequest.station.InvalidLineStationException;
+import kuit.subway.exception.notfound.line.NotFoundLineException;
+import kuit.subway.exception.notfound.station.NotFoundStationException;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
