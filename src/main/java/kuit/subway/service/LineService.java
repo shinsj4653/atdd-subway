@@ -3,6 +3,7 @@ package kuit.subway.service;
 import jakarta.persistence.EntityNotFoundException;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
+import kuit.subway.domain.Sections;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.response.line.LineCreateResponse;
@@ -45,41 +46,34 @@ public class LineService {
         // 상행역과 하행역 둘 다 같은 역이면 예외발생
         validateSameStation(downStationId, upStationId);
 
-        // 노선에는 구간 형태로 추가해줘야한다.
-        Section section = new Section();
-        section.addStations(upStation, downStation);
-
         // 만약, 둘 다 존재하는 역이라면 노선 생성
-        Line line = Line.builder()
-                        .color(res.getColor())
-                        .distance(res.getDistance())
-                        .name(res.getName())
-                        .createdDate(LocalDateTime.now())
-                        .modifiedDate(LocalDateTime.now()).build();
+        Line line = Line.createLine(res.getColor(), res.getDistance(), res.getName());
 
-        section.addLine(line);
-        line.addSection(section);
+        // 노선에는 구간 형태로 추가해줘야한다.
+        Sections sections = new Sections();
+        sections.addSection(Section.createSection(line, upStation, downStation));
+        line.addSection(sections);
         lineRepository.save(line);
 
         return new LineCreateResponse("지하철 노선 생성 완료", line.getId());
     }
 
-    public LineDto findLineById(Long id) {
-
-        // 존재하지 않는 노선을 조회했을 때 예외처리
-        Line line = validateLineExist(id);
-
-        LineDto result = LineDto.builder()
-                .id(line.getId())
-                .name(line.getName())
-                .color(line.getColor())
-                .stations(createStationDtoList(line.getStations()))
-                .createdDate(line.getCreatedDate())
-                .modifiedDate(line.getModifiedDate())
-                .build();
-
-        return result;
-    }
+//    public LineDto findLineById(Long id) {
+//
+//        // 존재하지 않는 노선을 조회했을 때 예외처리
+//        Line line = validateLineExist(id);
+//
+//        LineDto result = LineDto.builder()
+//                .id(line.getId())
+//                .name(line.getName())
+//                .color(line.getColor())
+//                .stations(createStationDtoList(line.getStations()))
+//                .createdDate(line.getCreatedDate())
+//                .modifiedDate(line.getModifiedDate())
+//                .build();
+//
+//        return result;
+//    }
 
 //    public List<LineDto> findAllLines() {
 //
@@ -136,21 +130,21 @@ public class LineService {
 //    }
 
     // 노선의 역 리스트 생성 함수
-    private List<StationDto> createStationDtoList(List<Station> stations) {
-
-        List<StationDto> result = stations.stream()
-                .map(station -> createStationDto(station)).collect(Collectors.toList());
-        return result;
-    }
+//    private List<StationDto> createStationDtoList(List<Station> stations) {
+//
+//        List<StationDto> result = stations.stream()
+//                .map(station -> createStationDto(station)).collect(Collectors.toList());
+//        return result;
+//    }
     
     // Station에서 StationDto로 변환해주는 함수
-    private StationDto createStationDto(Station station) {
-        return StationDto.builder()
-                .id(station.getId())
-                .name(station.getName())
-                .createdDate(station.getCreatedDate())
-                .modifiedDate(station.getModifiedDate()).build();
-    }
+//    private StationDto createStationDto(Station station) {
+//        return StationDto.builder()
+//                .id(station.getId())
+//                .name(station.getName())
+//                .createdDate(station.getCreatedDate())
+//                .modifiedDate(station.getModifiedDate()).build();
+//    }
 
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {

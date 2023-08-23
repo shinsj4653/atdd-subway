@@ -16,9 +16,13 @@ public class Sections {
     public List<Section> sections = new ArrayList<>();
 
     public void addSection(Section section) {
-        validateSectionCreateUpStation(section);
-        validateSectionCreateDownStation(section);
-        this.sections.add(section);
+        // 구간을 처음 추가하는 경우는 validate 할 필요 X
+        if(sections.size() > 0) {
+            validateSectionCreateUpStation(section);
+            validateSectionCreateDownStation(section);
+        } else {
+            this.sections.add(section);
+        }
     }
 
     // 새로운 구간의 상행역은 등록되어있는 하행 종점역이어야 한다.

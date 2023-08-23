@@ -27,8 +27,7 @@ public class StationService {
 
     @Transactional
     public StationCreateResponse addStation(StationCreateRequest res) {
-        Station station = Station.builder()
-                        .name(res.getName()).build();
+        Station station = Station.createStation(res.getName(), LocalDateTime.now(), LocalDateTime.now());
         stationRepository.save(station);
 
         return new StationCreateResponse("지하철 역 추가 완료", station.getId());
@@ -36,31 +35,20 @@ public class StationService {
     public List<StationDto> findStations() {
         List<Station> findStations = stationRepository.findAll();
         List<StationDto> result = findStations.stream()
-                .map(station -> StationDto.builder()
-                        .id(station.getId())
-                        .name(station.getName())
-                        .createdDate(station.getCreatedDate())
-                        .modifiedDate(station.getModifiedDate()).build())
+                .map(station -> StationDto.createStationDto(station.getId(), station.getName()))
                 .collect(Collectors.toList());
         return result;
     }
 
     public StationDto findStationById(Long id) {
         Station station = validateStationExist(id);
-
-        StationDto result = StationDto.builder()
-                .id(station.getId())
-                .name(station.getName())
-                .createdDate(station.getCreatedDate())
-                .modifiedDate(station.getModifiedDate()).build();
-
-        return result;
+        return StationDto.createStationDto(station.getId(), station.getName());
     }
 
     @Transactional
     public StationDeleteResponse deleteStation(Long id) {
         Station station = stationRepository.findById(id)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(NotFoundStationException::new);
 
         stationRepository.delete(station);
         return new StationDeleteResponse("지하철 역 삭제 완료", station.getId());

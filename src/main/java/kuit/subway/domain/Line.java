@@ -29,9 +29,7 @@ public class Line extends BaseTimeEntity {
     private int distance;
 
     private String name;
-
-    @OneToMany(mappedBy = "line", cascade = CascadeType.ALL)
-    private List<Section> sections = new ArrayList<>();
+    private Sections sections;
 
     public static Line createLine(String color, int distance, String name) {
         return Line.builder()
@@ -41,8 +39,8 @@ public class Line extends BaseTimeEntity {
                 .build();
     }
     // 연관관계 메서드
-    public void addSection(Section section) {
-        sections.add(section);
+    public void addSection(Sections sections) {
+        this.sections = sections;
     }
 //
 //    public void deleteStation(Station station) {
