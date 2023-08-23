@@ -30,11 +30,14 @@ public class Section extends BaseTimeEntity {
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 
-    public static Section createSection(Line line, Station upStation, Station downStation) {
+    private int distance;
+
+    public static Section createSection(Line line, Station upStation, Station downStation, int distance) {
         return Section.builder()
                 .line(line)
                 .upStation(upStation)
                 .downStation(downStation)
+                .distance(distance)
                 .build();
     }
 

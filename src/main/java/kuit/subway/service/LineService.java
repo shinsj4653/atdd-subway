@@ -48,7 +48,7 @@ public class LineService {
 
         // 노선에는 구간 형태로 추가해줘야한다.
         Sections sections = new Sections();
-        sections.addSection(Section.createSection(line, upStation, downStation));
+        sections.addSection(Section.createSection(line, upStation, downStation, 1));
         line.addSection(sections);
         lineRepository.save(line);
 

@@ -6,12 +6,15 @@ import jakarta.persistence.OneToMany;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothExistException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateDownStationException;
+import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateLengthLongerException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateUpStationException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteLastStationException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Embeddable
 public class Sections {
@@ -24,7 +27,9 @@ public class Sections {
         if(sections.size() > 0) {
             validateSectionCreateUpStation(section);
             validateSectionCreateDownStation(section);
-
+            validateSectionCreateBothNotExist(section);
+            validateSectionCreateBothExist(section);
+            validateSectionCreateLengthLonger(section);
         }
         this.sections.add(section);
     }
@@ -104,7 +109,13 @@ public class Sections {
 
     // 역 사이에 새로운 역을 등록할 경우 기존 역 사이 길이보다 크거나 같으면 추가 불가
     private void validateSectionCreateLengthLonger(Section section) {
-        
+        Optional<Section> findSection = this.sections.stream()
+                .filter(s -> s.getUpStation().equals(section.getUpStation()))
+                .findAny();
+
+        if (findSection.isPresent() && findSection.get().getDistance() <= section.getDistance()) {
+            throw new InvalidSectionCreateLengthLongerException();
+        }
     }
 
     // 지하철 노선에 등록된 역(하행 종점역)만 제거할 수 있다. 즉, 마지막 구간만 제거할 수 있다.
