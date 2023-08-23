@@ -47,8 +47,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
     void deleteStation() {
 
         // given
-        ExtractableResponse<Response> res = 지하철_역_등록("강남역");
-        Long id = res.jsonPath().getLong("id");
+        Long id = 지하철_역_등록("강남역").jsonPath().getLong("id");
 
         // when
         ExtractableResponse<Response> 지하철_역_삭제_결과 = 지하철_역_삭제(id);
