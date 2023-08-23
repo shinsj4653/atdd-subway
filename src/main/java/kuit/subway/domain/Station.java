@@ -28,13 +28,19 @@ public class Station extends BaseTimeEntity {
     @OneToMany(fetch = LAZY)
     @JoinColumn(name = "section_id")
     private List<Section> sections;
-
-    public Station(LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        super(createdDate, modifiedDate);
-    }
     public static Station createStation(String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         return Station.builder()
                 .name(name)
                 .build();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Station)) {
+            return false;
+        }
+        Station station = (Station) o;
+        return station.getId().equals(id) && station.getName().equals(name);
+    }
+
 }

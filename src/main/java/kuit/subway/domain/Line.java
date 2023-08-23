@@ -43,29 +43,11 @@ public class Line extends BaseTimeEntity {
     public void addSection(Sections sections) {
         this.sections = sections;
     }
-//
-//    public void deleteStation(Station station) {
-//        station.removeLine(this);
-//    }
-//    public void addStations(List<Station> stations) {
-//        stations.forEach(station -> station.addLine(this));
-//    }
-//
     public void updateLine(String name, String color, int distance, Station upStation, Station downStation) {
         this.name = name;
         this.color = color;
         this.distance = distance;
         this.sections.updateSections(upStation, downStation);
     }
-//
-//    public void updateStations(List<Station> stations) {
-//        // 현재 노선에 존재하고 있는 역들을 제거
-//        this.stations.forEach(station -> station.removeLine(this));
-//        // stations 리스트 clear()
-//        this.stations.clear();
-//
-//        this.stations = new ArrayList<>(stations);
-//        addStations(stations);
-//    }
 
 }
