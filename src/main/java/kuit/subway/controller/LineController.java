@@ -28,11 +28,11 @@ public class LineController {
                 .body(res);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<LineDto> getLineById(@PathVariable("id") Long id) {
-//        return ResponseEntity.ok(lineService.findLineById(id));
-//    }
-//
+    @GetMapping("/{id}")
+    public ResponseEntity<LineDto> getLineById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(lineService.findLineById(id));
+    }
+
 //    @GetMapping()
 //    public ResponseEntity<List<LineDto>> getLines() {
 //        return ResponseEntity.ok(lineService.findAllLines());

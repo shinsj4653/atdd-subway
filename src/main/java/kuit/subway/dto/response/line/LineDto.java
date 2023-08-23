@@ -22,7 +22,7 @@ public class LineDto extends BaseTimeEntity {
     private Long id;
     private String name;
     private String color;
-    private List<SectionDto> stations;
+    private List<StationDto> stations;
 
     @CreatedDate
     private LocalDateTime createdDate;

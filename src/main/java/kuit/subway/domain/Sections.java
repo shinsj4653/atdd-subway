@@ -3,6 +3,7 @@ package kuit.subway.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
+import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.InvalidSectionCreateDownStationException;
 import kuit.subway.exception.badrequest.InvalidSectionCreateUpStationException;
 
@@ -24,6 +25,19 @@ public class Sections {
             this.sections.add(section);
         }
     }
+
+    public List<StationDto> getStationDtoList() {
+        List<StationDto> result = new ArrayList<>();
+        for (Section section : sections) {
+            Station upStation = section.getUpStation();
+            Station downStation = section.getDownStation();
+            result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
+            result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+        }
+        return result;
+    }
+
+
 
     // 새로운 구간의 상행역은 등록되어있는 하행 종점역이어야 한다.
     private void validateSectionCreateUpStation(Section section) {

@@ -58,22 +58,22 @@ public class LineService {
         return new LineCreateResponse("지하철 노선 생성 완료", line.getId());
     }
 
-//    public LineDto findLineById(Long id) {
-//
-//        // 존재하지 않는 노선을 조회했을 때 예외처리
-//        Line line = validateLineExist(id);
-//
-//        LineDto result = LineDto.builder()
-//                .id(line.getId())
-//                .name(line.getName())
-//                .color(line.getColor())
-//                .stations(createStationDtoList(line.getStations()))
-//                .createdDate(line.getCreatedDate())
-//                .modifiedDate(line.getModifiedDate())
-//                .build();
-//
-//        return result;
-//    }
+    public LineDto findLineById(Long id) {
+
+        // 존재하지 않는 노선을 조회했을 때 예외처리
+        Line line = validateLineExist(id);
+
+        LineDto result = LineDto.builder()
+                .id(line.getId())
+                .name(line.getName())
+                .color(line.getColor())
+                .stations(line.getSections().getStationDtoList())
+                .createdDate(line.getCreatedDate())
+                .modifiedDate(line.getModifiedDate())
+                .build();
+
+        return result;
+    }
 
 //    public List<LineDto> findAllLines() {
 //
@@ -127,14 +127,6 @@ public class LineService {
 //
 //        lineRepository.delete(line);
 //        return new LineDeleteResponse("지하철 노선 삭제 완료", line.getId());
-//    }
-
-    // 노선의 역 리스트 생성 함수
-//    private List<StationDto> createStationDtoList(List<Station> stations) {
-//
-//        List<StationDto> result = stations.stream()
-//                .map(station -> createStationDto(station)).collect(Collectors.toList());
-//        return result;
 //    }
     
     // Station에서 StationDto로 변환해주는 함수
