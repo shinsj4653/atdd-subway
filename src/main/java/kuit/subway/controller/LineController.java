@@ -37,11 +37,11 @@ public class LineController {
     public ResponseEntity<List<LineDto>> getLines() {
         return ResponseEntity.ok(lineService.findAllLines());
     }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity<LineUpdateResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineCreateRequest req) {
-//        return ResponseEntity.ok(lineService.updateLine(id, req));
-//    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<LineUpdateResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineCreateRequest req) {
+        return ResponseEntity.ok(lineService.updateLine(id, req));
+    }
 //
 //    @DeleteMapping("/{id}")
 //    public ResponseEntity<LineDeleteResponse> deleteLine(@PathVariable("id") Long id) {

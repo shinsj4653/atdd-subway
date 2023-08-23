@@ -38,6 +38,17 @@ public class Section extends BaseTimeEntity {
                 .build();
     }
 
+    public void updateStations(Station upStation, Station downStation) {
+        this.upStation = upStation;
+        this.downStation = downStation;
+    }
+
+    public void removeLineAndStations() {
+        this.line = null;
+        this.upStation = null;
+        this.downStation = null;
+    }
+
 //    @Builder
 //    public Section(LocalDateTime createdDate, LocalDateTime modifiedDate) {
 //        super(createdDate, modifiedDate);

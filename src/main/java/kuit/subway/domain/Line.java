@@ -51,12 +51,11 @@ public class Line extends BaseTimeEntity {
 //        stations.forEach(station -> station.addLine(this));
 //    }
 //
-//    public void updateLine(String color, int distance, String name, LocalDateTime modifiedDate) {
-//        this.color = color;
-//        this.distance = distance;
-//        this.name = name;
-//        this.setModifiedDate(modifiedDate);
-//    }
+    public void updateLine(String name, String color, int distance) {
+        this.name = name;
+        this.color = color;
+        this.distance = distance;
+    }
 //
 //    public void updateStations(List<Station> stations) {
 //        // 현재 노선에 존재하고 있는 역들을 제거

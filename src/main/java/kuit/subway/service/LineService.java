@@ -91,16 +91,22 @@ public class LineService {
         // 상행역과 하행역이 같으면 예외처리
         validateSameStation(req.getDownStationId(), req.getUpStationId());
 
-        // 존재한다면, request 대로 노선 수정
-        line.updateLine(req.getColor(), req.getDistance(), req.getName(), LocalDateTime.now());
-        line.updateStations(stations);
+        // 모든 예외조건 패스할 시, request 대로 노선 수정
+        line.updateLine(req.getName(), req.getColor(), req.getDistance());
+        
+        // 기존의 Sections 정보 비워주기
+        line.getSections().updateSections(upStation, downStation);
+        
+//        // 새로운 구간 만들어서 노선에 넣어주기
+//        lineRepository.save(line);
 
-        return LineUpdateResponse.builder()
-                .color(req.getColor())
-                .distance(req.getDistance())
-                .name(req.getName())
-                .downStationId(req.getDownStationId())
-                .upStationId(req.getUpStationId()).build();
+        return LineUpdateResponse.createLineUpdateResponse(
+                line.getId(),
+                req.getName(),
+                req.getColor(),
+                req.getDistance(),
+                line.getSections().getStationDtoList()
+        );
     }
 //
 //    @Transactional

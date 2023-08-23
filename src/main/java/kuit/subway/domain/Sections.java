@@ -37,6 +37,12 @@ public class Sections {
         return result;
     }
 
+    public void updateSections(Station upStation, Station downStation) {
+        this.sections.forEach(section -> {
+            section.updateStations(upStation, downStation);
+        });
+    }
+
 
 
     // 새로운 구간의 상행역은 등록되어있는 하행 종점역이어야 한다.
