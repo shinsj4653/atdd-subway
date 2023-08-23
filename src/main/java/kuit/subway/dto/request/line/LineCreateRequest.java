@@ -1,18 +1,15 @@
 package kuit.subway.dto.request.line;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class LineCreateRequest {
 
+    private String name;
     private String color;
     private int distance;
-    private String name;
-    private Long downStationId;
     private Long upStationId;
+    private Long downStationId;
 }

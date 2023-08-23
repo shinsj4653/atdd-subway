@@ -24,18 +24,19 @@ public class Line extends BaseTimeEntity {
     @Column(name = "line_id")
     private Long id;
 
+    private String name;
+
     private String color;
 
     private int distance;
 
-    private String name;
     private Sections sections;
 
-    public static Line createLine(String color, int distance, String name) {
+    public static Line createLine(String name, String color, int distance) {
         return Line.builder()
+                .name(name)
                 .color(color)
                 .distance(distance)
-                .name(name)
                 .build();
     }
     // 연관관계 메서드

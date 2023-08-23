@@ -47,7 +47,7 @@ public class LineService {
         validateSameStation(downStationId, upStationId);
 
         // 만약, 둘 다 존재하는 역이라면 노선 생성
-        Line line = Line.createLine(res.getColor(), res.getDistance(), res.getName());
+        Line line = Line.createLine(res.getName(), res.getColor(), res.getDistance());
 
         // 노선에는 구간 형태로 추가해줘야한다.
         Sections sections = new Sections();
@@ -63,45 +63,45 @@ public class LineService {
         // 존재하지 않는 노선을 조회했을 때 예외처리
         Line line = validateLineExist(id);
 
-        return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getSections().getStationDtoList());
+        return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), line.getSections().getStationDtoList());
     }
 
     public List<LineDto> findAllLines() {
 
         List<Line> findLines = lineRepository.findAll();
         List<LineDto> result = findLines.stream()
-                .map(line -> LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getSections().getStationDtoList()))
+                .map(line -> LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), line.getSections().getStationDtoList()))
                 .collect(Collectors.toList());
         return result;
     }
-//
-//    @Transactional
-//    public LineUpdateResponse updateLine(Long id, LineCreateRequest req) {
-//        // 존재하지 않는 노선을 수정하려 했을때 예외처리
-//        Line line = validateLineExist(id);
-//
-//        // 존재하지 않는 station_id로 변경하려 했을 때 예외처리
-//        Station downStation = validateStationExist(req.getDownStationId());
-//        Station upStation = validateStationExist(req.getUpStationId());
-//
-//        List<Station> stations = new ArrayList<>();
-//        stations.add(upStation);
-//        stations.add(downStation);
-//
-//        // 상행역과 하행역이 같으면 예외처리
-//        validateSameStation(req.getDownStationId(), req.getUpStationId());
-//
-//        // 존재한다면, request 대로 노선 수정
-//        line.updateLine(req.getColor(), req.getDistance(), req.getName(), LocalDateTime.now());
-//        line.updateStations(stations);
-//
-//        return LineUpdateResponse.builder()
-//                .color(req.getColor())
-//                .distance(req.getDistance())
-//                .name(req.getName())
-//                .downStationId(req.getDownStationId())
-//                .upStationId(req.getUpStationId()).build();
-//    }
+
+    @Transactional
+    public LineUpdateResponse updateLine(Long id, LineCreateRequest req) {
+        // 존재하지 않는 노선을 수정하려 했을때 예외처리
+        Line line = validateLineExist(id);
+
+        // 존재하지 않는 station_id로 변경하려 했을 때 예외처리
+        Station downStation = validateStationExist(req.getDownStationId());
+        Station upStation = validateStationExist(req.getUpStationId());
+
+        List<Station> stations = new ArrayList<>();
+        stations.add(upStation);
+        stations.add(downStation);
+
+        // 상행역과 하행역이 같으면 예외처리
+        validateSameStation(req.getDownStationId(), req.getUpStationId());
+
+        // 존재한다면, request 대로 노선 수정
+        line.updateLine(req.getColor(), req.getDistance(), req.getName(), LocalDateTime.now());
+        line.updateStations(stations);
+
+        return LineUpdateResponse.builder()
+                .color(req.getColor())
+                .distance(req.getDistance())
+                .name(req.getName())
+                .downStationId(req.getDownStationId())
+                .upStationId(req.getUpStationId()).build();
+    }
 //
 //    @Transactional
 //    public LineDeleteResponse deleteLine(Long id) {

@@ -1,11 +1,15 @@
-package kuit.subway.dto.request.section;
+package kuit.subway.dto.request.line;
 
 import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class SectionCreateRequest {
+public class LineUpdateRequest {
+
+    private String name;
+    private String color;
+    private int distance;
     private Long upStationId;
     private Long downStationId;
 }

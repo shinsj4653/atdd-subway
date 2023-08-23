@@ -22,13 +22,15 @@ public class LineDto {
     private Long id;
     private String name;
     private String color;
+    private int distance;
     private List<StationDto> stations;
 
-    public static LineDto createLineDto(Long id, String name, String color, List<StationDto> stations) {
+    public static LineDto createLineDto(Long id, String name, String color, int distance, List<StationDto> stations) {
         return LineDto.builder()
                 .id(id)
                 .name(name)
                 .color(color)
+                .distance(distance)
                 .stations(stations)
                 .build();
     }

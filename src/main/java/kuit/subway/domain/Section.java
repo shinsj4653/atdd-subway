@@ -18,7 +18,6 @@ public class Section extends BaseTimeEntity {
     @Column(name = "section_id")
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "line_id")
     private Line line;

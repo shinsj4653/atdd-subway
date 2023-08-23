@@ -2,8 +2,9 @@ package kuit.subway.dto.response.line;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class LineUpdateResponse {
     private String color;
     private int distance;
