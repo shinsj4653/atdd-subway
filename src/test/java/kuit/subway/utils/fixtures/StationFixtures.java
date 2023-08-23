@@ -16,9 +16,11 @@ public class StationFixtures {
         return post(STATION_PATH, req);
     }
 
-    public static ExtractableResponse<Response> 지하철_역_조회() {
+    public static ExtractableResponse<Response> 지하철_역_전체_조회() {
         return get(STATION_PATH);
     }
+
+    public static ExtractableResponse<Response> 지하철_역_식별자로_조회(Long id) { return get(STATION_PATH + "/" + id); }
 
     public static ExtractableResponse<Response> 지하철_역_삭제(Long id) {
         return delete(STATION_PATH + "/" + id);

@@ -92,10 +92,7 @@ public class LineService {
         validateSameStation(req.getDownStationId(), req.getUpStationId());
 
         // 모든 예외조건 패스할 시, request 대로 노선 수정
-        line.updateLine(req.getName(), req.getColor(), req.getDistance());
-        
-        // 기존의 Sections 정보 업데이트
-        line.getSections().updateSections(upStation, downStation);
+        line.updateLine(req.getName(), req.getColor(), req.getDistance(), upStation, downStation);
 
         return LineUpdateResponse.createLineUpdateResponse(
                 line.getId(),

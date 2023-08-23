@@ -51,10 +51,11 @@ public class Line extends BaseTimeEntity {
 //        stations.forEach(station -> station.addLine(this));
 //    }
 //
-    public void updateLine(String name, String color, int distance) {
+    public void updateLine(String name, String color, int distance, Station upStation, Station downStation) {
         this.name = name;
         this.color = color;
         this.distance = distance;
+        this.sections.updateSections(upStation, downStation);
     }
 //
 //    public void updateStations(List<Station> stations) {

@@ -8,8 +8,6 @@ import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.request.station.StationCreateRequest;
 
 import static kuit.subway.study.common.CommonRestAssured.*;
-import static kuit.subway.utils.fixtures.StationFixtures.STATION_PATH;
-import static kuit.subway.utils.fixtures.StationFixtures.지하철_역_조회;
 
 public class SectionFixtures {
 

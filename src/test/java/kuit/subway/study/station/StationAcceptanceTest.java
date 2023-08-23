@@ -33,7 +33,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         지하철_역_등록("성수역");
 
         // when
-        ExtractableResponse<Response> 지하철_역_조회_결과 = 지하철_역_조회();
+        ExtractableResponse<Response> 지하철_역_조회_결과 = 지하철_역_전체_조회();
 
         // then
         assertAll(
