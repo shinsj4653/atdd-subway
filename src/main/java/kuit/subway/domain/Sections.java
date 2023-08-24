@@ -3,6 +3,7 @@ package kuit.subway.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
+import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.section.create.*;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteLastStationException;
@@ -67,7 +68,7 @@ public class Sections {
                         // 사이에 끼울 경우, 각 기존 구간의 상행역 & 하행역을 신규 구간 정보로 잘 변경
                         Section findSection = this.sections.stream()
                                 .filter(s -> s.getUpStation().equals(section.getUpStation()))
-                                .findAny().get();
+                                .findFirst().get();
                         System.out.println("findSection upStation" + findSection.getUpStation().getId());
                         System.out.println("findSection downStation" + findSection.getDownStation().getId());
 
@@ -110,7 +111,6 @@ public class Sections {
 
                         // 기존 구간 정보 갱신
                         findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
-
                     }
                 }
             }
@@ -119,21 +119,28 @@ public class Sections {
 
     public List<StationDto> getStationDtoList() {
         List<StationDto> result = new ArrayList<>();
-        for (Section section : sections) {
-            System.out.println("section upstation : " + section.getUpStation());
-            System.out.println("section downstation: " + section.getDownStation());
-            if (result.size() == 0){
-                Station upStation = section.getUpStation();
-                result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
+        Long nextUpStationId;
 
-                Station downStation = section.getDownStation();
-                result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
-            } else {
-                Station downStation = section.getDownStation();
-                result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
-            }
+        // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
+        Station upStation = sections.get(0).getUpStation();
+        result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
 
+        Station downStation = sections.get(0).getDownStation();
+        result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+
+        nextUpStationId = downStation.getId();
+
+        for (int i = 1; i < sections.size(); i++) {
+            Long finalNextUpStationId = nextUpStationId;
+            Section findSection = sections.stream()
+                    .filter(section -> section.getUpStation().getId() == finalNextUpStationId)
+                    .findFirst().get();
+            System.out.println(findSection.getDownStation().getId());
+            downStation = findSection.getDownStation();
+            result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+            nextUpStationId = downStation.getId();
         }
+
         return result;
     }
 

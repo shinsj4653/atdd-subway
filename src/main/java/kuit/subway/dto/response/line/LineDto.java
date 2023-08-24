@@ -34,4 +34,8 @@ public class LineDto {
                 .stations(stations)
                 .build();
     }
+
+    public void addStationDto(StationDto stationDto) {
+        this.stations.add(stationDto);
+    }
 }
