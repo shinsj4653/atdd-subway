@@ -58,7 +58,6 @@ public class Sections {
                     // 2 5 <= found
                     // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
                     Boolean isUpExist = validateInsertBetween(section);
-                    System.out.println("result!!!!!!" + isUpExist);
 
                     // 새로운 상행이 이미 존재하는 경우
                     if (isUpExist) {
@@ -235,18 +234,12 @@ public class Sections {
     // 2 5 <= found
 
     // 역 사이에 새로운 역 등록할 경우, 상행역, 혹은 하행역 중 어느 쪽이 이미 존재하는지 판별
-
-    // TODO 추후 리팩토링 필수
     private Boolean validateInsertBetween(Section section) {
-        Optional<Section> newUpExistUp = this.sections.stream()
+        Optional<Section> existUp = this.sections.stream()
                 .filter(s -> s.getUpStation().equals(section.getUpStation()))
                 .findAny();
 
-        Optional<Section> newDownExistDown = this.sections.stream()
-                .filter(s -> s.getDownStation().equals(section.getDownStation()))
-                .findAny();
-
-        if (newUpExistUp.isPresent()) {
+        if (existUp.isPresent()) {
             return true;
         } else
             return false;
