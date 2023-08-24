@@ -1,35 +1,88 @@
-//package kuit.subway.study.line;
-//
-//import kuit.subway.dto.response.line.LineCreateResponse;
-//import kuit.subway.repository.LineRepository;
-//import kuit.subway.repository.StationRepository;
-//import kuit.subway.service.LineService;
-//import kuit.subway.utils.fixtures.LineFixtures;
-//import kuit.subway.utils.fixtures.StationFixtures;
-//import org.assertj.core.api.Assertions;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.extension.ExtendWith;
-//import org.mockito.InjectMocks;
-//import org.mockito.Mock;
-//import org.mockito.junit.jupiter.MockitoExtension;
-//
-//import static io.restassured.RestAssured.when;
-//import static org.mockito.Mockito.times;
-//import static org.mockito.Mockito.verify;
-//
-//@ExtendWith(MockitoExtension.class)
-//public class LineServiceMockTest {
-//
-//    @Mock
-//    private LineRepository lineRepository;
-//
-//    @Mock
-//    private StationRepository stationRepository;
-//
-//    @InjectMocks
-//    private LineService lineService;
-//
+package kuit.subway.study.line;
+
+import kuit.subway.domain.Line;
+import kuit.subway.domain.Section;
+import kuit.subway.domain.Station;
+import kuit.subway.dto.request.line.LineCreateRequest;
+import kuit.subway.dto.response.line.LineCreateResponse;
+import kuit.subway.repository.LineRepository;
+import kuit.subway.repository.StationRepository;
+import kuit.subway.service.LineService;
+import kuit.subway.utils.fixtures.LineFixtures;
+import kuit.subway.utils.fixtures.StationFixtures;
+import org.apache.commons.lang3.builder.ToStringExclude;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
+import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
+import static io.restassured.RestAssured.when;
+import static kuit.subway.utils.fixtures.StationFixtures.지하철_역_등록;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+@ExtendWith(MockitoExtension.class)
+@DisplayName("지하철 노선 Mock 테스트")
+public class LineServiceMockTest {
+
+    @InjectMocks
+    private LineService lineService;
+
+    @Mock
+    private LineRepository lineRepository;
+
+    @Mock
+    private StationRepository stationRepository;
+
+//    @BeforeEach
+//    void setup() {
+//        stationRepository.save(Station.createStation("강남역"));
+//        stationRepository.save(Station.createStation("성수역"));
+//    }
+
+    @DisplayName("지하철 노선 생성 Mock 테스트")
+    @Test
+    public void createLine() {
+
+        // given
+        Station upStation = Station.createStation("강남역");
+        Station downStation = Station.createStation("수서역");
+
+        given(stationRepository.findById(any())).willReturn(Optional.of(upStation));
+        given(stationRepository.findById(any())).willReturn(Optional.of(upStation));
+
+        Line line = Line.createLine("와우선", "green", 20);
+        line.addSection(Section.createSection(line, upStation, downStation, 1));
+
+        LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 2L);
+
+        given(lineRepository.save(line)).willReturn(line);
+        given(lineRepository.findById(any())).willReturn(Optional.of(line));
+
+        // when
+        LineCreateResponse res = lineService.addLine(req);
+        Optional<Line> findLine = lineRepository.findById(1L);
+
+        // then
+        assertThat(findLine).isNotNull();
+        assertEquals(findLine.get().getId(), res.getId());
+        verify(stationRepository, times(2)).findById(any());
+        verify(stationRepository, times(2)).findById(any());
+
+    }
+
 //    @DisplayName("노선 생성 Mock 테스트")
 //    @Test
 //    void addSection() {
@@ -41,7 +94,7 @@
 //        when(stationRepository.findById(1L)).thenReturn(StationFixData.create_강남역());
 //        when(stationRepository.findById(2L)).thenReturn(StationFixData.create_성수역());
 //        when(lineRepository.save(경춘선)).thenReturn(createEmptyLine_경춘선());
-//
+
 //
 //        // when
 //        // lineService.addSection 호출
@@ -58,5 +111,5 @@
 //    void findLineById() {
 //
 //    }
-//
-//}
+
+}

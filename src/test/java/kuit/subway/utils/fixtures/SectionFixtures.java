@@ -15,9 +15,9 @@ public class SectionFixtures {
 
     public static final String SECTION_PATH = "/sections";
 
-    public static ExtractableResponse<Response> 지하철_구간_등록(Long lineId, Long upStationId, Long downStationId) {
+    public static ExtractableResponse<Response> 지하철_구간_등록(Long lineId, Long upStationId, Long downStationId, int distance) {
 
-        SectionCreateRequest req = 지하철_구간_생성_요청(upStationId, downStationId);
+        SectionCreateRequest req = 지하철_구간_생성_요청(upStationId, downStationId, distance);
         return post(SECTION_PATH + "/" + lineId, req);
     }
 

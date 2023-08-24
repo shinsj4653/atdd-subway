@@ -24,7 +24,7 @@ public class StationService {
 
     @Transactional
     public StationCreateResponse addStation(StationCreateRequest res) {
-        Station station = Station.createStation(res.getName(), LocalDateTime.now(), LocalDateTime.now());
+        Station station = Station.createStation(res.getName());
         stationRepository.save(station);
 
         return new StationCreateResponse("지하철 역 추가 완료", station.getId());

@@ -2,7 +2,10 @@ package kuit.subway.utils.fixtures;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import kuit.subway.domain.Station;
 import kuit.subway.dto.request.station.StationCreateRequest;
+
+import java.util.Optional;
 
 import static kuit.subway.study.common.CommonRestAssured.*;
 import static kuit.subway.utils.steps.StationStep.지하철_역_생성_요청;

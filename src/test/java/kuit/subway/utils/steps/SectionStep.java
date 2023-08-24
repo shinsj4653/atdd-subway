@@ -7,8 +7,8 @@ import kuit.subway.dto.request.section.SectionDeleteRequest;
 
 public class SectionStep {
 
-    public static SectionCreateRequest 지하철_구간_생성_요청(Long downStationId, Long upStationdId) {
-        return new SectionCreateRequest(downStationId, upStationdId);
+    public static SectionCreateRequest 지하철_구간_생성_요청(Long downStationId, Long upStationdId, int distance) {
+        return new SectionCreateRequest(downStationId, upStationdId, distance);
     }
 
     public static SectionDeleteRequest 지하철_구간_삭제_요청(Long deleteStationId) {

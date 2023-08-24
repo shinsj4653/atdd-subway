@@ -37,7 +37,7 @@ public class SectionService {
         Line line = validateLineExist(lineId);
 
         // 노선에는 구간 형태로 추가해줘야한다.
-        line.getSections().addSection(Section.createSection(line, upStation, downStation, req.getDistance()));
+        line.addSection(Section.createSection(line, upStation, downStation, req.getDistance()));
 
         return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), line.getSections().getStationDtoList());
     }
@@ -54,7 +54,7 @@ public class SectionService {
         Line line = validateLineExist(lineId);
 
         // 노선의 구간 삭제
-        line.getSections().deleteSection(station);
+//        line.deleteSection(station);
 
         return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), line.getSections().getStationDtoList());
     }
