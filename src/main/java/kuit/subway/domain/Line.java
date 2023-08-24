@@ -41,8 +41,8 @@ public class Line extends BaseTimeEntity {
                 .build();
     }
     // 연관관계 메서드
-    public void addSection(Sections sections) {
-        this.sections = sections;
+    public void addSection(Section section) {
+        this.sections.addSection(section);
     }
     public void updateLine(String name, String color, int distance, Station upStation, Station downStation) {
         this.name = name;
