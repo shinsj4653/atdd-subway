@@ -29,7 +29,6 @@ public class Line extends BaseTimeEntity {
     private String color;
 
     private int distance;
-
     @Embedded
     private Sections sections;
 
@@ -38,11 +37,11 @@ public class Line extends BaseTimeEntity {
                 .name(name)
                 .color(color)
                 .distance(distance)
+                .sections(new Sections())
                 .build();
     }
     // 연관관계 메서드
     public void addSection(Section section) {
-        sections = new Sections();
         this.sections.addSection(section);
     }
     public void updateLine(String name, String color, int distance, Station upStation, Station downStation) {
