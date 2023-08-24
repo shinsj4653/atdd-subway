@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class LineServiceMockTest {
         // then
         assertThat(findLine).isNotNull();
         assertEquals(line.getId(), findLine.get().getId());
+        verify(lineRepository).save(line);
         verify(stationRepository, times(2)).findById(any());
         verify(lineRepository, times(1)).findById(any());
 

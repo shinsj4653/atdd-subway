@@ -130,10 +130,10 @@ public class Sections {
 
         nextUpStationId = downStation.getId();
 
-        for (int i = 1; i < sections.size(); i++) {
+        for (int i = 0; i < sections.size() - 1; i++) {
             Long finalNextUpStationId = nextUpStationId;
             Section findSection = sections.stream()
-                    .filter(section -> section.getUpStation().getId() == finalNextUpStationId)
+                    .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
                     .findFirst().get();
             System.out.println(findSection.getDownStation().getId());
             downStation = findSection.getDownStation();
