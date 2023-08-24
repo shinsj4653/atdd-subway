@@ -25,14 +25,12 @@ public class Station extends BaseTimeEntity {
     @Column(length = 20, nullable = false)
     private String name;
 
-    @OneToMany(fetch = LAZY)
-    @JoinColumn(name = "section_id")
-    private List<Section> sections;
-    public static Station createStation(String name, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public static Station createStation(String name) {
         return Station.builder()
                 .name(name)
                 .build();
     }
+
 
     @Override
     public boolean equals(Object o) {
