@@ -189,9 +189,6 @@ public class LineServiceMockTest {
 
             }
         }
-
-
-
     }
 
     @Nested
