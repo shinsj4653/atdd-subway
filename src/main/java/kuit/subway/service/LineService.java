@@ -5,6 +5,7 @@ import kuit.subway.domain.Section;
 import kuit.subway.domain.Sections;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
+import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineDto;
@@ -71,7 +72,7 @@ public class LineService {
     }
 
     @Transactional
-    public LineUpdateResponse updateLine(Long id, LineCreateRequest req) {
+    public LineUpdateResponse updateLine(Long id, LineUpdateRequest req) {
         // 존재하지 않는 노선을 수정하려 했을때 예외처리
         Line line = validateLineExist(id);
 

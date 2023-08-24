@@ -1,6 +1,7 @@
 package kuit.subway.controller;
 
 import kuit.subway.dto.request.line.LineCreateRequest;
+import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineDto;
@@ -39,7 +40,7 @@ public class LineController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LineUpdateResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineCreateRequest req) {
+    public ResponseEntity<LineUpdateResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineUpdateRequest req) {
         return ResponseEntity.ok(lineService.updateLine(id, req));
     }
 

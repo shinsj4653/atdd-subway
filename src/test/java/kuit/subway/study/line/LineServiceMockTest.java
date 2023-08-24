@@ -4,8 +4,10 @@ import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
+import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDto;
+import kuit.subway.dto.response.line.LineUpdateResponse;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
@@ -84,7 +86,7 @@ public class LineServiceMockTest {
 
         // then
         assertThat(findLine).isNotNull();
-        assertEquals(findLine.get().getId(), res.getId());
+        assertEquals(line.getId(), findLine.get().getId());
         verify(stationRepository, times(2)).findById(any());
         verify(lineRepository, times(1)).findById(any());
 
@@ -108,7 +110,7 @@ public class LineServiceMockTest {
         // then
         assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
         assertThat(findLine).isNotNull();
-        assertEquals(findLine.getId(), line.getId());
+        assertEquals(line.getId(), findLine.getId());
         verify(lineRepository, times(2)).findById(any());
     }
 
@@ -138,6 +140,33 @@ public class LineServiceMockTest {
         assertEquals(2, allLines.size());
         verify(lineRepository, times(1)).findAll();
     }
+
+    @DisplayName("지하철 노선 수정 Mock 테스트")
+    @Test
+    void updateLine() {
+        // given
+        Station upStation = Station.createStation("강남역");
+        Station downStation = Station.createStation("수서역");
+        given(stationRepository.findById(1L)).willReturn(Optional.of(upStation));
+        given(stationRepository.findById(2L)).willReturn(Optional.of(upStation));
+
+        Line line = Line.createLine("와우선", "green", 20);
+        line.addSection(Section.createSection(line, upStation, downStation, 1));
+
+        given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+
+        // when
+        LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15, 2L, 1L);
+        LineUpdateResponse res = lineService.updateLine(1L, req);
+
+        // then
+        assertThat(res).isNotNull();
+        assertEquals(line.getId(), res.getId());
+        assertEquals(line.getName(), res.getName());
+        verify(lineRepository, times(1)).findById(any());
+
+    }
+
 
 
 //    @DisplayName("노선 생성 Mock 테스트")
