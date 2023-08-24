@@ -57,7 +57,7 @@ public class Sections {
                     // 3 5 <= new
                     // 2 5 <= found
                     // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
-                    Boolean isUpExist = validateInsertBetween(section);
+                    Boolean isUpExist = verifyIsUpExist(section);
 
                     // 새로운 상행이 이미 존재하는 경우
                     if (isUpExist) {
@@ -218,29 +218,15 @@ public class Sections {
         }
     }
 
-    // 사이 삽입 : 4가지 경우 존재
-    // 1. 새로 삽입 상행이 기존의 상행에 존재 : found 이전 자리에 삽입 후, found 업데이트
-    // 1 2 <= found
-    // 1 3 <= new
-    // 2 5
-
-    // 2. 새로 삽입 상행이 기존의 하행에 존재 : found 다음 자리에 삽입 후, new 다음걸 업데이트
-    // 1 2 <= found
-    // 2 3 <= new
-    // 2 5
-
-    // 3. 새로 삽입 하행이 기존의 상행에 존재 : found 이전 자리에 삽입 후, new 이전걸 업데이트
-    // 1 2
-    // 3 2 <= new
-    // 2 5 <= found
-
-    // 4. 새로 삽입 하행이 기존의 하행에 존재 : found 다음 자리에 삽입 후, found 업데이트
-    // 1 2
-    // 3 5 <= new
-    // 2 5 <= found
+    // 지하철 노선에 등록된 역(하행 종점역)만 제거할 수 있다. 즉, 마지막 구간만 제거할 수 있다.
+    private void validateSectionDeleteLastStation(Station downStation) {
+        if(!sections.get(sections.size() - 1).getDownStation().equals(downStation)){
+            throw new InvalidSectionDeleteLastStationException();
+        }
+    }
 
     // 역 사이에 새로운 역 등록할 경우, 상행역, 혹은 하행역 중 어느 쪽이 이미 존재하는지 판별
-    private Boolean validateInsertBetween(Section section) {
+    private Boolean verifyIsUpExist(Section section) {
         Optional<Section> existUp = this.sections.stream()
                 .filter(s -> s.getUpStation().equals(section.getUpStation()))
                 .findAny();
@@ -250,13 +236,5 @@ public class Sections {
         } else
             return false;
     }
-
-    // 지하철 노선에 등록된 역(하행 종점역)만 제거할 수 있다. 즉, 마지막 구간만 제거할 수 있다.
-    private void validateSectionDeleteLastStation(Station downStation) {
-        if(!sections.get(sections.size() - 1).getDownStation().equals(downStation)){
-            throw new InvalidSectionDeleteLastStationException();
-        }
-    }
-
 
 }

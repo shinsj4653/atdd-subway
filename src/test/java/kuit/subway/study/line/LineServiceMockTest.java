@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -146,10 +145,11 @@ public class LineServiceMockTest {
         LineUpdateResponse res = lineService.updateLine(line.getId(), req);
 
         // then
+        assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
         assertThat(res).isNotNull();
         assertEquals(line.getId(), res.getId());
         assertEquals(line.getName(), res.getName());
-        verify(lineRepository, times(1)).findById(any());
+        verify(lineRepository, times(2)).findById(any());
 
     }
 
@@ -168,9 +168,10 @@ public class LineServiceMockTest {
         LineDeleteResponse res = lineService.deleteLine(line.getId());
 
         // then
+        assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
         assertThat(res).isNotNull();
         assertEquals(line.getId(), res.getId());
-        verify(lineRepository, times(1)).findById(any());
+        verify(lineRepository, times(2)).findById(any());
 
     }
 
