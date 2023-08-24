@@ -8,12 +8,13 @@ import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@DisplayName("지하철 구간 Classic 예외 테스트")
 @SpringBootTest
 @Transactional
+@DisplayName("지하철 구간 Classic 예외 테스트")
 public class SectionServiceExceptionTest {
 
     @Autowired
@@ -42,6 +43,12 @@ public class SectionServiceExceptionTest {
         line = Line.createLine("와우선", "green", 20);
         line.addSection(Section.createSection(line, station1, station2, 10));
         lineRepository.save(line);
+    }
+
+    @Test
+    @DisplayName("상행역과 하행역 둘 중 하나도 포함되어있지 않으면 추가 불가")
+    void StationsBothNotExist() {
+
     }
 
 }

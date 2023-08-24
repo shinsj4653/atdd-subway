@@ -12,8 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("지하철역 인수 테스트")
 public class StationAcceptanceTest extends AcceptanceTest {
-    @DisplayName("강남역을 등록하고 201 OK를 반환한다.")
+
     @Test
+    @DisplayName("강남역을 등록하고 201 OK를 반환한다.")
     void createStation() {
 
         // given
@@ -24,8 +25,9 @@ public class StationAcceptanceTest extends AcceptanceTest {
         assertEquals(201, 지하철_역_등록_결과.statusCode());
     }
 
-    @DisplayName("등록된 강남역과 성수역을 모두 조회하고 200 OK를 반환한다.")
+
     @Test
+    @DisplayName("등록된 강남역과 성수역을 모두 조회하고 200 OK를 반환한다.")
     void getAllStations() {
 
         // given
@@ -42,8 +44,8 @@ public class StationAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("등록된 강남역을 삭제하고 200 OK를 반환한다.")
     @Test
+    @DisplayName("등록된 강남역을 삭제하고 200 OK를 반환한다.")
     void deleteStation() {
 
         // given

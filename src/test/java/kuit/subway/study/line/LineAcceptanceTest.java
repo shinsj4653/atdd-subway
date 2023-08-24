@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("지하철 노선 인수 테스트")
 public class LineAcceptanceTest extends AcceptanceTest {
 
-    @DisplayName("지하철 노선 생성 후 201 OK를 반환한다.")
     @Test
+    @DisplayName("지하철 노선 생성 후 201 OK를 반환한다.")
     void createLine() {
 
         // given
@@ -33,8 +33,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         assertEquals(201, 지하철_노선_등록_결과.statusCode());
     }
 
-    @DisplayName("등록한 지하철 노선을 조회하면 200 OK를 반환한다. 등록되어 있지 않으면, 400 Bad Request를 반환한다.")
     @Test
+    @DisplayName("등록한 지하철 노선을 조회하면 200 OK를 반환한다. 등록되어 있지 않으면, 400 Bad Request를 반환한다.")
     void getLineById() {
 
         // given
@@ -54,8 +54,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("등록된 모든 지하철 노선을 조회하고 200 OK를 반환한다.")
     @Test
+    @DisplayName("등록된 모든 지하철 노선을 조회하고 200 OK를 반환한다.")
     void getAllLines() {
 
         // given
@@ -74,8 +74,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("등록된 지하철 노선을 수정하고 200 OK를 반환하다. 등록되어 있지 않으면 400 Bad Request를 반환한다.")
     @Test
+    @DisplayName("등록된 지하철 노선을 수정하고 200 OK를 반환하다. 등록되어 있지 않으면 400 Bad Request를 반환한다.")
     void updateLine() {
 
         // given
@@ -95,8 +95,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @DisplayName("등록된 지하철 노선을 삭제 후 200 OK를 반환한다. 등록되어 있지 않으면 400 Bad Request를 반환한다.")
     @Test
+    @DisplayName("등록된 지하철 노선을 삭제 후 200 OK를 반환한다. 등록되어 있지 않으면 400 Bad Request를 반환한다.")
     void deleteLine() {
 
         // given

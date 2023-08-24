@@ -18,9 +18,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("지하철 구간 Classic 테스트")
+
 @SpringBootTest
 @Transactional
+@DisplayName("지하철 구간 Classic 테스트")
 public class SectionServiceTest {
 
     @Autowired
@@ -51,8 +52,8 @@ public class SectionServiceTest {
         lineRepository.save(line);
     }
 
-    @DisplayName("지하철 구간 생성 - 새로운 역을 상행 종점으로 등록할 경우 맨 상위 구간으로 추가")
     @Test
+    @DisplayName("지하철 구간 생성 - 새로운 역을 상행 종점으로 등록할 경우 맨 상위 구간으로 추가")
     void addSectionFirstUpStation() {
 
         // given
@@ -66,8 +67,8 @@ public class SectionServiceTest {
 
     }
 
-    @DisplayName("지하철 구간 생성 - 새로운 역을 하행 종점으로 등록할 경우 맨 하위 구간으로 추가")
     @Test
+    @DisplayName("지하철 구간 생성 - 새로운 역을 하행 종점으로 등록할 경우 맨 하위 구간으로 추가")
     void addSectionLastDownStation() {
 
         // given
@@ -81,8 +82,8 @@ public class SectionServiceTest {
 
     }
 
-    @DisplayName("사이에 끼울 경우 각 기존 구간의 상행역 or 하행역을 신규 구간 정보로 잘 변경 - 새로운 구간의 상행역이 이미 존재할 경우")
     @Test
+    @DisplayName("사이에 끼울 경우 각 기존 구간의 상행역 or 하행역을 신규 구간 정보로 잘 변경 - 새로운 구간의 상행역이 이미 존재할 경우")
     void addSectionBetweenStationsUpExist() {
 
         // given
@@ -96,8 +97,8 @@ public class SectionServiceTest {
         assertEquals(3, stationDtoList.size());
     }
 
-    @DisplayName("사이에 끼울 경우 각 기존 구간의 상행역 or 하행역을 신규 구간 정보로 잘 변경 - 새로운 구간의 하행역이 이미 존재할 경우")
     @Test
+    @DisplayName("사이에 끼울 경우 각 기존 구간의 상행역 or 하행역을 신규 구간 정보로 잘 변경 - 새로운 구간의 하행역이 이미 존재할 경우")
     void addSectionBetweenStationsDownExist() {
 
         // given
@@ -111,8 +112,8 @@ public class SectionServiceTest {
         assertEquals(3, stationDtoList.size());
     }
 
-    @DisplayName("노선 조회 시 상행 종점을 기준으로 역들이 잘 정렬되어 반환되어야 함")
     @Test
+    @DisplayName("노선 조회 시 상행 종점을 기준으로 역들이 잘 정렬되어 반환되어야 함")
     void addSectionReturnAsSorted() {
 
         // given

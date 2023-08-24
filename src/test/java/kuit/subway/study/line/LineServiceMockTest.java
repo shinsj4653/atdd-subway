@@ -33,8 +33,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("지하철 노선 Mock 테스트")
 @ExtendWith(MockitoExtension.class)
+@DisplayName("지하철 노선 Mock 테스트")
 public class LineServiceMockTest {
 
     @InjectMocks
@@ -46,8 +46,8 @@ public class LineServiceMockTest {
     @Mock
     private StationRepository stationRepository;
 
-    @DisplayName("지하철 노선 생성 Mock 테스트")
     @Test
+    @DisplayName("지하철 노선 생성 Mock 테스트")
     void createLine() {
 
         // given
@@ -78,8 +78,8 @@ public class LineServiceMockTest {
 
     }
 
-    @DisplayName("지하철 노선 식별자로 조회 Mock 테스트")
     @Test
+    @DisplayName("지하철 노선 식별자로 조회 Mock 테스트")
     void findLineById() {
         // given
         Station upStation = Station.createStation("강남역");
@@ -100,8 +100,8 @@ public class LineServiceMockTest {
         verify(lineRepository, times(2)).findById(any());
     }
 
-    @DisplayName("지하철 노선 전체조회 Mock 테스트")
     @Test
+    @DisplayName("지하철 노선 전체조회 Mock 테스트")
     void findAllLines() {
         // given
         Station upStation = Station.createStation("강남역");
@@ -127,8 +127,8 @@ public class LineServiceMockTest {
         verify(lineRepository, times(1)).findAll();
     }
 
-    @DisplayName("지하철 노선 수정 Mock 테스트")
     @Test
+    @DisplayName("지하철 노선 수정 Mock 테스트")
     void updateLine() {
         // given
         Station upStation = Station.createStation("강남역");
@@ -153,8 +153,8 @@ public class LineServiceMockTest {
 
     }
 
-    @DisplayName("지하철 노선 삭제 Mock 테스트")
     @Test
+    @DisplayName("지하철 노선 삭제 Mock 테스트")
     void deleteLine() {
         // given
         Station upStation = Station.createStation("강남역");

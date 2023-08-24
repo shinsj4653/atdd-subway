@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("지하철 구간 인수 테스트")
 public class SectionAcceptanceTest extends AcceptanceTest {
 
-    @DisplayName("지하철 구간 등록 후 201 OK와 변경된 노선의 결과를 반환한다.")
     @Test
+    @DisplayName("지하철 구간 등록 후 201 OK와 변경된 노선의 결과를 반환한다.")
     void createSection() {
 
         // given
@@ -46,8 +46,8 @@ public class SectionAcceptanceTest extends AcceptanceTest {
 
     }
 
-    @DisplayName("지하철 구간 삭제 후 200 OK와 변경된 노선의 결과를 반환한다.")
     @Test
+    @DisplayName("지하철 구간 삭제 후 200 OK와 변경된 노선의 결과를 반환한다.")
     void deleteSection() {
 
         // given
