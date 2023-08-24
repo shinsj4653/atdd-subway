@@ -139,10 +139,9 @@ public class Sections {
         return result;
     }
 
+    // 구간이 1개일 경우 그 구간을 update 해주는 함수
     public void updateSections(Station upStation, Station downStation) {
-        this.sections.forEach(section -> {
-            section.updateStations(upStation, downStation);
-        });
+        this.sections.get(0).updateStations(upStation, downStation);
     }
 
     public void deleteSection(Station station) {
