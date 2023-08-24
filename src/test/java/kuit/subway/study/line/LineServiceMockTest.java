@@ -33,8 +33,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayName("지하철 노선 Mock 테스트")
+@ExtendWith(MockitoExtension.class)
 public class LineServiceMockTest {
 
     @InjectMocks
@@ -46,15 +46,9 @@ public class LineServiceMockTest {
     @Mock
     private StationRepository stationRepository;
 
-//    @BeforeEach
-//    void setup() {
-//        stationRepository.save(Station.createStation("강남역"));
-//        stationRepository.save(Station.createStation("성수역"));
-//    }
-
     @DisplayName("지하철 노선 생성 Mock 테스트")
     @Test
-    public void createLine() {
+    void createLine() {
 
         // given
         Station upStation = Station.createStation("강남역");
