@@ -9,11 +9,15 @@ import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.dto.response.line.LineUpdateResponse;
+import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
+import kuit.subway.exception.notfound.station.NotFoundStationException;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import kuit.subway.service.LineService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,136 +49,302 @@ public class LineServiceMockTest {
     @Mock
     private StationRepository stationRepository;
 
-    @Test
+    @Nested
     @DisplayName("지하철 노선 생성 Mock 테스트")
-    void createLine() {
+    class AddLine {
 
-        // given
-        Station upStation = Station.createStation("강남역");
-        Station downStation = Station.createStation("수서역");
+        Station upStation;
+        Station downStation;
 
-        given(stationRepository.findById(1L)).willReturn(Optional.of(upStation));
-        given(stationRepository.findById(2L)).willReturn(Optional.of(downStation));
+        @BeforeEach
+        void setUp() {
+            upStation = Station.createStation("강남역");
+            downStation = Station.createStation("수서역");
+        }
 
-        Line line = Line.createLine("와우선", "green", 20);
-        line.addSection(Section.createSection(line, upStation, downStation, 1));
+        @Nested
+        @DisplayName("정상 케이스")
+        class SuccessCase {
+            @Test
+            @DisplayName("새로운 노선 생성")
+            void addLineSuccess() {
+                // given
+                given(stationRepository.findById(1L)).willReturn(Optional.of(upStation));
+                given(stationRepository.findById(2L)).willReturn(Optional.of(downStation));
 
-        LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 2L);
+                Line line = Line.createLine("와우선", "green", 20);
+                line.addSection(Section.createSection(line, upStation, downStation, 1));
 
-        given(lineRepository.save(line)).willReturn(line);
-        given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 2L);
 
-        // when
-        LineCreateResponse res = lineService.addLine(req);
-        Optional<Line> findLine = lineRepository.findById(line.getId());
+                given(lineRepository.save(line)).willReturn(line);
+                given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
 
-        // then
-        assertThat(findLine).isNotNull();
-        assertEquals(line.getId(), findLine.get().getId());
-        verify(lineRepository).save(line);
-        verify(stationRepository, times(2)).findById(any());
-        verify(lineRepository, times(1)).findById(any());
+                // when
+                LineCreateResponse res = lineService.addLine(req);
+                Optional<Line> findLine = lineRepository.findById(line.getId());
+
+                // then
+                assertThat(findLine).isNotNull();
+                assertEquals(line.getId(), res.getId());
+                verify(lineRepository).save(line);
+                verify(stationRepository, times(2)).findById(any());
+                verify(lineRepository, times(1)).findById(any());
+            }
+
+        }
+
+        @Nested
+        @DisplayName("비정상 케이스")
+        class FailCase {
+            @Test
+            @DisplayName("존재하지 않는 역을 노선에 추가할 경우")
+            void addLineFail1() {
+                // given
+                given(stationRepository.findById(3L)).willReturn(Optional.ofNullable(null));
+
+                Line line = Line.createLine("와우선", "green", 20);
+                line.addSection(Section.createSection(line, upStation, downStation, 1));
+
+                // when
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 3L);
+
+                // then
+                assertThatThrownBy(() -> lineService.addLine(req)).isInstanceOf(NotFoundStationException.class);
+
+            }
+
+            @Test
+            @DisplayName("같은 상행역과 하행역을 노선에 추가할 경우")
+            void addLineFail2() {
+                // given
+                given(stationRepository.findById(1L)).willReturn(Optional.ofNullable(upStation));
+
+                Line line = Line.createLine("와우선", "green", 20);
+                line.addSection(Section.createSection(line, upStation, downStation, 1));
+
+                // when
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 1L);
+
+                // then
+                assertThatThrownBy(() -> lineService.addLine(req)).isInstanceOf(InvalidLineStationException.class);
+
+            }
+        }
+
 
     }
 
-    @Test
+    @Nested
     @DisplayName("지하철 노선 식별자로 조회 Mock 테스트")
-    void findLineById() {
-        // given
-        Station upStation = Station.createStation("강남역");
-        Station downStation = Station.createStation("수서역");
+    class FindLineById {
 
-        Line line = Line.createLine("와우선", "green", 20);
-        line.addSection(Section.createSection(line, upStation, downStation, 1));
+        Station upStation;
+        Station downStation;
 
-        given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+        @BeforeEach
+        void setUp() {
+            upStation = Station.createStation("강남역");
+            downStation = Station.createStation("수서역");
+        }
 
-        // when
-        LineDto findLine = lineService.findLineById(1L);
+        @Nested
+        @DisplayName("정상 케이스")
+        class SuccessCase {
+            @Test
+            @DisplayName("식별자로 노선 조회")
+            void findLineByIdSuccess() {
+                // given
+                Station upStation = Station.createStation("강남역");
+                Station downStation = Station.createStation("수서역");
 
-        // then
-        assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
-        assertThat(findLine).isNotNull();
-        assertEquals(line.getId(), findLine.getId());
-        verify(lineRepository, times(2)).findById(any());
+                Line line = Line.createLine("와우선", "green", 20);
+                line.addSection(Section.createSection(line, upStation, downStation, 1));
+
+                given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+
+                // when
+                LineDto findLine = lineService.findLineById(1L);
+
+                // then
+                assertThat(findLine).isNotNull();
+                assertEquals(line.getId(), findLine.getId());
+                verify(lineRepository, times(1)).findById(any());
+            }
+
+        }
+
+        @Nested
+        @DisplayName("비정상 케이스")
+        class FailCase {
+            @Test
+            @DisplayName("존재하지 않는 노선을 조회할 경우")
+            void findLineByIdFail() {
+                // given
+                given(lineRepository.findById(2L)).willReturn(Optional.ofNullable(null));
+
+                // when
+                // then
+                assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
+
+            }
+        }
+
+
+
     }
 
-    @Test
+    @Nested
     @DisplayName("지하철 노선 전체조회 Mock 테스트")
-    void findAllLines() {
-        // given
-        Station upStation = Station.createStation("강남역");
-        Station downStation = Station.createStation("수서역");
+    class FindAllLines {
+        Station upStation;
+        Station downStation;
 
-        Line line1 = Line.createLine("와우선", "green", 20);
-        Line line2 = Line.createLine("경춘선", "blue", 20);
-        line1.addSection(Section.createSection(line1, upStation, downStation, 1));
-        line2.addSection(Section.createSection(line1, upStation, downStation, 1));
+        @BeforeEach
+        void setUp() {
+            upStation = Station.createStation("강남역");
+            downStation = Station.createStation("수서역");
+        }
 
-        List<Line> lines = new ArrayList<>();
-        lines.add(line1);
-        lines.add(line2);
+        @Nested
+        @DisplayName("정상 케이스")
+        class SuccessCase {
+            @Test
+            @DisplayName("노선 전체 조회")
+            void findAllLinesSuccess() {
+                // given
+                Line line1 = Line.createLine("와우선", "green", 20);
+                Line line2 = Line.createLine("경춘선", "blue", 20);
+                line1.addSection(Section.createSection(line1, upStation, downStation, 1));
+                line2.addSection(Section.createSection(line1, upStation, downStation, 1));
 
-        given(lineRepository.findAll()).willReturn(lines);
+                List<Line> lines = new ArrayList<>();
+                lines.add(line1);
+                lines.add(line2);
 
-        // when
-        List<LineDto> allLines = lineService.findAllLines();
+                given(lineRepository.findAll()).willReturn(lines);
 
-        // then
-        assertThat(allLines).isNotNull();
-        assertEquals(2, allLines.size());
-        verify(lineRepository, times(1)).findAll();
+                // when
+                List<LineDto> allLines = lineService.findAllLines();
+
+                // then
+                assertThat(allLines).isNotNull();
+                assertEquals(2, allLines.size());
+                verify(lineRepository, times(1)).findAll();
+            }
+
+        }
     }
 
-    @Test
+    @Nested
     @DisplayName("지하철 노선 수정 Mock 테스트")
-    void updateLine() {
-        // given
-        Station upStation = Station.createStation("강남역");
-        Station downStation = Station.createStation("수서역");
-        given(stationRepository.findById(1L)).willReturn(Optional.of(upStation));
-        given(stationRepository.findById(2L)).willReturn(Optional.of(downStation));
+    class UpdateLine {
 
-        Line line = Line.createLine("와우선", "green", 20);
-        line.addSection(Section.createSection(line, upStation, downStation, 1));
+        Station upStation;
+        Station downStation;
 
-        given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
+        @BeforeEach
+        void setUp() {
+            upStation = Station.createStation("강남역");
+            downStation = Station.createStation("수서역");
+        }
 
-        // when
-        LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15, 2L, 1L);
-        LineUpdateResponse res = lineService.updateLine(line.getId(), req);
+        @Nested
+        @DisplayName("정상 케이스")
+        class SuccessCase {
+            @Test
+            @DisplayName("노선 정보 수정")
+            void updateLineSuccess() {
+                given(stationRepository.findById(1L)).willReturn(Optional.of(upStation));
+                given(stationRepository.findById(2L)).willReturn(Optional.of(downStation));
 
-        // then
-        assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
-        assertThat(res).isNotNull();
-        assertEquals(line.getId(), res.getId());
-        assertEquals(line.getName(), res.getName());
-        verify(lineRepository, times(2)).findById(any());
+                Line line = Line.createLine("와우선", "green", 20);
+                line.addSection(Section.createSection(line, upStation, downStation, 1));
 
+                given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
+
+                // when
+                LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15, 2L, 1L);
+                LineUpdateResponse res = lineService.updateLine(line.getId(), req);
+
+                // then
+                assertThat(res).isNotNull();
+                assertEquals(line.getId(), res.getId());
+                assertEquals(line.getName(), res.getName());
+                verify(lineRepository, times(1)).findById(any());
+            }
+
+        }
+
+        @Nested
+        @DisplayName("비정상 케이스")
+        class FailCase {
+            @Test
+            @DisplayName("존재하지 않는 노선을 수정하려고 할 경우")
+            void updatedLineFail() {
+                // given
+                given(lineRepository.findById(2L)).willReturn(Optional.ofNullable(null));
+
+                // when
+                // then
+                assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
+
+            }
+        }
     }
-
-    @Test
+    @Nested
     @DisplayName("지하철 노선 삭제 Mock 테스트")
-    void deleteLine() {
-        // given
-        Station upStation = Station.createStation("강남역");
-        Station downStation = Station.createStation("수서역");
-        Line line = Line.createLine("와우선", "green", 20);
-        line.addSection(Section.createSection(line, upStation, downStation, 1));
+    class DeleteLine {
 
-        given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
+        Station upStation;
+        Station downStation;
 
-        // when
-        LineDeleteResponse res = lineService.deleteLine(line.getId());
+        @BeforeEach
+        void setUp() {
+            upStation = Station.createStation("강남역");
+            downStation = Station.createStation("수서역");
+        }
 
-        // then
-        assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
-        assertThat(res).isNotNull();
-        assertEquals(line.getId(), res.getId());
-        verify(lineRepository, times(2)).findById(any());
+        @Nested
+        @DisplayName("정상 케이스")
+        class SuccessCase {
+            @Test
+            @DisplayName("노선 정보 삭제")
+            void deleteLineSuccess() {
+                // given
+                Line line = Line.createLine("와우선", "green", 20);
+                line.addSection(Section.createSection(line, upStation, downStation, 1));
+
+                given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
+
+                // when
+                LineDeleteResponse res = lineService.deleteLine(line.getId());
+
+                // then
+                assertThat(res).isNotNull();
+                assertEquals(line.getId(), res.getId());
+                verify(lineRepository, times(1)).findById(any());
+            }
+
+        }
+
+        @Nested
+        @DisplayName("비정상 케이스")
+        class FailCase {
+            @Test
+            @DisplayName("존재하지 않는 노선을 삭제하려고 할 경우")
+            void updatedLineFail() {
+                // given
+                given(lineRepository.findById(2L)).willReturn(Optional.ofNullable(null));
+
+                // when
+                // then
+                assertThatThrownBy(() -> lineService.findLineById(2L)).isInstanceOf(NotFoundLineException.class);
+
+            }
+        }
+
 
     }
-
-
 
 }

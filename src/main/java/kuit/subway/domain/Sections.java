@@ -9,9 +9,7 @@ import kuit.subway.exception.badrequest.section.create.*;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteLastStationException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Embeddable
 public class Sections {
@@ -115,6 +113,24 @@ public class Sections {
                 }
             }
         }
+    }
+
+    private List<Section> getOrderSections() {
+        Section startSection = findStartSection();
+
+        Map<Station, Section> upStationAndSectionRoute = new HashMap<>();
+        List<Section> orderedSections = new ArrayList<>();
+        Section nextSection = startSection;
+        while (nextSection != null) {
+            orderedSections.add(nextSection);
+            Station curDownStation = nextSection.getDownStation();
+            nextSection = upStationAndSectionRoute.get(curDownStation);
+        }
+        return orderedSections;
+    }
+
+    private Section findStartSection() {
+        return this.sections.get(0);
     }
 
     public List<StationDto> getStationDtoList() {
