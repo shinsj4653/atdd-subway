@@ -16,4 +16,8 @@ public class PathFindResponse {
                 .totalDistance(totalDistance)
                 .build();
     }
+
+    public void addStationDto(StationDto dto) {
+        this.stations.add(dto);
+    }
 }

@@ -6,10 +6,8 @@ import kuit.subway.domain.Sections;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.response.line.LineCreateResponse;
-import kuit.subway.dto.response.line.LineDeleteResponse;
-import kuit.subway.dto.response.line.LineDto;
-import kuit.subway.dto.response.line.LineUpdateResponse;
+import kuit.subway.dto.request.line.PathFindRequest;
+import kuit.subway.dto.response.line.*;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
@@ -20,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -87,9 +86,38 @@ public class LineService {
         return result;
     }
 
-//    public List<StationDto> findPath() {
-//
-//    }
+    public PathFindResponse findPath(Long lineId, PathFindRequest req) {
+
+        // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
+        Station startStation = validateStationExist(req.getStartStationId());
+        Station endStation = validateStationExist(req.getEndStationid());
+
+        // 존재하지 않는 노선을 조회하려 했을때 예외처리
+        Line line = validateLineExist(lineId);
+
+        List<Section> orderSections = line.getSections().getOrderSections();
+        Section findStartSection = orderSections.stream()
+                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
+
+        Section findEndSection = orderSections.stream()
+                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
+
+        int startIdx = orderSections.indexOf(findStartSection);
+        int endIdx = orderSections.indexOf(findEndSection);
+        int distance = 0;
+
+        for (int i = startIdx; i <= endIdx; i++) {
+            distance += orderSections.get(i).getDistance();
+        }
+
+        List<StationDto> stationDtoPath = getStationDtoPath(orderSections, startStation, endStation);
+
+        PathFindResponse res = PathFindResponse.createPathFindResponse(distance);
+        for (StationDto stationDto : stationDtoPath) {
+            res.addStationDto(stationDto);
+        }
+        return res;
+    }
 
     @Transactional
     public LineUpdateResponse updateLine(Long id, LineUpdateRequest req) {
@@ -160,6 +188,27 @@ public class LineService {
             }
 
             return result;
+    }
+
+    private List<StationDto> getStationDtoPath(List<Section> sections, Station startStation, Station endStation) {
+        List<StationDto> result = new ArrayList<>();
+
+        // 출발역 정보 넣어주기
+        result.add(StationDto.createStationDto(startStation.getId(), startStation.getName()));
+        Section findStartSection = sections.stream()
+                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
+
+        Section findEndSection = sections.stream()
+                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
+
+        int startIdx = sections.indexOf(findStartSection);
+        int endIdx = sections.indexOf(findEndSection);
+
+        for (int i = startIdx; i <= endIdx; i++) {
+            Station findStation = sections.get(i).getDownStation();
+            result.add(StationDto.createStationDto(findStation.getId(), findStation.getName()));
+        }
+        return result;
     }
 
     // 존재하는 역인지 판별해주는 함수
