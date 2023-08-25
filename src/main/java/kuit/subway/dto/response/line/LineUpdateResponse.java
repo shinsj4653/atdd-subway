@@ -8,13 +8,13 @@ import java.util.List;
 
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class LineUpdateResponse {
     private Long id;
     private String name;
     private String color;
     private int distance;
+
+    @Builder.Default
     private List<StationDto> stations = new ArrayList<>();
 
     public static LineUpdateResponse createLineUpdateResponse(Long id, String name, String color, int distance) {

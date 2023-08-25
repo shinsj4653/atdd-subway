@@ -15,14 +15,14 @@ import java.util.List;
 
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class LineDto {
     private Long id;
     private String name;
     private String color;
     private int distance;
-    private List<StationDto> stations;
+
+    @Builder.Default
+    private List<StationDto> stations = new ArrayList<>();
 
     public static LineDto createLineDto(Long id, String name, String color, int distance) {
         return LineDto.builder()
@@ -30,7 +30,6 @@ public class LineDto {
                 .name(name)
                 .color(color)
                 .distance(distance)
-                .stations(new ArrayList<>())
                 .build();
     }
 

@@ -7,15 +7,12 @@ import java.util.List;
 
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class PathFindResponse {
     private List<StationDto> stations;
     private int totalDistance;
 
-    public static PathFindResponse createPathFindResponse(List<StationDto> stations, int totalDistance) {
+    public static PathFindResponse createPathFindResponse(int totalDistance) {
         return PathFindResponse.builder()
-                .stations(stations)
                 .totalDistance(totalDistance)
                 .build();
     }
