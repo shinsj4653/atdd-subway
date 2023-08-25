@@ -38,34 +38,6 @@ public class SectionServiceTest {
         Station station3;
         Line line;
 
-        private List<StationDto> getStationDtoList(List<Section> sections) {
-
-            List<StationDto> result = new ArrayList<>();
-            Long nextUpStationId;
-
-            // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
-            Station upStation = sections.get(0).getUpStation();
-            result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
-
-            Station downStation = sections.get(0).getDownStation();
-            result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
-
-            nextUpStationId = downStation.getId();
-
-            for (int i = 0; i < sections.size() - 1; i++) {
-                Long finalNextUpStationId = nextUpStationId;
-                Section findSection = sections.stream()
-                        .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
-                        .findFirst().get();
-                System.out.println(findSection.getDownStation().getId());
-                downStation = findSection.getDownStation();
-                result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
-                nextUpStationId = downStation.getId();
-            }
-
-            return result;
-        }
-
         // 사전에 필요한 역, 노선 데이터 생성
         @BeforeEach
         void setUpLine() {
@@ -91,10 +63,10 @@ public class SectionServiceTest {
             line.addSection(Section.createSection(line, station3, station1, 5));
 
             // when
-            List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+            List<Section> orderSections = line.getSections().getOrderSections();
 
             // then
-            assertEquals(station3.getId(), stationDtoList.get(0).getId());
+            assertEquals(station3.getId(), orderSections.get(0).getUpStation().getId());
 
         }
 
@@ -106,10 +78,10 @@ public class SectionServiceTest {
             line.addSection(Section.createSection(line, station2, station3, 5));
 
             // when
-            List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+            List<Section> orderSections = line.getSections().getOrderSections();
 
             // then
-            assertEquals(station3.getId(), stationDtoList.get(stationDtoList.size() - 1).getId());
+            assertEquals(station3.getId(), orderSections.get(orderSections.size() - 1).getDownStation().getId());
 
         }
 
@@ -121,11 +93,12 @@ public class SectionServiceTest {
             line.addSection(Section.createSection(line, station1, station3, 2));
 
             // when
-            List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+            List<Section> orderSections = line.getSections().getOrderSections();
 
             // then
-            assertEquals(station3.getId(), stationDtoList.get(1).getId());
-            assertEquals(3, stationDtoList.size());
+            assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
+            assertEquals(station2.getId(), orderSections.get(1).getUpStation().getId());
+            assertEquals(2, orderSections.size());
         }
 
         @Test
@@ -136,11 +109,12 @@ public class SectionServiceTest {
             line.addSection(Section.createSection(line, station3, station2, 2));
 
             // when
-            List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+            List<Section> orderSections = line.getSections().getOrderSections();
 
             // then
-            assertEquals(station3.getId(), stationDtoList.get(1).getId());
-            assertEquals(3, stationDtoList.size());
+            assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
+            assertEquals(station2.getId(), orderSections.get(1).getUpStation().getId());
+            assertEquals(2, orderSections.size());
         }
 
         @Test
@@ -151,12 +125,12 @@ public class SectionServiceTest {
             line.addSection(Section.createSection(line, station3, station2, 2));
 
             // when
-            List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+            List<Section> orderSections = line.getSections().getOrderSections();
 
             // then
-            assertEquals(station1.getId(), stationDtoList.get(0).getId());
-            assertEquals(station3.getId(), stationDtoList.get(1).getId());
-            assertEquals(station2.getId(), stationDtoList.get(2).getId());
+            assertEquals(station1.getId(), orderSections.get(0).getUpStation().getId());
+            assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
+            assertEquals(station2.getId(), orderSections.get(1).getDownStation().getId());
         }
     }
 
@@ -167,34 +141,6 @@ public class SectionServiceTest {
         Station station2;
         Station station3;
         Line line;
-
-        private List<StationDto> getStationDtoList(List<Section> sections) {
-
-            List<StationDto> result = new ArrayList<>();
-            Long nextUpStationId;
-
-            // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
-            Station upStation = sections.get(0).getUpStation();
-            result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
-
-            Station downStation = sections.get(0).getDownStation();
-            result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
-
-            nextUpStationId = downStation.getId();
-
-            for (int i = 0; i < sections.size() - 1; i++) {
-                Long finalNextUpStationId = nextUpStationId;
-                Section findSection = sections.stream()
-                        .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
-                        .findFirst().get();
-                System.out.println(findSection.getDownStation().getId());
-                downStation = findSection.getDownStation();
-                result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
-                nextUpStationId = downStation.getId();
-            }
-
-            return result;
-        }
 
         // 사전에 필요한 역, 노선 데이터 생성
         @BeforeEach
