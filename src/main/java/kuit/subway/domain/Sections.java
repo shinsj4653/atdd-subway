@@ -9,8 +9,10 @@ import kuit.subway.exception.badrequest.section.create.*;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteLastStationException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteStationNotExist;
+import kuit.subway.exception.notfound.section.NotFoundSectionHavingCycleException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Embeddable
 public class Sections {
@@ -119,8 +121,7 @@ public class Sections {
     // 구간들 상행 종점역 기준으로 정렬한 후, 반환해주는 함수
     public List<Section> getOrderSections() {
         Section startSection = findStartSection();
-
-        Map<Station, Section> upStationAndSectionRoute = new HashMap<>();
+        Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
         List<Section> orderedSections = new ArrayList<>();
         Section nextSection = startSection;
         while (nextSection != null) {
@@ -132,7 +133,23 @@ public class Sections {
     }
 
     private Section findStartSection() {
-        return this.sections.get(0);
+        Set<Station> downStations = sections.stream()
+                .map(Section::getDownStation)
+                .collect(Collectors.toSet());
+        // 전체 상행역 중 하행역이 아닌 상행역 추출(=> 시작점)
+        return sections.stream()
+                .filter(section -> !downStations.contains(section.getUpStation()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundSectionHavingCycleException());
+    }
+
+    private Map<Station, Section> getSectionRoute() {
+        return sections.stream()
+                .collect(
+                        Collectors.toMap(Section::getUpStation,
+                                section -> section,
+                                (stationKey1, stationKey2) -> stationKey1,
+                                HashMap::new));
     }
 
     // 구간이 1개일 경우 그 구간을 update 해주는 함수
@@ -154,7 +171,7 @@ public class Sections {
                 this.sections.remove(0);
             } else {
                 // 중간역 제거
-                
+
             }
 
         } else if (sections.size() == 1){
