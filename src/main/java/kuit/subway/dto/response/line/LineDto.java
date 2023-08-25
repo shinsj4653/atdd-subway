@@ -22,7 +22,7 @@ public class LineDto {
     private String name;
     private String color;
     private int distance;
-    private List<StationDto> stations = new ArrayList<>();
+    private List<StationDto> stations;
 
     public static LineDto createLineDto(Long id, String name, String color, int distance) {
         return LineDto.builder()
@@ -30,6 +30,7 @@ public class LineDto {
                 .name(name)
                 .color(color)
                 .distance(distance)
+                .stations(new ArrayList<>())
                 .build();
     }
 
