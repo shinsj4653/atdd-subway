@@ -9,6 +9,7 @@ import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.line.PathFindRequest;
 import kuit.subway.dto.response.line.*;
 import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.exception.badrequest.line.InvalidPathSameStationException;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
 import kuit.subway.exception.notfound.station.NotFoundStationException;
@@ -94,6 +95,9 @@ public class LineService {
 
         // 존재하지 않는 노선을 조회하려 했을때 예외처리
         Line line = validateLineExist(lineId);
+
+        // 출발역과 도착역이 같을 때 예외발생
+        validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
 
         List<Section> orderSections = line.getSections().getOrderSections();
         Section findStartSection = orderSections.stream()
@@ -228,5 +232,12 @@ public class LineService {
     private Line validateLineExist(Long id) {
         return lineRepository.findById(id)
                 .orElseThrow(NotFoundLineException::new);
+    }
+
+    // 경로 조회 - 출발역과 도착역이 같은 경우를 판별해주는 함수
+    private void validateFindPathSameStations(Long startStationId, Long endStationId) {
+        if (startStationId.equals(endStationId)) {
+            throw new InvalidPathSameStationException();
+        }
     }
 }
