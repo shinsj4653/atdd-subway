@@ -32,7 +32,7 @@ public class SectionServiceTest {
 
     @Nested
     @DisplayName("지하철 구간 생성 테스트")
-    class addSection {
+    class AddSection {
         Station station1;
         Station station2;
         Station station3;
@@ -162,7 +162,7 @@ public class SectionServiceTest {
 
     @Nested
     @DisplayName("지하철 구간 삭제 테스트")
-    class deleteSection {
+    class DeleteSection {
         Station station1;
         Station station2;
         Station station3;
