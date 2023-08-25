@@ -115,7 +115,8 @@ public class Sections {
         }
     }
 
-    private List<Section> getOrderSections() {
+    // 구간들 상행 종점역 기준으로 정렬한 후, 반환해주는 함수
+    public List<Section> getOrderSections() {
         Section startSection = findStartSection();
 
         Map<Station, Section> upStationAndSectionRoute = new HashMap<>();
@@ -131,33 +132,6 @@ public class Sections {
 
     private Section findStartSection() {
         return this.sections.get(0);
-    }
-
-    public List<StationDto> getStationDtoList() {
-        List<StationDto> result = new ArrayList<>();
-        Long nextUpStationId;
-
-        // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
-        Station upStation = sections.get(0).getUpStation();
-        result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
-
-        Station downStation = sections.get(0).getDownStation();
-        result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
-
-        nextUpStationId = downStation.getId();
-
-        for (int i = 0; i < sections.size() - 1; i++) {
-            Long finalNextUpStationId = nextUpStationId;
-            Section findSection = sections.stream()
-                    .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
-                    .findFirst().get();
-            System.out.println(findSection.getDownStation().getId());
-            downStation = findSection.getDownStation();
-            result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
-            nextUpStationId = downStation.getId();
-        }
-
-        return result;
     }
 
     // 구간이 1개일 경우 그 구간을 update 해주는 함수

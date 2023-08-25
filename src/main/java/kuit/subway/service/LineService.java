@@ -10,6 +10,7 @@ import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineDto;
 import kuit.subway.dto.response.line.LineUpdateResponse;
+import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
 import kuit.subway.exception.notfound.station.NotFoundStationException;
@@ -59,14 +60,14 @@ public class LineService {
         // 존재하지 않는 노선을 조회했을 때 예외처리
         Line line = validateLineExist(id);
 
-        return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), line.getSections().getStationDtoList());
+        return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), getStationDtoList(line.getSections().getOrderSections()));
     }
 
     public List<LineDto> findAllLines() {
 
         List<Line> findLines = lineRepository.findAll();
         List<LineDto> result = findLines.stream()
-                .map(line -> LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), line.getSections().getStationDtoList()))
+                .map(line -> LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), getStationDtoList(line.getSections().getOrderSections())))
                 .collect(Collectors.toList());
         return result;
     }
@@ -95,7 +96,7 @@ public class LineService {
                 req.getName(),
                 req.getColor(),
                 req.getDistance(),
-                line.getSections().getStationDtoList()
+                getStationDtoList(line.getSections().getOrderSections())
         );
     }
 
@@ -108,6 +109,35 @@ public class LineService {
         lineRepository.delete(line);
         return new LineDeleteResponse("지하철 노선 삭제 완료", line.getId());
     }
+
+    private List<StationDto> getStationDtoList(List<Section> sections) {
+
+            List<StationDto> result = new ArrayList<>();
+            Long nextUpStationId;
+
+            // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
+            Station upStation = sections.get(0).getUpStation();
+            result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
+
+            Station downStation = sections.get(0).getDownStation();
+            result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+
+            nextUpStationId = downStation.getId();
+
+            for (int i = 0; i < sections.size() - 1; i++) {
+                Long finalNextUpStationId = nextUpStationId;
+                Section findSection = sections.stream()
+                        .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
+                        .findFirst().get();
+                System.out.println(findSection.getDownStation().getId());
+                downStation = findSection.getDownStation();
+                result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+                nextUpStationId = downStation.getId();
+            }
+
+            return result;
+    }
+
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {
         return stationRepository.findById(id)
