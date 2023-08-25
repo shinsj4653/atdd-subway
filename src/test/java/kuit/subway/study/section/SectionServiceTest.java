@@ -215,21 +215,35 @@ public class SectionServiceTest {
         }
 
         @Test
-        @DisplayName("종점이 제거될 경우 다음으로 오던 역이 종점이 되도록 구현")
+        @DisplayName("하행 종점역이 제거될 경우 다음으로 오던 역이 하행 종점이 되도록 구현")
         void deleteLastStation() {
 
             // given
-            // when
             line.deleteSection(station3);
 
-            // then
+            // when
             List<Section> orderSections = line.getSections().getOrderSections();
+
+            // then
             assertEquals(station2.getId(), orderSections.get(orderSections.size() - 1).getDownStation().getId());
 
         }
+
+        @Test
+        @DisplayName("상행 종점역이 제거될 경우 다음으로 오던 역이 상행 종점이 되도록 구현")
+        void deleteFirstStation() {
+
+            // given
+            line.deleteSection(station1);
+
+            // when
+            List<Section> orderSections = line.getSections().getOrderSections();
+
+            // then
+            assertEquals(station2.getId(), orderSections.get(0).getUpStation().getId());
+
+        }
+
     }
-
-
-
-
+    
 }
