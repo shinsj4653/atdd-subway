@@ -22,7 +22,8 @@ public enum CustomExceptionContext implements ExceptionContext {
 
     // NOT_FOUND
     NOT_FOUND_LINE_ERROR("존재하지 않는 노선입니다.", 2001),
-    NOT_FOUND_STATION_ERROR("존재하지 않는 역입니다.", 2002);
+    NOT_FOUND_SECTION_HAVING_CYCLE_ERROR("해당 노선에 사이클이 존재합니다.", 2002),
+    NOT_FOUND_STATION_ERROR("존재하지 않는 역입니다.", 2003);
 
     private final String message;
     private final int code;
