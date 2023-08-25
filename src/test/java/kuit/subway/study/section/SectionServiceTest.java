@@ -244,6 +244,23 @@ public class SectionServiceTest {
 
         }
 
+        @Test
+        @DisplayName("중간역이 제거될 경우 재배치해야한다.")
+        void deleteBetweenStation() {
+
+            // given
+            line.deleteSection(station2);
+
+            // when
+            List<Section> orderSections = line.getSections().getOrderSections();
+
+            // then
+            assertEquals(station1.getId(), orderSections.get(0).getUpStation().getId());
+            assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
+            assertEquals(20, orderSections.get(0).getDistance());
+
+        }
+
     }
-    
+
 }
