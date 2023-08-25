@@ -72,6 +72,10 @@ public class LineService {
         return result;
     }
 
+    public List<StationDto> findPath() {
+
+    }
+
     @Transactional
     public LineUpdateResponse updateLine(Long id, LineUpdateRequest req) {
         // 존재하지 않는 노선을 수정하려 했을때 예외처리
