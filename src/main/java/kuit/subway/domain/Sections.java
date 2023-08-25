@@ -8,6 +8,7 @@ import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.section.create.*;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteLastStationException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
+import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteStationNotExist;
 
 import java.util.*;
 
@@ -142,8 +143,8 @@ public class Sections {
     public void deleteSection(Station deleteStation) {
 
         if (sections.size() > 1) {
-
-
+            validateSectionDeleteStationNotExist(deleteStation);
+            
 
         } else if (sections.size() == 1){
             // 구간이 하나인 노선에서 구간 제거 불가
@@ -209,6 +210,16 @@ public class Sections {
         if ((upExist.isPresent() && upExist.get().getDistance() <= section.getDistance()) ||
                 (downExist.isPresent() && downExist.get().getDistance() <= section.getDistance())) {
             throw new InvalidSectionCreateLengthLongerException();
+        }
+    }
+
+    // 노선에 등록되어 있지 않은 역은 제거 불가
+    private void validateSectionDeleteStationNotExist(Station deleteStation) {
+        Boolean isExist = this.sections.stream()
+                .anyMatch(s -> s.getUpStation().equals(deleteStation) || s.getDownStation().equals(deleteStation));
+
+        if (!isExist) {
+            throw new InvalidSectionDeleteStationNotExist();
         }
     }
 

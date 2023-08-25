@@ -8,7 +8,7 @@ import static kuit.subway.exception.CustomExceptionContext.INVALID_SECTION_DELET
 
 @Getter
 public class InvalidSectionDeleteStationNotExist extends BadRequestException {
-    public InvalidSectionDeleteStationNotExist(ExceptionContext context) {
+    public InvalidSectionDeleteStationNotExist() {
         super(INVALID_SECTION_DELETE_STATION_NOT_EXIST_ERROR);
     }
 }
