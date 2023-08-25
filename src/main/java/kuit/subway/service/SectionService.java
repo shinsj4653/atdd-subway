@@ -13,12 +13,14 @@ import kuit.subway.exception.notfound.station.NotFoundStationException;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -44,12 +46,12 @@ public class SectionService {
         line.addSection(Section.createSection(line, upStation, downStation, req.getDistance()));
 
         LineDto lineDto = LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
-
         List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
 
         for (StationDto stationDto : stationDtoList) {
             lineDto.addStationDto(stationDto);
         }
+
         return lineDto;
     }
 

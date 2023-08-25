@@ -58,67 +58,57 @@ public class Sections {
                     // 3 5 <= new
                     // 2 5 <= found
 
-
                     // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
-//                    Boolean isUpExist = verifyIsUpExist(section);
-//
-//                    // 새로운 상행이 이미 존재하는 경우
-//                    if (isUpExist) {
-//                        // 1 2
-//                        // 2 3 <= new
-//                        // 2 5 <= found
-//
-//                        // 사이에 끼울 경우, 각 기존 구간의 상행역 & 하행역을 신규 구간 정보로 잘 변경
-//                        Section findSection = this.sections.stream()
-//                                .filter(s -> s.getUpStation().equals(section.getUpStation()))
-//                                .findFirst().get();
-//                        System.out.println("findSection upStation" + findSection.getUpStation().getId());
-//                        System.out.println("findSection downStation" + findSection.getDownStation().getId());
-//
-//                        int index = this.sections.indexOf(findSection);
-//                        System.out.println("index : " + index);
-//                        int findDistance = findSection.getDistance();
-//                        int newDistance = section.getDistance();
-//
-//                        // 새롭게 추가할 상행역, 하행역
-//                        Station newUpStation = section.getUpStation();
-//                        Station newDownStation = section.getDownStation();
-//
-//                        // 추가해줄 구간 생성
-//                        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-//                        this.sections.add(index, newSection);
-//
-//                        // 기존 구간 정보 갱신
-//                        findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
-//
-//                    } else {
-//                        // 새로운 하행이 기존 하행으로 존재할 경우
-//                        // 1 2
-//                        // 2 5 <= found
-//                        // 3 5 <= new
-//                        Section findSection = this.sections.stream()
-//                                .filter(s -> s.getDownStation().equals(section.getDownStation()))
-//                                .findFirst().get();
-//
-//                        int index = this.sections.indexOf(findSection);
-//                        int findDistance = findSection.getDistance();
-//                        int newDistance = section.getDistance();
-//
-//                        // 새롭게 추가할 상행역, 하행역
-//                        Station newUpStation = section.getUpStation();
-//                        Station newDownStation = section.getDownStation();
-//
-//                        // 추가해줄 구간 생성
-//                        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-//                        this.sections.add(index + 1, newSection);
-//
-//                        // 기존 구간 정보 갱신
-//                        findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
-//                    }
-                    this.sections.add(section);
+                    Boolean isUpExist = verifyIsUpExist(section);
+                    Section findSection;
+                    // 새로운 상행이 이미 존재하는 경우
+                    if (isUpExist) {
+                        // 1 2
+                        // 2 3 <= new
+                        // 2 5 <= found
+
+                        // 사이에 끼울 경우, 각 기존 구간의 상행역 & 하행역을 신규 구간 정보로 잘 변경
+                        findSection = findMatchUpSection(section.getUpStation()).get();
+
+                    } else {
+                        // 새로운 하행이 기존 하행으로 존재할 경우
+                        // 1 2
+                        // 2 5 <= found
+                        // 3 5 <= new
+                        findSection = findMatchDownSection(section.getDownStation()).get();
+                    }
+                    adjustSectionBetweenStations(findSection, section, isUpExist);
                 }
+
             }
         }
+    }
+
+    private void adjustSectionBetweenStations(Section findSection, Section requestSection, Boolean isUpExist) {
+        int index = this.sections.indexOf(findSection);
+        int findDistance = findSection.getDistance();
+        int newDistance = requestSection.getDistance();
+
+        // 새롭게 추가할 상행역, 하행역
+        Station newUpStation = requestSection.getUpStation();
+        Station newDownStation = requestSection.getDownStation();
+
+        // 추가해줄 구간 생성
+        if(isUpExist){
+            Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
+            this.sections.add(index, newSection);
+
+            // 기존 구간 정보 갱신
+            findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
+        } else {
+            // 추가해줄 구간 생성
+            Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
+            this.sections.add(index + 1, newSection);
+
+            // 기존 구간 정보 갱신
+            findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
+        }
+
     }
 
     // 구간들 상행 종점역 기준으로 정렬한 후, 반환해주는 함수
@@ -153,12 +143,6 @@ public class Sections {
                                 section -> section,
                                 (stationKey1, stationKey2) -> stationKey1,
                                 HashMap::new));
-    }
-
-
-    // 구간이 1개일 경우 그 구간을 update 해주는 함수
-    public void updateSections(Station upStation, Station downStation) {
-        this.sections.get(0).updateStations(upStation, downStation);
     }
 
 
@@ -198,11 +182,22 @@ public class Sections {
 
     }
 
+    // 주어진 상행역을 이미 상행역으로 가지고 있는 구간 반환
+    private Optional<Section> findMatchUpSection(Station upStaiton) {
+        return this.sections.stream()
+                .filter(s -> s.getUpStation().equals(upStaiton))
+                .findFirst();
+    }
 
-
+    // 주어진 하행역을 이미 상행역으로 가지고 있는 구간 반환
+    private Optional<Section> findMatchDownSection(Station downStation) {
+        return this.sections.stream()
+                .filter(s -> s.getDownStation().equals(downStation))
+                .findFirst();
+    }
 
     // 새로운 구간의 상행역이 등록되어있는 하행 종점역이면, 새로운 역을 하행 종점으로 등록할 경우
-    private boolean validateSectionCreateFirstStation(Section section) {
+    private Boolean validateSectionCreateFirstStation(Section section) {
         Section firstSection = sections.get(0);
         if(firstSection.getUpStation().equals(section.getDownStation())) {
             return true;
@@ -212,7 +207,7 @@ public class Sections {
     }
 
     // 새로운 구간의 상행역이 등록되어있는 하행 종점역이면, 새로운 역을 하행 종점으로 등록할 경우
-    private boolean validateSectionCreateFinalStation(Section section) {
+    private Boolean validateSectionCreateFinalStation(Section section) {
         Section lastSection = sections.get(sections.size() - 1);
         if(lastSection.getDownStation().equals(section.getUpStation())) {
             return true;
