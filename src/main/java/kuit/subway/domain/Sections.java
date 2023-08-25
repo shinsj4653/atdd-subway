@@ -152,6 +152,7 @@ public class Sections {
                                 HashMap::new));
     }
 
+
     // 구간이 1개일 경우 그 구간을 update 해주는 함수
     public void updateSections(Station upStation, Station downStation) {
         this.sections.get(0).updateStations(upStation, downStation);
@@ -162,7 +163,6 @@ public class Sections {
         if (sections.size() > 1) {
             validateSectionDeleteStationNotExist(deleteStation);
 
-
             if (verfiyIsLastStationDelete(deleteStation)) {
                 // 하행 종점 제거
                 this.sections.remove(sections.size() - 1);
@@ -171,7 +171,19 @@ public class Sections {
                 this.sections.remove(0);
             } else {
                 // 중간역 제거
-
+                // A B
+                // B C
+                Section findSection = sections.stream()
+                        .filter(s -> s.getDownStation().equals(deleteStation))
+                        .findFirst().get();
+                
+                // 거리 계산을 위해 다음 구간 가져오기
+                int index = sections.indexOf(findSection);
+                Section nextSection = sections.get(index + 1);
+                
+                // 거리 계산까지 하여 findSection 업데이트
+                findSection.updateSection(findSection.getUpStation(), nextSection.getDownStation(), findSection.getDistance() + nextSection.getDistance());
+                
             }
 
         } else if (sections.size() == 1){
