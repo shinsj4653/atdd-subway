@@ -90,7 +90,7 @@ public class LineService {
 
         // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
         Station startStation = validateStationExist(req.getStartStationId());
-        Station endStation = validateStationExist(req.getEndStationid());
+        Station endStation = validateStationExist(req.getEndStationId());
 
         // 존재하지 않는 노선을 조회하려 했을때 예외처리
         Line line = validateLineExist(lineId);

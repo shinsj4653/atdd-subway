@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 public class PathFindRequest {
 
     private Long startStationId;
-    private Long endStationid;
+    private Long endStationId;
 }

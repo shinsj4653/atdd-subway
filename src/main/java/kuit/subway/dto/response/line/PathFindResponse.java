@@ -3,12 +3,14 @@ package kuit.subway.dto.response.line;
 import kuit.subway.dto.response.station.StationDto;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Builder
 public class PathFindResponse {
-    private List<StationDto> stations;
+    @Builder.Default
+    private List<StationDto> stations = new ArrayList<>();
     private int totalDistance;
 
     public static PathFindResponse createPathFindResponse(int totalDistance) {

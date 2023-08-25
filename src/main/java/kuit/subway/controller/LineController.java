@@ -2,10 +2,8 @@ package kuit.subway.controller;
 
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.response.line.LineCreateResponse;
-import kuit.subway.dto.response.line.LineDeleteResponse;
-import kuit.subway.dto.response.line.LineDto;
-import kuit.subway.dto.response.line.LineUpdateResponse;
+import kuit.subway.dto.request.line.PathFindRequest;
+import kuit.subway.dto.response.line.*;
 import kuit.subway.service.LineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +35,11 @@ public class LineController {
     @GetMapping()
     public ResponseEntity<List<LineDto>> getLines() {
         return ResponseEntity.ok(lineService.findAllLines());
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<PathFindResponse> getPath(@PathVariable("id") Long id, @RequestBody PathFindRequest req) {
+        return ResponseEntity.ok(lineService.findPath(id, req));
     }
 
     @PutMapping("/{id}")
