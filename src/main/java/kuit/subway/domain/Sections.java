@@ -145,12 +145,13 @@ public class Sections {
         if (sections.size() > 1) {
             validateSectionDeleteStationNotExist(deleteStation);
 
-            // 종점 제거인지, 중간역 제거인지 판별
-            Boolean isLastStationDelete = verfiyIsLastStationDelete(deleteStation);
-            if (isLastStationDelete) {
-                // 종점 제거
-                this.sections.remove(sections.size() - 1);
 
+            if (verfiyIsLastStationDelete(deleteStation)) {
+                // 하행 종점 제거
+                this.sections.remove(sections.size() - 1);
+            } else if (verifyIsFirstStationDelete(deleteStation)){
+                // 상행 종점 제거
+                this.sections.remove(0);
             } else {
                 // 중간역 제거
                 
@@ -163,6 +164,7 @@ public class Sections {
         this.sections.removeIf(section -> (section.getDownStation().equals(deleteStation)));
 
     }
+
 
 
 
@@ -247,10 +249,14 @@ public class Sections {
             return false;
     }
 
-    // 종점 제거인지 아닌지 판별해주는 함수
-
+    // 하행 종점 제거인지 아닌지 판별해주는 함수
     private Boolean verfiyIsLastStationDelete(Station deleteStation) {
         return this.sections.get(sections.size() - 1).getDownStation().equals(deleteStation);
+    }
+
+    // 상행 종점 제거인지 아닌지 판별해주는 함수
+    private Boolean verifyIsFirstStationDelete(Station deleteStation) {
+        return this.sections.get(0).getUpStation().equals(deleteStation);
     }
 
 }
