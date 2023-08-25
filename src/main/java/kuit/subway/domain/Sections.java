@@ -142,7 +142,9 @@ public class Sections {
     public void deleteSection(Station deleteStation) {
 
         if (sections.size() > 1) {
-            validateSectionDeleteLastStation(deleteStation);
+
+
+
         } else if (sections.size() == 1){
             // 구간이 하나인 노선에서 구간 제거 불가
             throw new InvalidSectionDeleteOnlyTwoStationsException();
@@ -207,13 +209,6 @@ public class Sections {
         if ((upExist.isPresent() && upExist.get().getDistance() <= section.getDistance()) ||
                 (downExist.isPresent() && downExist.get().getDistance() <= section.getDistance())) {
             throw new InvalidSectionCreateLengthLongerException();
-        }
-    }
-
-    // 지하철 노선에 등록된 역(하행 종점역)만 제거할 수 있다. 즉, 마지막 구간만 제거할 수 있다.
-    private void validateSectionDeleteLastStation(Station downStation) {
-        if(!sections.get(sections.size() - 1).getDownStation().equals(downStation)){
-            throw new InvalidSectionDeleteLastStationException();
         }
     }
 
