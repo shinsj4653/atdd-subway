@@ -1,6 +1,5 @@
 package kuit.subway.dto.response.line;
 
-import jakarta.persistence.Entity;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.BaseTimeEntity;
 import kuit.subway.dto.response.section.SectionDto;

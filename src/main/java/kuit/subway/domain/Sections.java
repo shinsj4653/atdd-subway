@@ -158,6 +158,7 @@ public class Sections {
         this.sections.get(0).updateStations(upStation, downStation);
     }
 
+
     public void deleteSection(Station deleteStation) {
 
         if (sections.size() > 1) {
