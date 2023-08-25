@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,18 +60,36 @@ public class LineService {
 
         // 존재하지 않는 노선을 조회했을 때 예외처리
         Line line = validateLineExist(id);
+        List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
 
-        return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), getStationDtoList(line.getSections().getOrderSections()));
+        LineDto lineDto = LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
+        for (StationDto stationDto : stationDtoList) {
+            lineDto.addStationDto(stationDto);
+        }
+        return lineDto;
     }
 
     public List<LineDto> findAllLines() {
 
         List<Line> findLines = lineRepository.findAll();
-        List<LineDto> result = findLines.stream()
-                .map(line -> LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), getStationDtoList(line.getSections().getOrderSections())))
-                .collect(Collectors.toList());
+        List<LineDto> result = new ArrayList<>();
+
+        for (Line line : findLines) {
+            LineDto lineDto = LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
+            List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+
+            for (StationDto stationDto : stationDtoList) {
+                lineDto.addStationDto(stationDto);
+            }
+
+            result.add(lineDto);
+        }
         return result;
     }
+
+//    public List<StationDto> findPath() {
+//
+//    }
 
     @Transactional
     public LineUpdateResponse updateLine(Long id, LineUpdateRequest req) {
@@ -91,13 +110,18 @@ public class LineService {
         // 모든 예외조건 패스할 시, request 대로 노선 수정
         line.updateLine(req.getName(), req.getColor(), req.getDistance(), upStation, downStation);
 
-        return LineUpdateResponse.createLineUpdateResponse(
+        LineUpdateResponse res = LineUpdateResponse.createLineUpdateResponse(
                 line.getId(),
                 req.getName(),
                 req.getColor(),
-                req.getDistance(),
-                getStationDtoList(line.getSections().getOrderSections())
+                req.getDistance()
         );
+
+        List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+        for (StationDto stationDto : stationDtoList) {
+            res.addStationDto(stationDto);
+        }
+        return res;
     }
 
     @Transactional
