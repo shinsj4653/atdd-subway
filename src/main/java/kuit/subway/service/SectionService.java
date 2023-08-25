@@ -43,7 +43,14 @@ public class SectionService {
         // 노선에는 구간 형태로 추가해줘야한다.
         line.addSection(Section.createSection(line, upStation, downStation, req.getDistance()));
 
-        return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), getStationDtoList(line.getSections().getOrderSections()));
+        LineDto lineDto = LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
+
+        List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+
+        for (StationDto stationDto : stationDtoList) {
+            lineDto.addStationDto(stationDto);
+        }
+        return lineDto;
     }
 
     @Transactional
@@ -60,7 +67,13 @@ public class SectionService {
         // 노선의 구간 삭제
         line.deleteSection(station);
 
-        return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), getStationDtoList(line.getSections().getOrderSections()));
+        LineDto lineDto = LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
+        List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+
+        for (StationDto stationDto : stationDtoList) {
+            lineDto.addStationDto(stationDto);
+        }
+        return lineDto;
     }
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {

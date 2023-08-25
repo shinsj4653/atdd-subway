@@ -57,62 +57,65 @@ public class Sections {
                     // 1 2
                     // 3 5 <= new
                     // 2 5 <= found
+
+
                     // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
-                    Boolean isUpExist = verifyIsUpExist(section);
-
-                    // 새로운 상행이 이미 존재하는 경우
-                    if (isUpExist) {
-                        // 1 2
-                        // 2 3 <= new
-                        // 2 5 <= found
-
-                        // 사이에 끼울 경우, 각 기존 구간의 상행역 & 하행역을 신규 구간 정보로 잘 변경
-                        Section findSection = this.sections.stream()
-                                .filter(s -> s.getUpStation().equals(section.getUpStation()))
-                                .findFirst().get();
-                        System.out.println("findSection upStation" + findSection.getUpStation().getId());
-                        System.out.println("findSection downStation" + findSection.getDownStation().getId());
-
-                        int index = this.sections.indexOf(findSection);
-                        System.out.println("index : " + index);
-                        int findDistance = findSection.getDistance();
-                        int newDistance = section.getDistance();
-
-                        // 새롭게 추가할 상행역, 하행역
-                        Station newUpStation = section.getUpStation();
-                        Station newDownStation = section.getDownStation();
-
-                        // 추가해줄 구간 생성
-                        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-                        this.sections.add(index, newSection);
-
-                        // 기존 구간 정보 갱신
-                        findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
-
-                    } else {
-                        // 새로운 하행이 기존 하행으로 존재할 경우
-                        // 1 2
-                        // 2 5 <= found
-                        // 3 5 <= new
-                        Section findSection = this.sections.stream()
-                                .filter(s -> s.getDownStation().equals(section.getDownStation()))
-                                .findFirst().get();
-
-                        int index = this.sections.indexOf(findSection);
-                        int findDistance = findSection.getDistance();
-                        int newDistance = section.getDistance();
-
-                        // 새롭게 추가할 상행역, 하행역
-                        Station newUpStation = section.getUpStation();
-                        Station newDownStation = section.getDownStation();
-
-                        // 추가해줄 구간 생성
-                        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-                        this.sections.add(index + 1, newSection);
-
-                        // 기존 구간 정보 갱신
-                        findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
-                    }
+//                    Boolean isUpExist = verifyIsUpExist(section);
+//
+//                    // 새로운 상행이 이미 존재하는 경우
+//                    if (isUpExist) {
+//                        // 1 2
+//                        // 2 3 <= new
+//                        // 2 5 <= found
+//
+//                        // 사이에 끼울 경우, 각 기존 구간의 상행역 & 하행역을 신규 구간 정보로 잘 변경
+//                        Section findSection = this.sections.stream()
+//                                .filter(s -> s.getUpStation().equals(section.getUpStation()))
+//                                .findFirst().get();
+//                        System.out.println("findSection upStation" + findSection.getUpStation().getId());
+//                        System.out.println("findSection downStation" + findSection.getDownStation().getId());
+//
+//                        int index = this.sections.indexOf(findSection);
+//                        System.out.println("index : " + index);
+//                        int findDistance = findSection.getDistance();
+//                        int newDistance = section.getDistance();
+//
+//                        // 새롭게 추가할 상행역, 하행역
+//                        Station newUpStation = section.getUpStation();
+//                        Station newDownStation = section.getDownStation();
+//
+//                        // 추가해줄 구간 생성
+//                        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
+//                        this.sections.add(index, newSection);
+//
+//                        // 기존 구간 정보 갱신
+//                        findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
+//
+//                    } else {
+//                        // 새로운 하행이 기존 하행으로 존재할 경우
+//                        // 1 2
+//                        // 2 5 <= found
+//                        // 3 5 <= new
+//                        Section findSection = this.sections.stream()
+//                                .filter(s -> s.getDownStation().equals(section.getDownStation()))
+//                                .findFirst().get();
+//
+//                        int index = this.sections.indexOf(findSection);
+//                        int findDistance = findSection.getDistance();
+//                        int newDistance = section.getDistance();
+//
+//                        // 새롭게 추가할 상행역, 하행역
+//                        Station newUpStation = section.getUpStation();
+//                        Station newDownStation = section.getDownStation();
+//
+//                        // 추가해줄 구간 생성
+//                        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
+//                        this.sections.add(index + 1, newSection);
+//
+//                        // 기존 구간 정보 갱신
+//                        findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
+//                    }
+                    this.sections.add(section);
                 }
             }
         }
