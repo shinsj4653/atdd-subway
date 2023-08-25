@@ -139,14 +139,16 @@ public class Sections {
         this.sections.get(0).updateStations(upStation, downStation);
     }
 
-    public void deleteSection(Station station) {
+    public void deleteSection(Station deleteStation) {
 
         if (sections.size() > 1) {
-            validateSectionDeleteLastStation(station);
+            validateSectionDeleteLastStation(deleteStation);
         } else if (sections.size() == 1){
+            // 구간이 하나인 노선에서 구간 제거 불가
             throw new InvalidSectionDeleteOnlyTwoStationsException();
         }
-        this.sections.removeIf(section -> (section.getDownStation().equals(station)));
+        this.sections.removeIf(section -> (section.getDownStation().equals(deleteStation)));
+
     }
 
     // 새로운 구간의 상행역이 등록되어있는 하행 종점역이면, 새로운 역을 하행 종점으로 등록할 경우

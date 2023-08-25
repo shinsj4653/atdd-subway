@@ -54,7 +54,7 @@ public class SectionService {
         Line line = validateLineExist(lineId);
 
         // 노선의 구간 삭제
-//        line.deleteSection(station);
+        line.deleteSection(station);
 
         return LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance(), line.getSections().getStationDtoList());
     }
