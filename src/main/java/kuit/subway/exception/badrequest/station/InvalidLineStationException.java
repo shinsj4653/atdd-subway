@@ -3,9 +3,11 @@ package kuit.subway.exception.badrequest.station;
 import kuit.subway.exception.badrequest.BadRequestException;
 import lombok.Getter;
 
+import static kuit.subway.exception.CustomExceptionContext.INVALID_LINE_STATION_ERROR;
+
 @Getter
 public class InvalidLineStationException extends BadRequestException {
     public InvalidLineStationException(){
-        super("상행역과 하행액이 같으면 안됩니다.", 2001);
+        super(INVALID_LINE_STATION_ERROR);
     }
 }

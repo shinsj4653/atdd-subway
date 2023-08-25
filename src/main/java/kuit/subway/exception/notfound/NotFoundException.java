@@ -1,5 +1,6 @@
 package kuit.subway.exception.notfound;
 
+import kuit.subway.exception.ExceptionContext;
 import kuit.subway.exception.SubwayException;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -7,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class NotFoundException extends SubwayException {
 
-    public NotFoundException(String message, int code) {
-        super(HttpStatus.NOT_FOUND, message, code);
+    public NotFoundException(ExceptionContext context) {
+        super(HttpStatus.NOT_FOUND, context.getMessage(), context.getCode());
     }
 }
