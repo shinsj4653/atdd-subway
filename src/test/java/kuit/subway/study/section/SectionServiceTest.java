@@ -3,6 +3,7 @@ package kuit.subway.study.section;
 import jakarta.transaction.Transactional;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
+import kuit.subway.domain.Sections;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.repository.LineRepository;
@@ -162,7 +163,70 @@ public class SectionServiceTest {
     @Nested
     @DisplayName("지하철 구간 삭제 테스트")
     class deleteSection {
-        
+        Station station1;
+        Station station2;
+        Station station3;
+        Line line;
+
+        private List<StationDto> getStationDtoList(List<Section> sections) {
+
+            List<StationDto> result = new ArrayList<>();
+            Long nextUpStationId;
+
+            // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
+            Station upStation = sections.get(0).getUpStation();
+            result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
+
+            Station downStation = sections.get(0).getDownStation();
+            result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+
+            nextUpStationId = downStation.getId();
+
+            for (int i = 0; i < sections.size() - 1; i++) {
+                Long finalNextUpStationId = nextUpStationId;
+                Section findSection = sections.stream()
+                        .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
+                        .findFirst().get();
+                System.out.println(findSection.getDownStation().getId());
+                downStation = findSection.getDownStation();
+                result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+                nextUpStationId = downStation.getId();
+            }
+
+            return result;
+        }
+
+        // 사전에 필요한 역, 노선 데이터 생성
+        @BeforeEach
+        void setUpLine() {
+
+            station1 = Station.createStation("강남역");
+            station2 = Station.createStation("수서역");
+            station3 = Station.createStation("논현역");
+
+            stationRepository.save(station1);
+            stationRepository.save(station2);
+            stationRepository.save(station3);
+
+            line = Line.createLine("와우선", "green", 20);
+            line.addSection(Section.createSection(line, station1, station2, 10));
+            line.addSection(Section.createSection(line, station2, station3, 10));
+            lineRepository.save(line);
+        }
+
+        @Test
+        @DisplayName("종점이 제거될 경우 다음으로 오던 역이 종점이 되도록 구현")
+        void deleteLastStation() {
+
+            // given
+            // when
+            line.deleteSection(station3);
+
+            // then
+            List<Section> orderSections = line.getSections().getOrderSections();
+            assertEquals(station2.getId(), orderSections.get(orderSections.size() - 1).getDownStation().getId());
+
+        }
     }
 
 
