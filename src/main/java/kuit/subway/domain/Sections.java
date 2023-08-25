@@ -144,7 +144,17 @@ public class Sections {
 
         if (sections.size() > 1) {
             validateSectionDeleteStationNotExist(deleteStation);
-            
+
+            // 종점 제거인지, 중간역 제거인지 판별
+            Boolean isLastStationDelete = verfiyIsLastStationDelete(deleteStation);
+            if (isLastStationDelete) {
+                // 종점 제거
+                this.sections.remove(sections.size() - 1);
+
+            } else {
+                // 중간역 제거
+                
+            }
 
         } else if (sections.size() == 1){
             // 구간이 하나인 노선에서 구간 제거 불가
@@ -153,6 +163,8 @@ public class Sections {
         this.sections.removeIf(section -> (section.getDownStation().equals(deleteStation)));
 
     }
+
+
 
     // 새로운 구간의 상행역이 등록되어있는 하행 종점역이면, 새로운 역을 하행 종점으로 등록할 경우
     private boolean validateSectionCreateFirstStation(Section section) {
@@ -233,6 +245,12 @@ public class Sections {
             return true;
         } else
             return false;
+    }
+
+    // 종점 제거인지 아닌지 판별해주는 함수
+
+    private Boolean verfiyIsLastStationDelete(Station deleteStation) {
+        return this.sections.get(sections.size() - 1).getDownStation().equals(deleteStation);
     }
 
 }
