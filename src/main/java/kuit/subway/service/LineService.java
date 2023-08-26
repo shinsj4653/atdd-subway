@@ -9,6 +9,7 @@ import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.line.PathFindRequest;
 import kuit.subway.dto.response.line.*;
 import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
 import kuit.subway.exception.badrequest.line.InvalidPathSameStationException;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
@@ -23,6 +24,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,6 +101,9 @@ public class LineService {
         // 출발역과 도착역이 같을 때 예외발생
         validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
 
+        // 출발역과 도착역이 연결되어 있지 않은 경우 예외발생 => 이해 x..
+        validateFindPathStationsConnected(line, req.getStartStationId(), req.getEndStationId());
+
         List<Section> orderSections = line.getSections().getOrderSections();
         Section findStartSection = orderSections.stream()
                 .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
@@ -121,6 +126,19 @@ public class LineService {
             res.addStationDto(stationDto);
         }
         return res;
+    }
+
+    // 존재하는 역이긴 하지만, 해당 노선에는 존재하지 않으면 오류
+    private void validateFindPathStationsConnected(Line line, Long startStationId, Long endStationId) {
+        Optional<Section> startSection = line.getSections().getOrderSections().stream()
+                .filter(s -> s.getUpStation().getId().equals(startStationId)).findAny();
+
+        Optional<Section> endSection = line.getSections().getOrderSections().stream()
+                .filter(s -> s.getUpStation().getId().equals(endStationId)).findAny();
+
+        if (startSection.isEmpty() || endSection.isEmpty()) {
+            throw new InvalidPathNotConnectedException();
+        }
     }
 
     @Transactional
