@@ -344,4 +344,55 @@ public class LineServiceMockTest {
 
     }
 
+    @Nested
+    @DisplayName("노선 내 경로 조회 Mock 테스트")
+    class FindPath {
+        Station station1;
+        Station station2;
+        Station station3;
+
+        @BeforeEach
+        void setUp() {
+            station1 = Station.createStation("강남역");
+            station2 = Station.createStation("수서역");
+            station3 = Station.createStation("논현역");
+        }
+
+        @Nested
+        @DisplayName("정상 케이스")
+        class SuccessCase {
+
+            @Test
+            @DisplayName("출발역 id와 도착역 id로 요청하면 출발역, 도착역까지의 경로에 있는 역 목록, 그리고 경로 구간의 총 거리가 검색된다.")
+            void findLineSuccess() {
+
+            }
+        }
+
+        @Nested
+        @DisplayName("비정상 케이스")
+        class FailedCase {
+
+            @Test
+            @DisplayName("출발역과 도착역이 같은 경우")
+            void findLineFail1() {
+
+            }
+
+            @Test
+            @DisplayName("출발역과 도착역이 연결이 되어 있지 않은 경우")
+            void findLineFail2() {
+
+            }
+
+            @Test
+            @DisplayName("존재하지 않은 출발역이나 도착역을 조회할 경우")
+            void findLineFail3() {
+
+            }
+
+        }
+
+    }
+
 }
