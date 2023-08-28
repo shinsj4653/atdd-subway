@@ -9,7 +9,8 @@ public class LineUpdateRequest {
 
     private String name;
     private String color;
-    private int distance;
+    private int lineDistance;
     private Long upStationId;
     private Long downStationId;
+    private int sectionDistance;
 }
