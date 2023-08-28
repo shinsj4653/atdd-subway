@@ -83,32 +83,4 @@ public class SectionService {
         return lineRepository.findById(id)
                 .orElseThrow(NotFoundLineException::new);
     }
-
-    private List<StationReadResponse> getStationDtoList(List<Section> sections) {
-
-        List<StationReadResponse> result = new ArrayList<>();
-        Long nextUpStationId;
-
-        // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
-        Station upStation = sections.get(0).getUpStation();
-        result.add(StationReadResponse.createStationDto(upStation.getId(), upStation.getName()));
-
-        Station downStation = sections.get(0).getDownStation();
-        result.add(StationReadResponse.createStationDto(downStation.getId(), downStation.getName()));
-
-        nextUpStationId = downStation.getId();
-
-        for (int i = 0; i < sections.size() - 1; i++) {
-            Long finalNextUpStationId = nextUpStationId;
-            Section findSection = sections.stream()
-                    .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
-                    .findFirst().get();
-            System.out.println(findSection.getDownStation().getId());
-            downStation = findSection.getDownStation();
-            result.add(StationReadResponse.createStationDto(downStation.getId(), downStation.getName()));
-            nextUpStationId = downStation.getId();
-        }
-
-        return result;
-    }
 }
