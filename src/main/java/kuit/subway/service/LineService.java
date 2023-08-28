@@ -7,7 +7,11 @@ import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.line.PathFindRequest;
+import kuit.subway.dto.request.section.SectionCreateRequest;
+import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.*;
+import kuit.subway.dto.response.section.SectionCreateResponse;
+import kuit.subway.dto.response.section.SectionDeleteResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
 import kuit.subway.exception.badrequest.line.InvalidPathSameStationException;
@@ -74,45 +78,6 @@ public class LineService {
         return result;
     }
 
-    public PathReadResponse findPath(Long lineId, PathFindRequest req) {
-
-        // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
-        Station startStation = validateStationExist(req.getStartStationId());
-        Station endStation = validateStationExist(req.getEndStationId());
-
-        // 존재하지 않는 노선을 조회하려 했을때 예외처리
-        Line line = validateLineExist(lineId);
-
-        // 출발역과 도착역이 같을 때 예외발생
-        validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
-
-        // 출발역과 도착역이 연결되어 있지 않은 경우 예외발생 => 이해 x..
-        validateFindPathStationsConnected(line, req.getStartStationId(), req.getEndStationId());
-
-        List<Section> orderSections = line.getSections().getOrderSections();
-        Section findStartSection = orderSections.stream()
-                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
-
-        Section findEndSection = orderSections.stream()
-                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
-
-        int startIdx = orderSections.indexOf(findStartSection);
-        int endIdx = orderSections.indexOf(findEndSection);
-        int distance = 0;
-
-        for (int i = startIdx; i <= endIdx; i++) {
-            distance += orderSections.get(i).getDistance();
-        }
-
-        List<StationReadResponse> stationReadResponsePath = getStationDtoPath(orderSections, startStation, endStation);
-
-        PathReadResponse res = PathReadResponse.createPathFindResponse(distance);
-        for (StationReadResponse stationReadResponse : stationReadResponsePath) {
-            res.addStationDto(stationReadResponse);
-        }
-        return res;
-    }
-
     // 존재하는 역이긴 하지만, 해당 노선에는 존재하지 않으면 오류
     private void validateFindPathStationsConnected(Line line, Long startStationId, Long endStationId) {
         Optional<Section> startSection = line.getSections().getOrderSections().stream()
@@ -154,6 +119,81 @@ public class LineService {
         // 존재하지 않는 노선을 삭제하려고 할시, 예외처리
         Line line = validateLineExist(id);
         return LineDeleteResponse.of(line);
+    }
+
+    @Transactional
+    public SectionCreateResponse addSection(Long lineId, SectionCreateRequest req) {
+
+        Long upStationId = req.getUpStationId();
+        Long downStationId = req.getDownStationId();
+
+        // 역에 대한 예외처리
+        Station upStation = validateStationExist(upStationId);
+        Station downStation = validateStationExist(downStationId);
+        validateSameStation(upStationId, downStationId);
+
+        // 노선에 대한 예외처리
+        Line line = validateLineExist(lineId);
+
+        // 노선에는 구간 형태로 추가해줘야한다.
+        line.addSection(Section.createSection(line, upStation, downStation, req.getDistance()));
+
+        return SectionCreateResponse.of(line);
+    }
+
+    @Transactional
+    public SectionDeleteResponse deleteSection(Long lineId, SectionDeleteRequest req) {
+
+        Long deleteStationId = req.getDeleteStationId();
+
+        // 역에 대한 예외처리
+        Station station = validateStationExist(deleteStationId);
+
+        // 노선에 대한 예외처리
+        Line line = validateLineExist(lineId);
+
+        // 노선의 구간 삭제
+        line.deleteSection(station);
+        return SectionDeleteResponse.of(line);
+    }
+
+    public PathReadResponse findPath(Long lineId, PathFindRequest req) {
+
+        // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
+        Station startStation = validateStationExist(req.getStartStationId());
+        Station endStation = validateStationExist(req.getEndStationId());
+
+        // 존재하지 않는 노선을 조회하려 했을때 예외처리
+        Line line = validateLineExist(lineId);
+
+        // 출발역과 도착역이 같을 때 예외발생
+        validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
+
+        // 출발역과 도착역이 연결되어 있지 않은 경우 예외발생 => 이해 x..
+        validateFindPathStationsConnected(line, req.getStartStationId(), req.getEndStationId());
+
+        List<Section> orderSections = line.getSections().getOrderSections();
+        Section findStartSection = orderSections.stream()
+                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
+
+        Section findEndSection = orderSections.stream()
+                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
+
+        int startIdx = orderSections.indexOf(findStartSection);
+        int endIdx = orderSections.indexOf(findEndSection);
+        int distance = 0;
+
+        for (int i = startIdx; i <= endIdx; i++) {
+            distance += orderSections.get(i).getDistance();
+        }
+
+        List<StationReadResponse> stationReadResponsePath = getStationDtoPath(orderSections, startStation, endStation);
+
+        PathReadResponse res = PathReadResponse.createPathFindResponse(distance);
+        for (StationReadResponse stationReadResponse : stationReadResponsePath) {
+            res.addStationDto(stationReadResponse);
+        }
+        return res;
     }
 
     private List<StationReadResponse> getStationDtoPath(List<Section> sections, Station startStation, Station endStation) {

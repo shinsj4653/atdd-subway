@@ -11,6 +11,7 @@ import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyT
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteStationNotExist;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
+import kuit.subway.service.SectionService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +25,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Transactional
 @DisplayName("지하철 구간 Classic 예외 테스트")
 public class SectionServiceExceptionTest {
+
+    @Autowired
+    private SectionService sectionService;
 
     @Autowired
     private LineRepository lineRepository;

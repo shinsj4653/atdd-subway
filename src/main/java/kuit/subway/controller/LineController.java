@@ -3,7 +3,11 @@ package kuit.subway.controller;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.line.PathFindRequest;
+import kuit.subway.dto.request.section.SectionCreateRequest;
+import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.*;
+import kuit.subway.dto.response.section.SectionCreateResponse;
+import kuit.subway.dto.response.section.SectionDeleteResponse;
 import kuit.subway.service.LineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +41,6 @@ public class LineController {
         return ResponseEntity.ok(lineService.findAllLines());
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<PathReadResponse> getPath(@PathVariable("id") Long id, @RequestBody PathFindRequest req) {
-        return ResponseEntity.ok(lineService.findPath(id, req));
-    }
 
     @PutMapping("/{id}")
     public ResponseEntity<LineUpdateResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineUpdateRequest req) {
@@ -51,4 +51,25 @@ public class LineController {
     public ResponseEntity<LineDeleteResponse> deleteLine(@PathVariable("id") Long id) {
         return ResponseEntity.ok(lineService.deleteLine(id));
     }
+
+    @PostMapping("/{id}/sections")
+    public ResponseEntity<SectionCreateResponse> addSection(@PathVariable("id") Long lineId, @RequestBody SectionCreateRequest request) {
+
+        SectionCreateResponse res = lineService.addSection(lineId, request);
+        return ResponseEntity.created(URI.create("/sections/" + res.getId()))
+                .body(res);
+    }
+
+    @DeleteMapping("/{id}/sections")
+    public ResponseEntity<SectionDeleteResponse> deleteSection(@PathVariable("id") Long lineId, @RequestBody SectionDeleteRequest request) {
+
+        SectionDeleteResponse res = lineService.deleteSection(lineId, request);
+        return ResponseEntity.ok().body(res);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<PathReadResponse> getPath(@PathVariable("id") Long id, @RequestBody PathFindRequest req) {
+        return ResponseEntity.ok(lineService.findPath(id, req));
+    }
+
 }
