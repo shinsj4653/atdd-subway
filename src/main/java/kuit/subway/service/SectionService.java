@@ -6,6 +6,8 @@ import kuit.subway.domain.Station;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.LineReadResponse;
+import kuit.subway.dto.response.section.SectionCreateResponse;
+import kuit.subway.dto.response.section.SectionDeleteResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
@@ -29,7 +31,7 @@ public class SectionService {
     private final StationRepository stationRepository;
 
     @Transactional
-    public LineReadResponse addSection(Long lineId, SectionCreateRequest req) {
+    public SectionCreateResponse addSection(Long lineId, SectionCreateRequest req) {
 
         Long upStationId = req.getUpStationId();
         Long downStationId = req.getDownStationId();
@@ -45,11 +47,11 @@ public class SectionService {
         // 노선에는 구간 형태로 추가해줘야한다.
         line.addSection(Section.createSection(line, upStation, downStation, req.getDistance()));
 
-        return LineReadResponse.of(line);
+        return SectionCreateResponse.of(line);
     }
 
     @Transactional
-    public LineReadResponse deleteSection(Long lineId, SectionDeleteRequest req) {
+    public SectionDeleteResponse deleteSection(Long lineId, SectionDeleteRequest req) {
 
         Long deleteStationId = req.getDeleteStationId();
 
@@ -61,7 +63,7 @@ public class SectionService {
 
         // 노선의 구간 삭제
         line.deleteSection(station);
-        return LineReadResponse.of(line);
+        return SectionDeleteResponse.of(line);
     }
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {

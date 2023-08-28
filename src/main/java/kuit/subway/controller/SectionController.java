@@ -3,6 +3,8 @@ package kuit.subway.controller;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.LineReadResponse;
+import kuit.subway.dto.response.section.SectionCreateResponse;
+import kuit.subway.dto.response.section.SectionDeleteResponse;
 import kuit.subway.service.SectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +20,17 @@ public class SectionController {
     private final SectionService sectionService;
 
     @PostMapping("/{id}")
-    public ResponseEntity<LineReadResponse> addSection(@PathVariable("id") Long lineId, @RequestBody SectionCreateRequest request) {
+    public ResponseEntity<SectionCreateResponse> addSection(@PathVariable("id") Long lineId, @RequestBody SectionCreateRequest request) {
 
-        LineReadResponse res = sectionService.addSection(lineId, request);
+        SectionCreateResponse res = sectionService.addSection(lineId, request);
         return ResponseEntity.created(URI.create("/sections/" + res.getId()))
                 .body(res);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<LineReadResponse> deleteSection(@PathVariable("id") Long lineId, @RequestBody SectionDeleteRequest request) {
+    public ResponseEntity<SectionDeleteResponse> deleteSection(@PathVariable("id") Long lineId, @RequestBody SectionDeleteRequest request) {
 
-        LineReadResponse res = sectionService.deleteSection(lineId, request);
+        SectionDeleteResponse res = sectionService.deleteSection(lineId, request);
         return ResponseEntity.ok().body(res);
     }
 }

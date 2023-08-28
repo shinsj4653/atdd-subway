@@ -4,6 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static kuit.subway.utils.fixtures.StationFixtures.*;
@@ -13,17 +14,29 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("지하철역 인수 테스트")
 public class StationAcceptanceTest extends AcceptanceTest {
 
-    @Test
-    @DisplayName("강남역을 등록하고 201 OK를 반환한다.")
-    void createStation() {
+    @Nested
+    @DisplayName("지하철 역 등록")
+    class CreateStation {
 
-        // given
-        // when
-        ExtractableResponse<Response> 지하철_역_등록_결과 = 지하철_역_등록("강남역");
+        @Nested
+        @DisplayName("역 등록 성공")
+        class SuccessCase {
+            @Test
+            @DisplayName("강남역을 등록하고 201 OK를 반환한다.")
+            void createStation() {
 
-        // then
-        assertEquals(201, 지하철_역_등록_결과.statusCode());
+                // given
+                // when
+                ExtractableResponse<Response> 지하철_역_등록_결과 = 지하철_역_등록("강남역");
+
+                // then
+                assertEquals(201, 지하철_역_등록_결과.statusCode());
+            }
+        }
+
     }
+
+
 
 
     @Test

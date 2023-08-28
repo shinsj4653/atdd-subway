@@ -1,4 +1,4 @@
-package kuit.subway.dto.response.line;
+package kuit.subway.dto.response.section;
 
 import kuit.subway.domain.Line;
 import kuit.subway.dto.response.station.StationReadResponse;
@@ -9,22 +9,22 @@ import java.util.List;
 
 @Getter
 @Builder
-public class LineReadResponse {
+public class SectionDeleteResponse {
     private Long id;
+    private String message;
     private String name;
     private String color;
-    private int distance;
 
     @Builder.Default
     private List<StationReadResponse> stations = new ArrayList<>();
 
-    public static LineReadResponse of(Line line) {
-        return LineReadResponse.builder()
+    public static SectionDeleteResponse of(Line line) {
+        return SectionDeleteResponse.builder()
                 .id(line.getId())
+                .message("지하철 구간 삭제 완료")
                 .name(line.getName())
                 .color(line.getColor())
                 .stations(line.getSections().getOrderStations())
-                .distance(line.getDistance())
                 .build();
     }
 }
