@@ -25,20 +25,20 @@ public class StationService {
     public StationCreateResponse addStation(StationCreateRequest res) {
         Station station = Station.createStation(res.getName());
         stationRepository.save(station);
-
-        return new StationCreateResponse("지하철 역 추가 완료", station.getId());
+        return StationCreateResponse.of(station);
     }
+
     public List<StationReadResponse> findStations() {
         List<Station> findStations = stationRepository.findAll();
-        List<StationReadResponse> result = findStations.stream()
-                .map(station -> StationReadResponse.createStationDto(station.getId(), station.getName()))
+        return findStations.stream()
+                .map(station -> StationReadResponse.of(station))
                 .collect(Collectors.toList());
-        return result;
+
     }
 
     public StationReadResponse findStationById(Long id) {
         Station station = validateStationExist(id);
-        return StationReadResponse.createStationDto(station.getId(), station.getName());
+        return StationReadResponse.of(station);
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class StationService {
                 .orElseThrow(NotFoundStationException::new);
 
         stationRepository.delete(station);
-        return new StationDeleteResponse("지하철 역 삭제 완료", station.getId());
+        return StationDeleteResponse.of(station);
     }
 
     // 존재하는 역인지 판별해주는 함수
@@ -55,6 +55,5 @@ public class StationService {
         return stationRepository.findById(id)
                 .orElseThrow(NotFoundStationException::new);
     }
-
 
 }

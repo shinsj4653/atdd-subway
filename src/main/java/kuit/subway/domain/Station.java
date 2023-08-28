@@ -21,6 +21,8 @@ public class Station extends BaseTimeEntity {
     @Column(length = 20, nullable = false)
     private String name;
 
+
+
     public static Station createStation(String name) {
         return Station.builder()
                 .name(name)
