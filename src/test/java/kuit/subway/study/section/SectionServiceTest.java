@@ -9,6 +9,8 @@ import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import kuit.subway.service.LineService;
+import kuit.subway.utils.fixtures.SectionFixtures;
+import kuit.subway.utils.steps.SectionStep;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,7 +64,7 @@ public class SectionServiceTest {
         void addSectionFirstUpStation() {
 
             // given
-            SectionCreateRequest req = new SectionCreateRequest(station3.getId(), station1.getId(), 5);
+            SectionCreateRequest req = SectionStep.지하철_구간_생성_요청(station3.getId(), station1.getId(), 5);
             lineService.addSection(line.getId(), req);
 
             // when
@@ -78,7 +80,7 @@ public class SectionServiceTest {
         void addSectionLastDownStation() {
 
             // given
-            SectionCreateRequest req = new SectionCreateRequest(station2.getId(), station3.getId(), 5);
+            SectionCreateRequest req = SectionStep.지하철_구간_생성_요청(station2.getId(), station3.getId(), 5);
             lineService.addSection(line.getId(), req);
 
             // when
@@ -94,7 +96,7 @@ public class SectionServiceTest {
         void addSectionBetweenStationsUpExist() {
 
             // given
-            SectionCreateRequest req = new SectionCreateRequest(station1.getId(), station3.getId(), 2);
+            SectionCreateRequest req = SectionStep.지하철_구간_생성_요청(station1.getId(), station3.getId(), 5);
             lineService.addSection(line.getId(), req);
 
             // when
@@ -111,7 +113,7 @@ public class SectionServiceTest {
         void addSectionBetweenStationsDownExist() {
 
             // given
-            SectionCreateRequest req = new SectionCreateRequest(station3.getId(), station2.getId(), 2);
+            SectionCreateRequest req = SectionStep.지하철_구간_생성_요청(station3.getId(), station2.getId(), 5);
             lineService.addSection(line.getId(), req);
 
             // when
@@ -128,7 +130,7 @@ public class SectionServiceTest {
         void addSectionReturnAsSorted() {
 
             // given
-            SectionCreateRequest req = new SectionCreateRequest(station3.getId(), station2.getId(), 2);
+            SectionCreateRequest req = SectionStep.지하철_구간_생성_요청(station3.getId(), station2.getId(), 5);
             lineService.addSection(line.getId(), req);
 
             // when
@@ -172,7 +174,7 @@ public class SectionServiceTest {
         void deleteLastStation() {
 
             // given
-            SectionDeleteRequest req = new SectionDeleteRequest(station3.getId());
+            SectionDeleteRequest req = SectionStep.지하철_구간_삭제_요청(station3.getId());
             lineService.deleteSection(line.getId(), req);
 
             // when
@@ -188,7 +190,7 @@ public class SectionServiceTest {
         void deleteFirstStation() {
 
             // given
-            SectionDeleteRequest req = new SectionDeleteRequest(station1.getId());
+            SectionDeleteRequest req = SectionStep.지하철_구간_삭제_요청(station1.getId());
             lineService.deleteSection(line.getId(), req);
 
             // when
@@ -204,7 +206,7 @@ public class SectionServiceTest {
         void deleteBetweenStation() {
 
             // given
-            SectionDeleteRequest req = new SectionDeleteRequest(station2.getId());
+            SectionDeleteRequest req = SectionStep.지하철_구간_삭제_요청(station2.getId());
             lineService.deleteSection(line.getId(), req);
 
             // when
