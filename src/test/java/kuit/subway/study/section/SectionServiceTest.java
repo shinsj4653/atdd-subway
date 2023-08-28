@@ -9,7 +9,6 @@ import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import kuit.subway.service.LineService;
-import kuit.subway.service.SectionService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SectionServiceTest {
 
     @Autowired
-    private SectionService sectionService;
+    private LineService lineService;
 
     @Autowired
     private LineRepository lineRepository;
@@ -64,7 +63,7 @@ public class SectionServiceTest {
 
             // given
             SectionCreateRequest req = new SectionCreateRequest(station3.getId(), station1.getId(), 5);
-            sectionService.addSection(line.getId(), req);
+            lineService.addSection(line.getId(), req);
 
             // when
             List<Section> orderSections = line.getSections().getOrderSections();
@@ -80,7 +79,7 @@ public class SectionServiceTest {
 
             // given
             SectionCreateRequest req = new SectionCreateRequest(station2.getId(), station3.getId(), 5);
-            sectionService.addSection(line.getId(), req);
+            lineService.addSection(line.getId(), req);
 
             // when
             List<Section> orderSections = line.getSections().getOrderSections();
@@ -96,7 +95,7 @@ public class SectionServiceTest {
 
             // given
             SectionCreateRequest req = new SectionCreateRequest(station1.getId(), station3.getId(), 2);
-            sectionService.addSection(line.getId(), req);
+            lineService.addSection(line.getId(), req);
 
             // when
             List<Section> orderSections = line.getSections().getOrderSections();
@@ -113,7 +112,7 @@ public class SectionServiceTest {
 
             // given
             SectionCreateRequest req = new SectionCreateRequest(station3.getId(), station2.getId(), 2);
-            sectionService.addSection(line.getId(), req);
+            lineService.addSection(line.getId(), req);
 
             // when
             List<Section> orderSections = line.getSections().getOrderSections();
@@ -130,7 +129,7 @@ public class SectionServiceTest {
 
             // given
             SectionCreateRequest req = new SectionCreateRequest(station3.getId(), station2.getId(), 2);
-            sectionService.addSection(line.getId(), req);
+            lineService.addSection(line.getId(), req);
 
             // when
             List<Section> orderSections = line.getSections().getOrderSections();
@@ -174,7 +173,7 @@ public class SectionServiceTest {
 
             // given
             SectionDeleteRequest req = new SectionDeleteRequest(station3.getId());
-            sectionService.deleteSection(line.getId(), req);
+            lineService.deleteSection(line.getId(), req);
 
             // when
             List<Section> orderSections = line.getSections().getOrderSections();
@@ -190,7 +189,7 @@ public class SectionServiceTest {
 
             // given
             SectionDeleteRequest req = new SectionDeleteRequest(station1.getId());
-            sectionService.deleteSection(line.getId(), req);
+            lineService.deleteSection(line.getId(), req);
 
             // when
             List<Section> orderSections = line.getSections().getOrderSections();
@@ -206,7 +205,7 @@ public class SectionServiceTest {
 
             // given
             SectionDeleteRequest req = new SectionDeleteRequest(station2.getId());
-            sectionService.deleteSection(line.getId(), req);
+            lineService.deleteSection(line.getId(), req);
 
             // when
             List<Section> orderSections = line.getSections().getOrderSections();
