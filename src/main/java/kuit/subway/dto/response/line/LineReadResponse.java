@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class LineUpdateResponse {
+public class LineReadResponse {
     private Long id;
     private String name;
     private String color;
@@ -17,8 +17,8 @@ public class LineUpdateResponse {
     @Builder.Default
     private List<StationReadResponse> stations = new ArrayList<>();
 
-    public static LineUpdateResponse createLineUpdateResponse(Long id, String name, String color, int distance) {
-        return LineUpdateResponse.builder()
+    public static LineReadResponse createLineDto(Long id, String name, String color, int distance) {
+        return LineReadResponse.builder()
                 .id(id)
                 .name(name)
                 .color(color)
@@ -26,7 +26,7 @@ public class LineUpdateResponse {
                 .build();
     }
 
-    public void addStationDto(StationReadResponse dto) {
-        this.stations.add(dto);
+    public void addStationDto(StationReadResponse stationReadResponse) {
+        this.stations.add(stationReadResponse);
     }
 }

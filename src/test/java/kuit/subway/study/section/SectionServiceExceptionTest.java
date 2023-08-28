@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
 import kuit.subway.domain.Station;
-import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothExistException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothNotExistExcpetion;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateLengthLongerException;
@@ -19,9 +18,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @SpringBootTest

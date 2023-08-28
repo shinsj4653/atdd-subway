@@ -5,8 +5,8 @@ import kuit.subway.domain.Section;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
-import kuit.subway.dto.response.line.LineDto;
-import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.dto.response.line.LineReadResponse;
+import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
 import kuit.subway.exception.notfound.station.NotFoundStationException;
@@ -29,7 +29,7 @@ public class SectionService {
     private final StationRepository stationRepository;
 
     @Transactional
-    public LineDto addSection(Long lineId, SectionCreateRequest req) {
+    public LineReadResponse addSection(Long lineId, SectionCreateRequest req) {
 
         Long upStationId = req.getUpStationId();
         Long downStationId = req.getDownStationId();
@@ -45,18 +45,18 @@ public class SectionService {
         // 노선에는 구간 형태로 추가해줘야한다.
         line.addSection(Section.createSection(line, upStation, downStation, req.getDistance()));
 
-        LineDto lineDto = LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
-        List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+        LineReadResponse lineReadResponse = LineReadResponse.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
+        List<StationReadResponse> stationReadResponseList = getStationDtoList(line.getSections().getOrderSections());
 
-        for (StationDto stationDto : stationDtoList) {
-            lineDto.addStationDto(stationDto);
+        for (StationReadResponse stationReadResponse : stationReadResponseList) {
+            lineReadResponse.addStationDto(stationReadResponse);
         }
 
-        return lineDto;
+        return lineReadResponse;
     }
 
     @Transactional
-    public LineDto deleteSection(Long lineId, SectionDeleteRequest req) {
+    public LineReadResponse deleteSection(Long lineId, SectionDeleteRequest req) {
 
         Long deleteStationId = req.getDeleteStationId();
 
@@ -69,13 +69,13 @@ public class SectionService {
         // 노선의 구간 삭제
         line.deleteSection(station);
 
-        LineDto lineDto = LineDto.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
-        List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
+        LineReadResponse lineReadResponse = LineReadResponse.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
+        List<StationReadResponse> stationReadResponseList = getStationDtoList(line.getSections().getOrderSections());
 
-        for (StationDto stationDto : stationDtoList) {
-            lineDto.addStationDto(stationDto);
+        for (StationReadResponse stationReadResponse : stationReadResponseList) {
+            lineReadResponse.addStationDto(stationReadResponse);
         }
-        return lineDto;
+        return lineReadResponse;
     }
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {
@@ -96,17 +96,17 @@ public class SectionService {
                 .orElseThrow(NotFoundLineException::new);
     }
 
-    private List<StationDto> getStationDtoList(List<Section> sections) {
+    private List<StationReadResponse> getStationDtoList(List<Section> sections) {
 
-        List<StationDto> result = new ArrayList<>();
+        List<StationReadResponse> result = new ArrayList<>();
         Long nextUpStationId;
 
         // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
         Station upStation = sections.get(0).getUpStation();
-        result.add(StationDto.createStationDto(upStation.getId(), upStation.getName()));
+        result.add(StationReadResponse.createStationDto(upStation.getId(), upStation.getName()));
 
         Station downStation = sections.get(0).getDownStation();
-        result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+        result.add(StationReadResponse.createStationDto(downStation.getId(), downStation.getName()));
 
         nextUpStationId = downStation.getId();
 
@@ -117,7 +117,7 @@ public class SectionService {
                     .findFirst().get();
             System.out.println(findSection.getDownStation().getId());
             downStation = findSection.getDownStation();
-            result.add(StationDto.createStationDto(downStation.getId(), downStation.getName()));
+            result.add(StationReadResponse.createStationDto(downStation.getId(), downStation.getName()));
             nextUpStationId = downStation.getId();
         }
 

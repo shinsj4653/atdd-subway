@@ -4,14 +4,13 @@ import kuit.subway.domain.Station;
 import kuit.subway.dto.request.station.StationCreateRequest;
 import kuit.subway.dto.response.station.StationCreateResponse;
 import kuit.subway.dto.response.station.StationDeleteResponse;
-import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.notfound.station.NotFoundStationException;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,17 +28,17 @@ public class StationService {
 
         return new StationCreateResponse("지하철 역 추가 완료", station.getId());
     }
-    public List<StationDto> findStations() {
+    public List<StationReadResponse> findStations() {
         List<Station> findStations = stationRepository.findAll();
-        List<StationDto> result = findStations.stream()
-                .map(station -> StationDto.createStationDto(station.getId(), station.getName()))
+        List<StationReadResponse> result = findStations.stream()
+                .map(station -> StationReadResponse.createStationDto(station.getId(), station.getName()))
                 .collect(Collectors.toList());
         return result;
     }
 
-    public StationDto findStationById(Long id) {
+    public StationReadResponse findStationById(Long id) {
         Station station = validateStationExist(id);
-        return StationDto.createStationDto(station.getId(), station.getName());
+        return StationReadResponse.createStationDto(station.getId(), station.getName());
     }
 
     @Transactional

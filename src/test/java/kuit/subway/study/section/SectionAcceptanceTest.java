@@ -3,15 +3,10 @@ package kuit.subway.study.section;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.dto.request.station.StationCreateRequest;
-import kuit.subway.dto.response.station.StationDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static kuit.subway.utils.fixtures.LineFixtures.지하철_노선_등록;
-import static kuit.subway.utils.fixtures.LineFixtures.지하철_노선_식별자로_조회;
 import static kuit.subway.utils.fixtures.SectionFixtures.지하철_구간_등록;
 import static kuit.subway.utils.fixtures.SectionFixtures.지하철_구간_삭제;
 import static kuit.subway.utils.fixtures.StationFixtures.지하철_역_등록;

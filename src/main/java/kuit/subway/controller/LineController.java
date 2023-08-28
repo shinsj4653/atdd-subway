@@ -28,17 +28,17 @@ public class LineController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LineDto> getLineById(@PathVariable("id") Long id) {
+    public ResponseEntity<LineReadResponse> getLineById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(lineService.findLineById(id));
     }
 
     @GetMapping()
-    public ResponseEntity<List<LineDto>> getLines() {
+    public ResponseEntity<List<LineReadResponse>> getLines() {
         return ResponseEntity.ok(lineService.findAllLines());
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<PathFindResponse> getPath(@PathVariable("id") Long id, @RequestBody PathFindRequest req) {
+    public ResponseEntity<PathReadResponse> getPath(@PathVariable("id") Long id, @RequestBody PathFindRequest req) {
         return ResponseEntity.ok(lineService.findPath(id, req));
     }
 

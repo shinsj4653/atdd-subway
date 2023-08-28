@@ -3,17 +3,13 @@ package kuit.subway.study.section;
 import jakarta.transaction.Transactional;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
-import kuit.subway.domain.Sections;
 import kuit.subway.domain.Station;
-import kuit.subway.dto.response.station.StationDto;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
-import kuit.subway.service.LineService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

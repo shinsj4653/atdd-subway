@@ -7,7 +7,7 @@ import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
-import kuit.subway.dto.response.line.LineDto;
+import kuit.subway.dto.response.line.LineReadResponse;
 import kuit.subway.dto.response.line.LineUpdateResponse;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
@@ -164,7 +164,7 @@ public class LineServiceMockTest {
                 given(lineRepository.findById(1L)).willReturn(Optional.of(line));
 
                 // when
-                LineDto findLine = lineService.findLineById(1L);
+                LineReadResponse findLine = lineService.findLineById(1L);
 
                 // then
                 assertThat(findLine).isNotNull();
@@ -222,7 +222,7 @@ public class LineServiceMockTest {
                 given(lineRepository.findAll()).willReturn(lines);
 
                 // when
-                List<LineDto> allLines = lineService.findAllLines();
+                List<LineReadResponse> allLines = lineService.findAllLines();
 
                 // then
                 assertThat(allLines).isNotNull();

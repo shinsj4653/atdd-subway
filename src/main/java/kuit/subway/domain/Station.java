@@ -2,11 +2,7 @@ package kuit.subway.domain;
 
 import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
-import kuit.subway.dto.response.station.StationDto;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 import static jakarta.persistence.FetchType.LAZY;
 
