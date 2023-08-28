@@ -16,9 +16,9 @@ public class LineFixtures {
 
     public static final String LINE_PATH = "/lines";
 
-    public static ExtractableResponse<Response> 지하철_노선_등록(String name, String color, int distance) {
+    public static ExtractableResponse<Response> 지하철_노선_등록(String name, String color, int lineDistance, Long upStationId, Long downStationId, int sectionDistance) {
 
-        LineCreateRequest req = 지하철_노선_생성_요청(name, color, distance);
+        LineCreateRequest req = 지하철_노선_생성_요청(name, color, lineDistance, upStationId, downStationId, sectionDistance);
         return post(LINE_PATH, req);
     }
 
@@ -30,9 +30,9 @@ public class LineFixtures {
         return get(LINE_PATH);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_수정(Long id, String name, String color, int distance, Long upStationId, Long downStationId ) {
-        LineUpdateRequest req = 지하철_노선_수정_요청(name, color, distance, downStationId, upStationId);
-        return put(LINE_PATH + "/" + id, req);
+    public static ExtractableResponse<Response> 지하철_노선_수정(Long lineId, String name, String color, int lineDistance, Long upStationId, Long downStationId, int sectionDistance) {
+        LineUpdateRequest req = 지하철_노선_수정_요청(name, color, lineDistance, upStationId, downStationId, sectionDistance);
+        return put(LINE_PATH + "/" + lineId, req);
     }
 
     public static ExtractableResponse<Response> 지하철_노선_삭제(Long id) {

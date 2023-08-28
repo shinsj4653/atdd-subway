@@ -75,9 +75,9 @@ public class LineServiceMockTest {
                 given(stationRepository.findById(2L)).willReturn(Optional.of(downStation));
 
                 Line line = Line.createLine("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, downStation, 1));
+                line.addSection(Section.createSection(line, upStation, downStation, 5));
 
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20);
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 2L, 5);
 
                 given(lineRepository.save(line)).willReturn(line);
                 given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
@@ -108,8 +108,7 @@ public class LineServiceMockTest {
                 Line line = Line.createLine("와우선", "green", 20);
 
                 // when
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, notExistStation, 1));
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 3L, 5);
 
                 // then
                 assertThatThrownBy(() -> lineService.addLine(req)).isInstanceOf(NotFoundStationException.class);
@@ -126,8 +125,7 @@ public class LineServiceMockTest {
 
 
                 // when
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, upStation, 1));
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 1L, 5);
 
                 // then
                 assertThatThrownBy(() -> lineService.addLine(req)).isInstanceOf(InvalidLineStationException.class);
@@ -162,7 +160,6 @@ public class LineServiceMockTest {
                 Station downStation = Station.createStation("수서역");
 
                 Line line = Line.createLine("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, downStation, 1));
 
                 given(lineRepository.findById(1L)).willReturn(Optional.of(line));
 
@@ -264,7 +261,7 @@ public class LineServiceMockTest {
                 given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
 
                 // when
-                LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15, 2L, 1L);
+                LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15, 2L, 1L, 7);
                 LineUpdateResponse res = lineService.updateLine(line.getId(), req);
 
                 // then
