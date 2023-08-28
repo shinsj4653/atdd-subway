@@ -1,5 +1,6 @@
 package kuit.subway.dto.response.line;
 
+import kuit.subway.domain.Line;
 import kuit.subway.dto.response.station.StationReadResponse;
 import lombok.*;
 
@@ -17,12 +18,13 @@ public class LineReadResponse {
     @Builder.Default
     private List<StationReadResponse> stations = new ArrayList<>();
 
-    public static LineReadResponse createLineDto(Long id, String name, String color, int distance) {
+    public static LineReadResponse of(Line line) {
         return LineReadResponse.builder()
-                .id(id)
-                .name(name)
-                .color(color)
-                .distance(distance)
+                .id(line.getId())
+                .name(line.getName())
+                .color(line.getColor())
+                .stations(line.getSections().getOrderStations())
+                .distance(line.getDistance())
                 .build();
     }
 

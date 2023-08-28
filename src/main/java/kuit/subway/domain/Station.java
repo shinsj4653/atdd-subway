@@ -22,14 +22,11 @@ public class Station extends BaseTimeEntity {
     private String name;
 
 
-
     public static Station createStation(String name) {
         return Station.builder()
                 .name(name)
                 .build();
     }
-
-
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Station)) {

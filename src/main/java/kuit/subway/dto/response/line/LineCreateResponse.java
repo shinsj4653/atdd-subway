@@ -16,7 +16,7 @@ public class LineCreateResponse {
     public static LineCreateResponse of(Line line) {
         return LineCreateResponse.builder()
                 .id(line.getId())
-                .message("지하철 노선이 생성 완료.")
+                .message("지하철 노선 생성 완료")
                 .build();
     }
 }

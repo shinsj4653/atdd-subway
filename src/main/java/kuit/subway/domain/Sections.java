@@ -3,6 +3,7 @@ package kuit.subway.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
+import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.badrequest.section.create.*;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteStationNotExist;
@@ -108,7 +109,7 @@ public class Sections {
 
     }
 
-    // 구간들 상행 종점역 기준으로 정렬한 후, 반환해주는 함수
+    // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 구간 리스트를 반환해주는 함수
     public List<Section> getOrderSections() {
         Section startSection = findStartSection();
         Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
@@ -119,7 +120,23 @@ public class Sections {
             Station curDownStation = nextSection.getDownStation();
             nextSection = upStationAndSectionRoute.get(curDownStation);
         }
+
         return orderedSections;
+    }
+
+    // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 역 리스트를 반환해주는 함수
+    public List<StationReadResponse> getOrderStations() {
+        Section startSection = findStartSection();
+        Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
+        List<Section> orderedSections = new ArrayList<>();
+        Section nextSection = startSection;
+        while (nextSection != null) {
+            orderedSections.add(nextSection);
+            Station curDownStation = nextSection.getDownStation();
+            nextSection = upStationAndSectionRoute.get(curDownStation);
+        }
+
+        return getStations(orderedSections);
     }
 
     private Section findStartSection() {
@@ -178,6 +195,35 @@ public class Sections {
         this.sections.removeIf(section -> (section.getDownStation().equals(deleteStation)));
 
     }
+
+    private List<StationReadResponse> getStations(List<Section> sections) {
+
+        List<StationReadResponse> result = new ArrayList<>();
+        Long nextUpStationId;
+
+        // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
+        Station upStation = sections.get(0).getUpStation();
+        result.add(StationReadResponse.of(upStation));
+
+        Station downStation = sections.get(0).getDownStation();
+        result.add(StationReadResponse.of(upStation));
+
+        nextUpStationId = downStation.getId();
+
+        for (int i = 0; i < sections.size() - 1; i++) {
+            Long finalNextUpStationId = nextUpStationId;
+            Section findSection = sections.stream()
+                    .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
+                    .findFirst().get();
+            System.out.println(findSection.getDownStation().getId());
+            downStation = findSection.getDownStation();
+            result.add(StationReadResponse.of(downStation));
+            nextUpStationId = downStation.getId();
+        }
+
+        return result;
+    }
+
 
     // 주어진 상행역을 이미 상행역으로 가지고 있는 구간 반환
     private Optional<Section> findMatchUpSection(Station upStaiton) {

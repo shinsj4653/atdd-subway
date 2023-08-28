@@ -45,14 +45,7 @@ public class SectionService {
         // 노선에는 구간 형태로 추가해줘야한다.
         line.addSection(Section.createSection(line, upStation, downStation, req.getDistance()));
 
-        LineReadResponse lineReadResponse = LineReadResponse.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
-        List<StationReadResponse> stationReadResponseList = getStationDtoList(line.getSections().getOrderSections());
-
-        for (StationReadResponse stationReadResponse : stationReadResponseList) {
-            lineReadResponse.addStationDto(stationReadResponse);
-        }
-
-        return lineReadResponse;
+        return LineReadResponse.of(line);
     }
 
     @Transactional
@@ -68,14 +61,7 @@ public class SectionService {
 
         // 노선의 구간 삭제
         line.deleteSection(station);
-
-        LineReadResponse lineReadResponse = LineReadResponse.createLineDto(line.getId(), line.getName(), line.getColor(), line.getDistance());
-        List<StationReadResponse> stationReadResponseList = getStationDtoList(line.getSections().getOrderSections());
-
-        for (StationReadResponse stationReadResponse : stationReadResponseList) {
-            lineReadResponse.addStationDto(stationReadResponse);
-        }
-        return lineReadResponse;
+        return LineReadResponse.of(line);
     }
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {
