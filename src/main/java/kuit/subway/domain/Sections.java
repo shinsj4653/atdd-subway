@@ -206,7 +206,7 @@ public class Sections {
         result.add(StationReadResponse.of(upStation));
 
         Station downStation = sections.get(0).getDownStation();
-        result.add(StationReadResponse.of(upStation));
+        result.add(StationReadResponse.of(downStation));
 
         nextUpStationId = downStation.getId();
 

@@ -41,21 +41,10 @@ public class Section extends BaseTimeEntity {
                 .build();
     }
 
-    public void updateStations(Station upStation, Station downStation) {
-        this.upStation = upStation;
-        this.downStation = downStation;
-    }
-
     public void updateSection(Station upStation, Station downStation, int distance) {
         this.upStation = upStation;
         this.downStation = downStation;
         this.distance = distance;
-    }
-
-    public void removeLineAndStations() {
-        this.line = null;
-        this.upStation = null;
-        this.downStation = null;
     }
 
 }

@@ -9,6 +9,9 @@ import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
 import kuit.subway.dto.response.line.LineReadResponse;
 import kuit.subway.dto.response.line.LineUpdateResponse;
+import kuit.subway.dto.request.line.PathFindRequest;
+import kuit.subway.dto.response.line.*;
+import kuit.subway.dto.response.station.StationCreateResponse;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
 import kuit.subway.exception.notfound.station.NotFoundStationException;
@@ -365,7 +368,27 @@ public class LineServiceMockTest {
             @Test
             @DisplayName("출발역 id와 도착역 id로 요청하면 출발역, 도착역까지의 경로에 있는 역 목록, 그리고 경로 구간의 총 거리가 검색된다.")
             void findLineSuccess() {
+                // given
+                given(stationRepository.findById(1L)).willReturn(Optional.of(station1));
+                given(stationRepository.findById(2L)).willReturn(Optional.of(station2));
+                given(stationRepository.findById(3L)).willReturn(Optional.of(station3));
 
+                Line line = Line.createLine("와우선", "green", 20);
+                line.addSection(Section.createSection(line, station1, station2, 10));
+                line.addSection(Section.createSection(line, station2, station3, 10));
+
+                given(lineRepository.save(line)).willReturn(line);
+                given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
+
+                // when
+                PathFindRequest req = new PathFindRequest(station1.getId(), station3.getId());
+                PathFindResponse res = lineService.findPath(line.getId(), req);
+
+                // then
+                assertThat(res).isNotNull();
+                assertEquals(3, res.getStations());
+                assertEquals(10, res.getTotalDistance());
+                verify(lineRepository, times(1)).findById(any());
             }
         }
 
