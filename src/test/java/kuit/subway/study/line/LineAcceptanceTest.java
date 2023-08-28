@@ -27,7 +27,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         지하철_역_등록("성수역");
 
         // when
-        ExtractableResponse<Response> 지하철_노선_등록_결과 = 지하철_노선_등록("와우선", "green", 10, 1L,  2L);
+        ExtractableResponse<Response> 지하철_노선_등록_결과 = 지하철_노선_등록("와우선", "green", 10);
 
         // then
         assertEquals(201, 지하철_노선_등록_결과.statusCode());
@@ -40,7 +40,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
         Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");;
-        Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id).jsonPath().getLong("id");
+        Long lineId = 지하철_노선_등록("와우선", "green", 10).jsonPath().getLong("id");
 
         // when
         ExtractableResponse<Response> 지하철_노선_조회_실패_결과 = 지하철_노선_식별자로_조회(lineId + 1);
@@ -61,8 +61,8 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
         Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");;
-        지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id);
-        지하철_노선_등록("싱준선", "green", 10, station1Id,  station2Id);
+        지하철_노선_등록("와우선", "green", 10);
+        지하철_노선_등록("싱준선", "green", 10;
 
         // when
         ExtractableResponse<Response> 지하철_노선_전체목록_조회_결과 = 지하철_노선_전체목록_조회();
@@ -81,7 +81,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
         Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");;
-        Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id).jsonPath().getLong("id");
+        Long lineId = 지하철_노선_등록("와우선", "green", 10).jsonPath().getLong("id");
 
         // when
         ExtractableResponse<Response> 지하철_노선_수정_실패_결과 = 지하철_노선_식별자로_조회(lineId + 1);
@@ -102,7 +102,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         // given
         Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
         Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");;
-        Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id).jsonPath().getLong("id");
+        Long lineId = 지하철_노선_등록("와우선", "green", 10).jsonPath().getLong("id");
 
         // when
         ExtractableResponse<Response> 지하철_노선_삭제_실패_결과 = 지하철_노선_삭제(lineId + 1);

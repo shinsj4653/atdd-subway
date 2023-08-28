@@ -16,9 +16,9 @@ public class LineFixtures {
 
     public static final String LINE_PATH = "/lines";
 
-    public static ExtractableResponse<Response> 지하철_노선_등록(String name, String color, int distance, Long upStationId, Long downStationId) {
+    public static ExtractableResponse<Response> 지하철_노선_등록(String name, String color, int distance) {
 
-        LineCreateRequest req = 지하철_노선_생성_요청(name, color, distance, upStationId, downStationId);
+        LineCreateRequest req = 지하철_노선_생성_요청(name, color, distance);
         return post(LINE_PATH, req);
     }
 

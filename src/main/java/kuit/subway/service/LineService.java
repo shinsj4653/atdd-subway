@@ -52,7 +52,7 @@ public class LineService {
         Line line = Line.createLine(res.getName(), res.getColor(), res.getDistance());
 
         // 노선에는 구간 형태로 추가해줘야한다.
-        line.addSection(Section.createSection(line, upStation, downStation, 1));
+        //line.addSection(Section.createSection(line, upStation, downStation, 1));
         lineRepository.save(line);
 
         return new LineCreateResponse("지하철 노선 생성 완료", line.getId());
