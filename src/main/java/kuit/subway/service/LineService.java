@@ -38,21 +38,21 @@ public class LineService {
     @Transactional
     public LineCreateResponse addLine(LineCreateRequest res) {
 
-        //Long downStationId = res.getDownStationId();
-       // Long upStationId = res.getUpStationId();
+        Long downStationId = res.getDownStationId();
+        Long upStationId = res.getUpStationId();
 
         // 존재하지 않는 station_id를 추가하려고 하면 예외발생
-       // Station downStation = validateStationExist(downStationId);
-        //Station upStation = validateStationExist(upStationId);
+        Station downStation = validateStationExist(downStationId);
+        Station upStation = validateStationExist(upStationId);
 
         // 상행역과 하행역 둘 다 같은 역이면 예외발생
-      //  validateSameStation(downStationId, upStationId);
+        validateSameStation(downStationId, upStationId);
 
         // 만약, 둘 다 존재하는 역이라면 노선 생성
-        Line line = Line.createLine(res.getName(), res.getColor(), res.getDistance());
+        Line line = Line.createLine(res.getName(), res.getColor(), res.getLineDistance());
 
         // 노선에는 구간 형태로 추가해줘야한다.
-        //line.addSection(Section.createSection(line, upStation, downStation, 1));
+        line.addSection(Section.createSection(line, upStation, downStation, res.getSectionDistance()));
         lineRepository.save(line);
 
         return new LineCreateResponse("지하철 노선 생성 완료", line.getId());
