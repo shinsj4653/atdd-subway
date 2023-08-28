@@ -3,15 +3,12 @@ package kuit.subway.study.section;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.dto.request.station.StationCreateRequest;
-import kuit.subway.dto.response.station.StationDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static kuit.subway.utils.fixtures.LineFixtures.지하철_노선_등록;
-import static kuit.subway.utils.fixtures.LineFixtures.지하철_노선_식별자로_조회;
 import static kuit.subway.utils.fixtures.SectionFixtures.지하철_구간_등록;
 import static kuit.subway.utils.fixtures.SectionFixtures.지하철_구간_삭제;
 import static kuit.subway.utils.fixtures.StationFixtures.지하철_역_등록;
@@ -21,56 +18,95 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisplayName("지하철 구간 인수 테스트")
 public class SectionAcceptanceTest extends AcceptanceTest {
 
-    @Test
-    @DisplayName("지하철 구간 등록 후 201 OK와 변경된 노선의 결과를 반환한다.")
-    void createSection() {
+    @Nested
+    @DisplayName("지하철 구간 등록 인수 테스트")
+    class CreateSection {
 
-        // given
-        Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
-        Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
-        Long station3Id = 지하철_역_등록("논현역").jsonPath().getLong("id");
-        Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id).jsonPath().getLong("id");
+        @Nested
+        @DisplayName("지하철 구간 등록 성공 케이스")
+        class SuccessCase {
 
-        // when
-        ExtractableResponse<Response> failedRes1 = 지하철_구간_등록(lineId, station3Id, station2Id, 1);
-        ExtractableResponse<Response> failedRes2 = 지하철_구간_등록(lineId, station2Id, station2Id, 1);
-        ExtractableResponse<Response> successRes = 지하철_구간_등록(lineId, station2Id, station3Id, 1);
+            @Test
+            @DisplayName("조건에 맞게 지하철 구간 등록할 시, 201 OK를 반환한다.")
+            void createSectionSuccess() {
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long station3Id = 지하철_역_등록("논현역").jsonPath().getLong("id");
+                Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id, 5).jsonPath().getLong("id");
 
-        // then
-        assertAll(
-                // 존재하지 않는 노선 조회 시 에러
-                () -> { assertEquals(400, failedRes1.statusCode()); },
-                () -> { assertEquals(400, failedRes2.statusCode()); },
-                () -> { assertEquals(201, successRes.statusCode()); }
-        );
+                // when
+                ExtractableResponse<Response> successRes = 지하철_구간_등록(lineId, station2Id, station3Id, 1);
 
-    }
+                // then
+               assertEquals(201, successRes.statusCode());
+            }
 
-    @Test
-    @DisplayName("지하철 구간 삭제 후 200 OK와 변경된 노선의 결과를 반환한다.")
-    void deleteSection() {
+        }
 
-        // given
-        Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
-        Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
-        Long station3Id = 지하철_역_등록("논현역").jsonPath().getLong("id");
 
-        Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id).jsonPath().getLong("id");
+        @Nested
+        @DisplayName("지하철 구간 등록 실패 케이스")
+        class FailedCase {
 
-        지하철_구간_등록(lineId, station2Id, station3Id, 1);
+            @Test
+            @DisplayName("같은 두 역을 구간으로 추가하려고 할시, 400 Bad Request를 반환한다.")
+            void createSectionFail1() {
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id, 5).jsonPath().getLong("id");
 
-        // when
-        ExtractableResponse<Response> failedRes1 = 지하철_구간_삭제(lineId, station2Id);
-        ExtractableResponse<Response> successRes = 지하철_구간_삭제(lineId, station3Id);
-        ExtractableResponse<Response> failedRes2 = 지하철_구간_삭제(lineId, station2Id);
+                // when
+                ExtractableResponse<Response> failedRes = 지하철_구간_등록(lineId, station2Id, station2Id, 1);
 
-        // then
-        assertAll(
-                // 존재하지 않는 노선 조회 시 에러
-                () -> { assertEquals(400, failedRes1.statusCode()); },
-                () -> { assertEquals(400, failedRes2.statusCode()); },
-                () -> { assertEquals(200, successRes.statusCode()); }
-        );
+                // then
+                assertEquals(400, failedRes.statusCode());
+            }
+
+            @Test
+            @DisplayName("상행역과 하행역 둘 중 하나도 포함되어있지 않으면, 400 Bad Request를 반환한다.")
+            void createSectionFail2() {
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long station3Id = 지하철_역_등록("논현역").jsonPath().getLong("id");
+                Long station4Id = 지하철_역_등록("이수역").jsonPath().getLong("id");
+                Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id, 5).jsonPath().getLong("id");
+
+                // when
+                ExtractableResponse<Response> failedRes = 지하철_구간_등록(lineId, station3Id, station4Id, 1);
+
+                // then
+                assertEquals(400, failedRes.statusCode());
+            }
+
+            @Test
+            @DisplayName("상행역과 하행역 둘 다 모두 포함되어 있으면, 400 Bad Request를 반환한다.")
+            void createSectionFail3() {
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id, 5).jsonPath().getLong("id");
+
+                // when
+                ExtractableResponse<Response> failedRes = 지하철_구간_등록(lineId, station2Id, station1Id, 1);
+
+                // then
+                assertEquals(400, failedRes.statusCode());
+            }
+            @Test
+            @DisplayName("상행역과 하행역 둘 다 모두 포함되어 있으면, 400 Bad Request를 반환한다.")
+            void createSectionFail4() {
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long lineId = 지하철_노선_등록("와우선", "green", 10, station1Id,  station2Id, 5).jsonPath().getLong("id");
+
+                // when
+                ExtractableResponse<Response> failedRes = 지하철_구간_등록(lineId, station2Id, station1Id, 1);
+
+                // then
+                assertEquals(400, failedRes.statusCode());
+            }
+
+        }
+
     }
 
 }

@@ -7,7 +7,7 @@ import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.response.line.LineCreateResponse;
 import kuit.subway.dto.response.line.LineDeleteResponse;
-import kuit.subway.dto.response.line.LineDto;
+import kuit.subway.dto.response.line.LineReadResponse;
 import kuit.subway.dto.response.line.LineUpdateResponse;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
@@ -55,11 +55,13 @@ public class LineServiceMockTest {
 
         Station upStation;
         Station downStation;
+        Station notExistStation;
 
         @BeforeEach
         void setUp() {
             upStation = Station.createStation("강남역");
             downStation = Station.createStation("수서역");
+
         }
 
         @Nested
@@ -73,9 +75,9 @@ public class LineServiceMockTest {
                 given(stationRepository.findById(2L)).willReturn(Optional.of(downStation));
 
                 Line line = Line.createLine("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, downStation, 1));
+                line.addSection(Section.createSection(line, upStation, downStation, 5));
 
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 2L);
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 2L, 5);
 
                 given(lineRepository.save(line)).willReturn(line);
                 given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
@@ -104,10 +106,9 @@ public class LineServiceMockTest {
                 given(stationRepository.findById(3L)).willReturn(Optional.ofNullable(null));
 
                 Line line = Line.createLine("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, downStation, 1));
 
                 // when
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 3L);
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 3L, 5);
 
                 // then
                 assertThatThrownBy(() -> lineService.addLine(req)).isInstanceOf(NotFoundStationException.class);
@@ -121,10 +122,10 @@ public class LineServiceMockTest {
                 given(stationRepository.findById(1L)).willReturn(Optional.ofNullable(upStation));
 
                 Line line = Line.createLine("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, downStation, 1));
+
 
                 // when
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 1L);
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 1L, 5);
 
                 // then
                 assertThatThrownBy(() -> lineService.addLine(req)).isInstanceOf(InvalidLineStationException.class);
@@ -159,12 +160,11 @@ public class LineServiceMockTest {
                 Station downStation = Station.createStation("수서역");
 
                 Line line = Line.createLine("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, downStation, 1));
 
                 given(lineRepository.findById(1L)).willReturn(Optional.of(line));
 
                 // when
-                LineDto findLine = lineService.findLineById(1L);
+                LineReadResponse findLine = lineService.findLineById(1L);
 
                 // then
                 assertThat(findLine).isNotNull();
@@ -222,7 +222,7 @@ public class LineServiceMockTest {
                 given(lineRepository.findAll()).willReturn(lines);
 
                 // when
-                List<LineDto> allLines = lineService.findAllLines();
+                List<LineReadResponse> allLines = lineService.findAllLines();
 
                 // then
                 assertThat(allLines).isNotNull();
@@ -261,7 +261,7 @@ public class LineServiceMockTest {
                 given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
 
                 // when
-                LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15, 2L, 1L);
+                LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15, 2L, 1L, 7);
                 LineUpdateResponse res = lineService.updateLine(line.getId(), req);
 
                 // then
@@ -341,6 +341,57 @@ public class LineServiceMockTest {
             }
         }
 
+
+    }
+
+    @Nested
+    @DisplayName("노선 내 경로 조회 Mock 테스트")
+    class FindPath {
+        Station station1;
+        Station station2;
+        Station station3;
+
+        @BeforeEach
+        void setUp() {
+            station1 = Station.createStation("강남역");
+            station2 = Station.createStation("수서역");
+            station3 = Station.createStation("논현역");
+        }
+
+        @Nested
+        @DisplayName("정상 케이스")
+        class SuccessCase {
+
+            @Test
+            @DisplayName("출발역 id와 도착역 id로 요청하면 출발역, 도착역까지의 경로에 있는 역 목록, 그리고 경로 구간의 총 거리가 검색된다.")
+            void findLineSuccess() {
+
+            }
+        }
+
+        @Nested
+        @DisplayName("비정상 케이스")
+        class FailedCase {
+
+            @Test
+            @DisplayName("출발역과 도착역이 같은 경우")
+            void findLineFail1() {
+
+            }
+
+            @Test
+            @DisplayName("출발역과 도착역이 연결이 되어 있지 않은 경우")
+            void findLineFail2() {
+
+            }
+
+            @Test
+            @DisplayName("존재하지 않은 출발역이나 도착역을 조회할 경우")
+            void findLineFail3() {
+
+            }
+
+        }
 
     }
 

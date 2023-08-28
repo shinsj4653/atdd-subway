@@ -3,7 +3,7 @@ package kuit.subway.controller;
 import kuit.subway.dto.request.station.StationCreateRequest;
 import kuit.subway.dto.response.station.StationCreateResponse;
 import kuit.subway.dto.response.station.StationDeleteResponse;
-import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.service.StationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +20,12 @@ public class StationController {
     private final StationService stationService;
 
     @GetMapping()
-    public ResponseEntity<List<StationDto>> getStations() {
+    public ResponseEntity<List<StationReadResponse>> getStations() {
         return ResponseEntity.ok(stationService.findStations());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StationDto> getStationById(@PathVariable("id") Long id) {
+    public ResponseEntity<StationReadResponse> getStationById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(stationService.findStationById(id));
     }
 

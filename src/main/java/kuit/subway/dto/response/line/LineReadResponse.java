@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class LineUpdateResponse {
+public class LineReadResponse {
     private Long id;
     private String name;
     private String color;
@@ -18,13 +18,13 @@ public class LineUpdateResponse {
     @Builder.Default
     private List<StationReadResponse> stations = new ArrayList<>();
 
-    public static LineUpdateResponse of(Line line) {
-        return LineUpdateResponse.builder()
+    public static LineReadResponse of(Line line) {
+        return LineReadResponse.builder()
                 .id(line.getId())
                 .name(line.getName())
                 .color(line.getColor())
-                .distance(line.getDistance())
                 .stations(line.getSections().getOrderStations())
+                .distance(line.getDistance())
                 .build();
     }
 }

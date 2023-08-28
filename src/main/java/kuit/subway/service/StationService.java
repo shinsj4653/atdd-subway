@@ -4,14 +4,13 @@ import kuit.subway.domain.Station;
 import kuit.subway.dto.request.station.StationCreateRequest;
 import kuit.subway.dto.response.station.StationCreateResponse;
 import kuit.subway.dto.response.station.StationDeleteResponse;
-import kuit.subway.dto.response.station.StationDto;
+import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.notfound.station.NotFoundStationException;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,20 +25,20 @@ public class StationService {
     public StationCreateResponse addStation(StationCreateRequest res) {
         Station station = Station.createStation(res.getName());
         stationRepository.save(station);
-
-        return new StationCreateResponse("지하철 역 추가 완료", station.getId());
+        return StationCreateResponse.of(station);
     }
-    public List<StationDto> findStations() {
+
+    public List<StationReadResponse> findStations() {
         List<Station> findStations = stationRepository.findAll();
-        List<StationDto> result = findStations.stream()
-                .map(station -> StationDto.createStationDto(station.getId(), station.getName()))
+        return findStations.stream()
+                .map(station -> StationReadResponse.of(station))
                 .collect(Collectors.toList());
-        return result;
+
     }
 
-    public StationDto findStationById(Long id) {
+    public StationReadResponse findStationById(Long id) {
         Station station = validateStationExist(id);
-        return StationDto.createStationDto(station.getId(), station.getName());
+        return StationReadResponse.of(station);
     }
 
     @Transactional
@@ -48,7 +47,7 @@ public class StationService {
                 .orElseThrow(NotFoundStationException::new);
 
         stationRepository.delete(station);
-        return new StationDeleteResponse("지하철 역 삭제 완료", station.getId());
+        return StationDeleteResponse.of(station);
     }
 
     // 존재하는 역인지 판별해주는 함수
@@ -56,6 +55,5 @@ public class StationService {
         return stationRepository.findById(id)
                 .orElseThrow(NotFoundStationException::new);
     }
-
 
 }

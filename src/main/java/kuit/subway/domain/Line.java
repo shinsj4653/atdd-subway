@@ -30,14 +30,14 @@ public class Line extends BaseTimeEntity {
 
     private int distance;
     @Embedded
-    private Sections sections;
+    @Builder.Default
+    private Sections sections = new Sections();
 
     public static Line createLine(String name, String color, int distance) {
         return Line.builder()
                 .name(name)
                 .color(color)
                 .distance(distance)
-                .sections(new Sections())
                 .build();
     }
     // 연관관계 메서드
@@ -48,11 +48,11 @@ public class Line extends BaseTimeEntity {
     public void deleteSection(Station deleteStation) {
         this.sections.deleteSection(deleteStation);
     }
-    public void updateLine(String name, String color, int distance, Station upStation, Station downStation, 1) {
+    public void updateLine(String name, String color, int distance, Station upStation, Station downStation, int sectionDistance) {
         this.name = name;
         this.color = color;
         this.distance = distance;
-        this.sections.getOrderSections().get(0).updateSection(upStation, downStation, 1);
+        this.sections.getOrderSections().get(0).updateSection(upStation, downStation, sectionDistance);
     }
 
 }

@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum CustomExceptionContext implements ExceptionContext {
 
     // BAD_REQUEST
+    INVALID_PATH_SAME_STATION_ERROR("출발역과 도착역이 같으면 안됩니다", 1010),
+    INVALID_PATH_STATIONS_NOT_CONNECTED_ERROR("출발역과 도착역이 연결되어 있지 않습니다.", 1011),
+
     INVALID_LINE_STATION_ERROR("상행역과 하행역이 같으면 안됩니다.", 1001),
 
     INVALID_SECTION_CREATE_BOTH_EXIST("상행역과 하행역이 이미 노선에 모두 등록되어 있다면 구간 추가 불가하다.", 1002),
