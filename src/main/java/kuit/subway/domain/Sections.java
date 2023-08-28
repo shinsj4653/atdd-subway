@@ -112,16 +112,25 @@ public class Sections {
     // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 구간 리스트를 반환해주는 함수
     public List<Section> getOrderSections() {
         Section startSection = findStartSection();
-        Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
         List<Section> orderedSections = new ArrayList<>();
-        Section nextSection = startSection;
-        while (nextSection != null) {
-            orderedSections.add(nextSection);
-            Station curDownStation = nextSection.getDownStation();
-            nextSection = upStationAndSectionRoute.get(curDownStation);
+
+        if (sections.size() == 1) {
+            orderedSections.add(startSection);
+            return orderedSections;
+        } else {
+            Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
+            Section nextSection = startSection;
+            while (nextSection != null) {
+                orderedSections.add(nextSection);
+                Station curDownStation = nextSection.getDownStation();
+                nextSection = upStationAndSectionRoute.get(curDownStation);
+            }
+
+            return orderedSections;
         }
 
-        return orderedSections;
+
+
     }
 
     // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 역 리스트를 반환해주는 함수

@@ -104,7 +104,7 @@ public class SectionServiceTest {
 
             // then
             assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
-            assertEquals(station2.getId(), orderSections.get(1).getUpStation().getId());
+            assertEquals(station2.getId(), orderSections.get(1).getDownStation().getId());
             assertEquals(2, orderSections.size());
         }
 
@@ -121,7 +121,7 @@ public class SectionServiceTest {
 
             // then
             assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
-            assertEquals(station2.getId(), orderSections.get(1).getUpStation().getId());
+            assertEquals(station2.getId(), orderSections.get(1).getDownStation().getId());
             assertEquals(2, orderSections.size());
         }
 
