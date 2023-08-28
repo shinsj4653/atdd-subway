@@ -62,7 +62,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
         Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");;
         지하철_노선_등록("와우선", "green", 10);
-        지하철_노선_등록("싱준선", "green", 10;
+        지하철_노선_등록("싱준선", "green", 10);
 
         // when
         ExtractableResponse<Response> 지하철_노선_전체목록_조회_결과 = 지하철_노선_전체목록_조회();

@@ -55,11 +55,13 @@ public class LineServiceMockTest {
 
         Station upStation;
         Station downStation;
+        Station notExistStation;
 
         @BeforeEach
         void setUp() {
             upStation = Station.createStation("강남역");
             downStation = Station.createStation("수서역");
+
         }
 
         @Nested
@@ -75,7 +77,7 @@ public class LineServiceMockTest {
                 Line line = Line.createLine("와우선", "green", 20);
                 line.addSection(Section.createSection(line, upStation, downStation, 1));
 
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 2L);
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20);
 
                 given(lineRepository.save(line)).willReturn(line);
                 given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
@@ -104,10 +106,10 @@ public class LineServiceMockTest {
                 given(stationRepository.findById(3L)).willReturn(Optional.ofNullable(null));
 
                 Line line = Line.createLine("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, downStation, 1));
 
                 // when
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 3L);
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20);
+                line.addSection(Section.createSection(line, upStation, notExistStation, 1));
 
                 // then
                 assertThatThrownBy(() -> lineService.addLine(req)).isInstanceOf(NotFoundStationException.class);
@@ -121,10 +123,11 @@ public class LineServiceMockTest {
                 given(stationRepository.findById(1L)).willReturn(Optional.ofNullable(upStation));
 
                 Line line = Line.createLine("와우선", "green", 20);
-                line.addSection(Section.createSection(line, upStation, downStation, 1));
+
 
                 // when
-                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20, 1L, 1L);
+                LineCreateRequest req = new LineCreateRequest("와우선", "green", 20);
+                line.addSection(Section.createSection(line, upStation, upStation, 1));
 
                 // then
                 assertThatThrownBy(() -> lineService.addLine(req)).isInstanceOf(InvalidLineStationException.class);
