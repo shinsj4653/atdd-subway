@@ -158,13 +158,13 @@ public class LineService {
         validateSameStation(req.getDownStationId(), req.getUpStationId());
 
         // 모든 예외조건 패스할 시, request 대로 노선 수정
-        line.updateLine(req.getName(), req.getColor(), req.getDistance(), upStation, downStation, 1);
+        line.updateLine(req.getName(), req.getColor(), req.getLineDistance(), upStation, downStation, req.getSectionDistance());
 
         LineUpdateResponse res = LineUpdateResponse.createLineUpdateResponse(
                 line.getId(),
                 req.getName(),
                 req.getColor(),
-                req.getDistance()
+                req.getLineDistance()
         );
 
         List<StationDto> stationDtoList = getStationDtoList(line.getSections().getOrderSections());
