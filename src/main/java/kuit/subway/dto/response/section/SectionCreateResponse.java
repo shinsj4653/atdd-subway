@@ -1,11 +1,9 @@
 package kuit.subway.dto.response.section;
 
 import kuit.subway.domain.Line;
-import kuit.subway.dto.response.line.LineReadResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -29,7 +27,7 @@ public class SectionCreateResponse {
                 .message("지하철 구간 추가 완료")
                 .name(line.getName())
                 .color(line.getColor())
-                .stations(line.getSections().getOrderStations())
+                .stations(line.getStations())
                 .build();
     }
 }

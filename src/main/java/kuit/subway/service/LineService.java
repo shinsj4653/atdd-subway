@@ -5,7 +5,7 @@ import kuit.subway.domain.Section;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.request.line.PathFindRequest;
+import kuit.subway.dto.request.line.PathReadRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.*;
@@ -157,7 +157,7 @@ public class LineService {
         return SectionDeleteResponse.of(line);
     }
 
-    public PathReadResponse findPath(Long lineId, PathFindRequest req) {
+    public PathReadResponse findPath(Long lineId, PathReadRequest req) {
 
         // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
         Station startStation = validateStationExist(req.getStartStationId());
@@ -190,7 +190,7 @@ public class LineService {
 
     // 노선으로 등록할 두 역이 같은 역인지 판별해주는 함수
     private void validateSameStation(Long downStationId, Long upStationId) {
-        if (downStationId == upStationId) {
+        if (downStationId.equals(upStationId)) {
             throw new InvalidLineStationException();
         }
     }

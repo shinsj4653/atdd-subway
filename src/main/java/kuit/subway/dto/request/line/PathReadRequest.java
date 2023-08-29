@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class PathFindRequest {
+public class PathReadRequest {
 
     private Long startStationId;
     private Long endStationId;

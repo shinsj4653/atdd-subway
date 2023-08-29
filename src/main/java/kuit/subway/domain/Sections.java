@@ -42,27 +42,6 @@ public class Sections {
                     // 새로운 역을 하행 종점으로 등록할 경우
                     this.sections.add(section);
                 } else {
-                    // 사이 삽입 : 4가지 경우 존재
-                    // 1. 새로 삽입 상행이 기존의 상행에 존재 : found 이전 자리에 삽입 후, found 업데이트
-                    // 1 2 <= found
-                    // 1 3 <= new
-                    // 2 5
-
-                    // 2. 새로 삽입 상행이 기존의 하행에 존재 : found 다음 자리에 삽입 후, new 다음걸 업데이트
-                    // 1 2 <= found
-                    // 2 3 <= new
-                    // 2 5
-
-                    // 3. 새로 삽입 하행이 기존의 상행에 존재 : found 이전 자리에 삽입 후, new 이전걸 업데이트
-                    // 1 2
-                    // 3 2 <= new
-                    // 2 5 <= found
-
-                    // 4. 새로 삽입 하행이 기존의 하행에 존재 : found 다음 자리에 삽입 후, found 업데이트
-                    // 1 2
-                    // 3 5 <= new
-                    // 2 5 <= found
-
                     // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
                     Boolean isUpExist = verifyIsUpExist(section);
                     Section findSection;
