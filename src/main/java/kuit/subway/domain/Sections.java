@@ -251,26 +251,24 @@ public class Sections {
         return result;
     }
 
-    // 경로 검색을 위한 함수
-    public List<Station> getDijkstraShortestPath(Station startStation, Station endStation) {
+    // 경로 검색을 위한 함수 - 출발지점과 도착지점까지의 경로에 있는 역 목록, 총 거리
+    public List<String> getDijkstraShortestPath(String startStationId, String endStationId) {
 
         WeightedMultigraph<String, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         boolean isFirst = true;
         for (Section section : sections) {
             if (isFirst) {
-
+                graph.addVertex(section.getUpStation().getId().toString());
             }
-
+            graph.addVertex(section.getDownStation().getId().toString());
+            graph.setEdgeWeight(graph.addEdge(section.getUpStation().getId().toString(),
+                    section.getDownStation().getId().toString()), section.getDistance());
+            isFirst = false;
         }
-        graph.addVertex("v1");
-        graph.addVertex("v2");
-        graph.addVertex("v3");
-        graph.setEdgeWeight(graph.addEdge("v1", "v2"), 2);
-        graph.setEdgeWeight(graph.addEdge("v2", "v3"), 2);
-        graph.setEdgeWeight(graph.addEdge("v1", "v3"), 100);
 
         DijkstraShortestPath<String, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        List<String> shortestPath = dijkstraShortestPath.getPath(source, target).getVertexList();
+        List<String> shortestPath = dijkstraShortestPath.getPath(startStationId, endStationId).getVertexList();
+        return shortestPath;
 
     }
 
