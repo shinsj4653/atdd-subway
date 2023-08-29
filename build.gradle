@@ -34,6 +34,9 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured'
 
     implementation 'com.google.guava:guava:31.1-jre'
+
+    // jgraph
+    implementation 'org.jgrapht:jgrapht-core:1.0.1'
 }
 
 tasks.named('test') {

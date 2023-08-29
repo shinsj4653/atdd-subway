@@ -4,10 +4,15 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import kuit.subway.dto.response.station.StationReadResponse;
-import kuit.subway.exception.badrequest.section.create.*;
+import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothExistException;
+import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothNotExistExcpetion;
+import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateLengthLongerException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteStationNotExist;
 import kuit.subway.exception.notfound.section.NotFoundSectionHavingCycleException;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -246,11 +251,34 @@ public class Sections {
         return result;
     }
 
+    // 경로 검색을 위한 함수
+    public List<Station> getDijkstraShortestPath(Station startStation, Station endStation) {
+
+        WeightedMultigraph<String, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        boolean isFirst = true;
+        for (Section section : sections) {
+            if (isFirst) {
+
+            }
+
+        }
+        graph.addVertex("v1");
+        graph.addVertex("v2");
+        graph.addVertex("v3");
+        graph.setEdgeWeight(graph.addEdge("v1", "v2"), 2);
+        graph.setEdgeWeight(graph.addEdge("v2", "v3"), 2);
+        graph.setEdgeWeight(graph.addEdge("v1", "v3"), 100);
+
+        DijkstraShortestPath<String, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        List<String> shortestPath = dijkstraShortestPath.getPath(source, target).getVertexList();
+
+    }
+
 
     // 주어진 상행역을 이미 상행역으로 가지고 있는 구간 반환
-    private Optional<Section> findMatchUpSection(Station upStaiton) {
+    private Optional<Section> findMatchUpSection(Station upStation) {
         return this.sections.stream()
-                .filter(s -> s.getUpStation().equals(upStaiton))
+                .filter(s -> s.getUpStation().equals(upStation))
                 .findFirst();
     }
 
