@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
 import kuit.subway.dto.response.station.StationReadResponse;
 import lombok.*;
+import org.jgrapht.GraphPath;
+import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.List;
-
-import static jakarta.persistence.FetchType.*;
 
 @Entity
 @Getter
@@ -54,6 +54,10 @@ public class Line extends BaseTimeEntity {
 
     public List<StationReadResponse> getStations() {
         return this.sections.getOrderStations();
+    }
+
+    public GraphPath<Station, DefaultWeightedEdge> getGraphPath(Station startStation, Station endStation) {
+        return this.sections.getGraphPath(startStation, endStation);
     }
 
 }

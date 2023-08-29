@@ -10,6 +10,7 @@ import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateLengt
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteStationNotExist;
 import kuit.subway.exception.notfound.section.NotFoundSectionHavingCycleException;
+import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
@@ -252,24 +253,22 @@ public class Sections {
     }
 
     // 경로 검색을 위한 함수 - 출발지점과 도착지점까지의 경로에 있는 역 목록, 총 거리
-    public List<String> getDijkstraShortestPath(String startStationId, String endStationId) {
+    public GraphPath<Station, DefaultWeightedEdge> getGraphPath(Station startStation, Station endStation) {
 
-        WeightedMultigraph<String, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
+        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         boolean isFirst = true;
         for (Section section : sections) {
             if (isFirst) {
-                graph.addVertex(section.getUpStation().getId().toString());
+                graph.addVertex(section.getUpStation());
             }
-            graph.addVertex(section.getDownStation().getId().toString());
-            graph.setEdgeWeight(graph.addEdge(section.getUpStation().getId().toString(),
-                    section.getDownStation().getId().toString()), section.getDistance());
+            graph.addVertex(section.getDownStation());
+            graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDistance());
             isFirst = false;
         }
 
-        DijkstraShortestPath<String, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-        List<String> shortestPath = dijkstraShortestPath.getPath(startStationId, endStationId).getVertexList();
-        return shortestPath;
-
+        DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+        GraphPath<Station, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(startStation, endStation);
+        return path;
     }
 
 
