@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
 import lombok.*;
 
-import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter

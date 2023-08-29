@@ -11,15 +11,12 @@ import java.util.List;
 public class PathReadResponse {
     @Builder.Default
     private List<StationReadResponse> stations = new ArrayList<>();
-    private int totalDistance;
+    private double totalDistance;
 
-    public static PathReadResponse createPathFindResponse(int totalDistance) {
+    public static PathReadResponse of(List<StationReadResponse> stations, double totalDistance) {
         return PathReadResponse.builder()
+                .stations(stations)
                 .totalDistance(totalDistance)
                 .build();
-    }
-
-    public void addStationDto(StationReadResponse dto) {
-        this.stations.add(dto);
     }
 }
