@@ -169,32 +169,8 @@ public class LineService {
         // 출발역과 도착역이 같을 때 예외발생
         validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
 
-        // 출발역과 도착역이 연결되어 있지 않은 경우 예외발생 => 이해 x..
-        //validateFindPathStationsConnected(line, req.getStartStationId(), req.getEndStationId());
-
-//        List<Section> orderSections = line.getSections().getOrderSections();
-//        Section findStartSection = orderSections.stream()
-//                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
-//
-//        Section findEndSection = orderSections.stream()
-//                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
-//
-//        int startIdx = orderSections.indexOf(findStartSection);
-//        int endIdx = orderSections.indexOf(findEndSection);
-//        int distance = 0;
-//
-//        for (int i = startIdx; i <= endIdx; i++) {
-//            distance += orderSections.get(i).getDistance();
-//        }
-//
-//        List<StationReadResponse> stationReadResponsePath = getStationDtoPath(orderSections, startStation, endStation);
-//
-//        PathReadResponse res = PathReadResponse.createPathFindResponse(distance);
-//        for (StationReadResponse stationReadResponse : stationReadResponsePath) {
-//            res.addStationDto(stationReadResponse);
-//        }
-
         GraphPath<Station, DefaultWeightedEdge> path = line.getGraphPath(startStation, endStation);
+
         PathReadResponse res = PathReadResponse.of(getStationDtoPath(path.getVertexList()), path.getWeight());
 
         return res;

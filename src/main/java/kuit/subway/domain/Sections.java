@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import kuit.subway.dto.response.station.StationReadResponse;
+import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothExistException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothNotExistExcpetion;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateLengthLongerException;
@@ -252,7 +253,7 @@ public class Sections {
         return result;
     }
 
-    // 경로 검색을 위한 함수 - 출발지점과 도착지점까지의 경로에 있는 역 목록, 총 거리
+    // 경로 조회를 위한 함수 - 출발지점과 도착지점까지의 경로에 있는 역 목록, 총 거리
     public GraphPath<Station, DefaultWeightedEdge> getGraphPath(Station startStation, Station endStation) {
 
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
@@ -267,6 +268,10 @@ public class Sections {
         }
 
         DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
+
+        // 출발역과 도착역이 연결되어 있지 않은 경우 예외발생
+        validateStationExistInGraph(dijkstraShortestPath, startStation, endStation);
+
         GraphPath<Station, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(startStation, endStation);
         return path;
     }
@@ -356,6 +361,16 @@ public class Sections {
 
         if (!isExist) {
             throw new InvalidSectionDeleteStationNotExist();
+        }
+    }
+
+    //경로 조회 시, 출발역과 도착역이 연결이 되어 있지 않은 경우
+    private void validateStationExistInGraph(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
+                                       Station startStation, Station endStation) {
+        try {
+            dijkstraShortestPath.getPath(startStation, endStation);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidPathNotConnectedException();
         }
     }
 
