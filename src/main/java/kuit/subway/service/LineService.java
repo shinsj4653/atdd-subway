@@ -79,17 +79,17 @@ public class LineService {
     }
 
     // 존재하는 역이긴 하지만, 해당 노선에는 존재하지 않으면 오류
-    private void validateFindPathStationsConnected(Line line, Long startStationId, Long endStationId) {
-        Optional<Section> startSection = line.getSections().getOrderSections().stream()
-                .filter(s -> s.getUpStation().getId().equals(startStationId)).findAny();
-
-        Optional<Section> endSection = line.getSections().getOrderSections().stream()
-                .filter(s -> s.getUpStation().getId().equals(endStationId)).findAny();
-
-        if (startSection.isEmpty() || endSection.isEmpty()) {
-            throw new InvalidPathNotConnectedException();
-        }
-    }
+//    private void validateFindPathStationsConnected(Line line, Long startStationId, Long endStationId) {
+//        Optional<Section> startSection = line.getSections().getOrderSections().stream()
+//                .filter(s -> s.getUpStation().getId().equals(startStationId)).findAny();
+//
+//        Optional<Section> endSection = line.getSections().getOrderSections().stream()
+//                .filter(s -> s.getUpStation().getId().equals(endStationId)).findAny();
+//
+//        if (startSection.isEmpty() || endSection.isEmpty()) {
+//            throw new InvalidPathNotConnectedException();
+//        }
+//    }
 
     @Transactional
     public LineUpdateResponse updateLine(Long id, LineUpdateRequest req) {
@@ -157,65 +157,65 @@ public class LineService {
         return SectionDeleteResponse.of(line);
     }
 
-    public PathReadResponse findPath(Long lineId, PathFindRequest req) {
+//    public PathReadResponse findPath(Long lineId, PathFindRequest req) {
+//
+//        // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
+//        Station startStation = validateStationExist(req.getStartStationId());
+//        Station endStation = validateStationExist(req.getEndStationId());
+//
+//        // 존재하지 않는 노선을 조회하려 했을때 예외처리
+//        Line line = validateLineExist(lineId);
+//
+//        // 출발역과 도착역이 같을 때 예외발생
+//        validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
+//
+//        // 출발역과 도착역이 연결되어 있지 않은 경우 예외발생 => 이해 x..
+//        validateFindPathStationsConnected(line, req.getStartStationId(), req.getEndStationId());
+//
+//        List<Section> orderSections = line.getSections().getOrderSections();
+//        Section findStartSection = orderSections.stream()
+//                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
+//
+//        Section findEndSection = orderSections.stream()
+//                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
+//
+//        int startIdx = orderSections.indexOf(findStartSection);
+//        int endIdx = orderSections.indexOf(findEndSection);
+//        int distance = 0;
+//
+//        for (int i = startIdx; i <= endIdx; i++) {
+//            distance += orderSections.get(i).getDistance();
+//        }
+//
+//        List<StationReadResponse> stationReadResponsePath = getStationDtoPath(orderSections, startStation, endStation);
+//
+//        PathReadResponse res = PathReadResponse.createPathFindResponse(distance);
+//        for (StationReadResponse stationReadResponse : stationReadResponsePath) {
+//            res.addStationDto(stationReadResponse);
+//        }
+//        return res;
+//    }
 
-        // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
-        Station startStation = validateStationExist(req.getStartStationId());
-        Station endStation = validateStationExist(req.getEndStationId());
-
-        // 존재하지 않는 노선을 조회하려 했을때 예외처리
-        Line line = validateLineExist(lineId);
-
-        // 출발역과 도착역이 같을 때 예외발생
-        validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
-
-        // 출발역과 도착역이 연결되어 있지 않은 경우 예외발생 => 이해 x..
-        validateFindPathStationsConnected(line, req.getStartStationId(), req.getEndStationId());
-
-        List<Section> orderSections = line.getSections().getOrderSections();
-        Section findStartSection = orderSections.stream()
-                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
-
-        Section findEndSection = orderSections.stream()
-                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
-
-        int startIdx = orderSections.indexOf(findStartSection);
-        int endIdx = orderSections.indexOf(findEndSection);
-        int distance = 0;
-
-        for (int i = startIdx; i <= endIdx; i++) {
-            distance += orderSections.get(i).getDistance();
-        }
-
-        List<StationReadResponse> stationReadResponsePath = getStationDtoPath(orderSections, startStation, endStation);
-
-        PathReadResponse res = PathReadResponse.createPathFindResponse(distance);
-        for (StationReadResponse stationReadResponse : stationReadResponsePath) {
-            res.addStationDto(stationReadResponse);
-        }
-        return res;
-    }
-
-    private List<StationReadResponse> getStationDtoPath(List<Section> sections, Station startStation, Station endStation) {
-        List<StationReadResponse> result = new ArrayList<>();
-
-        // 출발역 정보 넣어주기
-        result.add(StationReadResponse.of(startStation));
-        Section findStartSection = sections.stream()
-                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
-
-        Section findEndSection = sections.stream()
-                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
-
-        int startIdx = sections.indexOf(findStartSection);
-        int endIdx = sections.indexOf(findEndSection);
-
-        for (int i = startIdx; i <= endIdx; i++) {
-            Station findStation = sections.get(i).getDownStation();
-            result.add(StationReadResponse.of(findStation));
-        }
-        return result;
-    }
+//    private List<StationReadResponse> getStationDtoPath(List<Section> sections, Station startStation, Station endStation) {
+//        List<StationReadResponse> result = new ArrayList<>();
+//
+//        // 출발역 정보 넣어주기
+//        result.add(StationReadResponse.of(startStation));
+//        Section findStartSection = sections.stream()
+//                .filter(s -> s.getUpStation().equals(startStation)).findFirst().get();
+//
+//        Section findEndSection = sections.stream()
+//                .filter(s -> s.getDownStation().equals(endStation)).findFirst().get();
+//
+//        int startIdx = sections.indexOf(findStartSection);
+//        int endIdx = sections.indexOf(findEndSection);
+//
+//        for (int i = startIdx; i <= endIdx; i++) {
+//            Station findStation = sections.get(i).getDownStation();
+//            result.add(StationReadResponse.of(findStation));
+//        }
+//        return result;
+//    }
 
     // 존재하는 역인지 판별해주는 함수
     private Station validateStationExist(Long id) {
@@ -234,6 +234,8 @@ public class LineService {
     private Line validateLineExist(Long id) {
         return lineRepository.findById(id)
                 .orElseThrow(NotFoundLineException::new);
+
+
     }
 
     // 경로 조회 - 출발역과 도착역이 같은 경우를 판별해주는 함수

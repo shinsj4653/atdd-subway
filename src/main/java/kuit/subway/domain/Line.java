@@ -1,13 +1,10 @@
 package kuit.subway.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
+import kuit.subway.dto.response.station.StationReadResponse;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static jakarta.persistence.FetchType.*;
@@ -53,6 +50,10 @@ public class Line extends BaseTimeEntity {
         this.color = color;
         this.distance = distance;
         this.sections.getOrderSections().get(0).updateSection(upStation, downStation, sectionDistance);
+    }
+
+    public List<StationReadResponse> getStations() {
+        return this.sections.getOrderStations();
     }
 
 }

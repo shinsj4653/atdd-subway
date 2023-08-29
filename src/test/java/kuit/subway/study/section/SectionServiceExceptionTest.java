@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 
 @SpringBootTest
 @Transactional
@@ -74,7 +76,7 @@ public class SectionServiceExceptionTest {
 
             // when
             // then
-            Assertions.assertThatThrownBy(() -> lineService.addSection(line.getId(), req))
+            assertThatThrownBy(() -> lineService.addSection(line.getId(), req))
                     .isInstanceOf(InvalidSectionCreateBothNotExistExcpetion.class);
         }
 
@@ -87,7 +89,7 @@ public class SectionServiceExceptionTest {
 
             // when
             // then
-            Assertions.assertThatThrownBy(() -> lineService.addSection(line.getId(), req))
+            assertThatThrownBy(() -> lineService.addSection(line.getId(), req))
                     .isInstanceOf(InvalidSectionCreateBothExistException.class);
         }
 
@@ -100,7 +102,7 @@ public class SectionServiceExceptionTest {
 
             // when
             // then
-            Assertions.assertThatThrownBy(() -> lineService.addSection(line.getId(), req))
+            assertThatThrownBy(() -> lineService.addSection(line.getId(), req))
                     .isInstanceOf(InvalidSectionCreateLengthLongerException.class);
         }
 
@@ -144,7 +146,7 @@ public class SectionServiceExceptionTest {
 
             // when
             // then
-            Assertions.assertThatThrownBy(() -> lineService.deleteSection(line.getId(), req))
+            assertThatThrownBy(() -> lineService.deleteSection(line.getId(), req))
                     .isInstanceOf(InvalidSectionDeleteStationNotExist.class);
 
         }
@@ -161,7 +163,7 @@ public class SectionServiceExceptionTest {
             SectionDeleteRequest req2 = new SectionDeleteRequest(station2.getId());
 
             // then
-            Assertions.assertThatThrownBy(() -> lineService.deleteSection(line.getId(), req2))
+            assertThatThrownBy(() -> lineService.deleteSection(line.getId(), req2))
                     .isInstanceOf(InvalidSectionDeleteOnlyTwoStationsException.class);
         }
 
