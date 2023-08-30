@@ -392,7 +392,7 @@ public class LineServiceMockTest {
                 assertThat(res.getStations()).containsExactly(stationRes1, stationRes2, stationRes3);
                 assertEquals(20.0, res.getTotalDistance());
                 verify(lineRepository, times(1)).findById(anyLong());
-                verify(stationRepository, times(2)).findById(anyLong());
+                verify(stationRepository, times(3)).findById(anyLong());
             }
         }
 

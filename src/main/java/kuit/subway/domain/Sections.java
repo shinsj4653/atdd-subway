@@ -190,14 +190,16 @@ public class Sections {
                 
                 // 거리 계산까지 하여 findSection 업데이트
                 findSection.updateSection(findSection.getUpStation(), nextSection.getDownStation(), findSection.getDistance() + nextSection.getDistance());
-                
+
+                // 업데이트 구간의 다음 구간 삭제
+                this.sections.remove(nextSection);
             }
 
         } else if (sections.size() == 1){
             // 구간이 하나인 노선에서 구간 제거 불가
             throw new InvalidSectionDeleteOnlyTwoStationsException();
         }
-        this.sections.removeIf(section -> (section.getDownStation().equals(deleteStation)));
+
 
     }
 
