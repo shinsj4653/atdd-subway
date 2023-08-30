@@ -332,12 +332,8 @@ public class Sections {
 
     // 노선에 등록되어 있지 않은 역은 제거 불가
     private void validateSectionDeleteStationNotExist(Station deleteStation) {
-        Boolean isExist = this.sections.stream()
-                .anyMatch(s -> s.getUpStation().equals(deleteStation) || s.getDownStation().equals(deleteStation));
-
-        if (!isExist) {
+        if (findMatchUpSection(deleteStation).isEmpty() && findMatchDownSection(deleteStation).isEmpty())
             throw new InvalidSectionDeleteStationNotExist();
-        }
     }
 
     //경로 조회 시, 출발역과 도착역이 연결이 되어 있지 않은 경우
