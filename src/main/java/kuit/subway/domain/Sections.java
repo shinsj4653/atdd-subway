@@ -186,8 +186,7 @@ public class Sections {
                 Section findSection = findMatchDownSection(deleteStation).get();
                 
                 // 거리 계산을 위해 다음 구간 가져오기
-                int index = sections.indexOf(findSection);
-                Section nextSection = sections.get(index + 1);
+                Section nextSection = findMatchUpSection(deleteStation).get();
                 
                 // 거리 계산까지 하여 findSection 업데이트
                 findSection.updateSection(findSection.getUpStation(), nextSection.getDownStation(), findSection.getDistance() + nextSection.getDistance());
@@ -254,14 +253,14 @@ public class Sections {
     }
 
 
-    // 주어진 상행역을 이미 상행역으로 가지고 있는 구간 반환
+    // 주어진 역을 이미 상행역으로 가지고 있는 구간 반환
     private Optional<Section> findMatchUpSection(Station upStation) {
         return this.sections.stream()
                 .filter(s -> s.getUpStation().equals(upStation))
                 .findFirst();
     }
 
-    // 주어진 하행역을 이미 상행역으로 가지고 있는 구간 반환
+    // 주어진 역을 이미 하행역으로 가지고 있는 구간 반환
     private Optional<Section> findMatchDownSection(Station downStation) {
         return this.sections.stream()
                 .filter(s -> s.getDownStation().equals(downStation))
