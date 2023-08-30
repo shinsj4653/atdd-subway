@@ -183,9 +183,7 @@ public class Sections {
                 // 중간역 제거
                 // A B
                 // B C
-                Section findSection = sections.stream()
-                        .filter(s -> s.getDownStation().equals(deleteStation))
-                        .findFirst().get();
+                Section findSection = findMatchDownSection(deleteStation).get();
                 
                 // 거리 계산을 위해 다음 구간 가져오기
                 int index = sections.indexOf(findSection);
