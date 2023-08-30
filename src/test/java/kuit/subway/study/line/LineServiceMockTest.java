@@ -8,6 +8,7 @@ import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.line.PathReadRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.response.line.*;
+import kuit.subway.dto.response.section.SectionCreateResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
@@ -376,6 +377,12 @@ public class LineServiceMockTest {
                 Line line = Line.createLine("와우선", "green", 20);
                 given(lineRepository.save(line)).willReturn(line);
                 given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+
+                Section section1 = Section.createSection(line, station1, station2, 10);
+                Section section2 = Section.createSection(line, station2, station3, 10);
+
+                given(lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10)))
+                        .willReturn(SectionCreateResponse.builder().build());
 
                 // when
                 lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
