@@ -70,12 +70,10 @@ public class LineService {
     public List<LineReadResponse> findAllLines() {
 
         List<Line> findLines = lineRepository.findAll();
-        List<LineReadResponse> result = new ArrayList<>();
 
-        for (Line line : findLines) {
-            result.add(LineReadResponse.of(line));
-        }
-        return result;
+        return findLines.stream()
+                .map(line -> LineReadResponse.of(line))
+                .collect(Collectors.toList());
     }
 
     // 존재하는 역이긴 하지만, 해당 노선에는 존재하지 않으면 오류
