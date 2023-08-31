@@ -16,6 +16,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
+import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,25 +44,21 @@ public class Sections {
                     this.sections.add(section);
                 } else {
                     // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
-                    Boolean isUpExist = verifyIsUpExist(section);
-                    Section findSection;
+
                     // 새로운 상행이 이미 존재하는 경우
-                    if (isUpExist) {
-                        // 1 2
-                        // 2 3 <= new
-                        // 2 5 <= found
+                    // 1 2
+                    // 2 3 <= new
+                    // 2 5 <= found
 
-                        // 사이에 끼울 경우, 각 기존 구간의 상행역 & 하행역을 신규 구간 정보로 잘 변경
-                        findSection = findMatchUpSection(section.getUpStation()).get();
+                    // 새로운 하행이 기존 하행으로 존재할 경우
+                    // 1 2
+                    // 2 5 <= found
+                    // 3 5 <= new
+                    Optional<Section> upSectionOptional = findMatchUpSection(section.getUpStation());
+                    Optional<Section> downSectionOptional = findMatchUpSection(section.getDownStation());
 
-                    } else {
-                        // 새로운 하행이 기존 하행으로 존재할 경우
-                        // 1 2
-                        // 2 5 <= found
-                        // 3 5 <= new
-                        findSection = findMatchDownSection(section.getDownStation()).get();
-                    }
-                    adjustSectionBetweenStations(findSection, section, isUpExist);
+                    upSectionOptional.ifPresent(upSection -> adjustSectionBetweenStations(upSection, section, true));
+                    downSectionOptional.ifPresent(downSection -> adjustSectionBetweenStations(downSection, section, true));
                 }
 
             }
@@ -69,7 +66,7 @@ public class Sections {
     }
 
     private void adjustSectionBetweenStations(Section findSection, Section requestSection, Boolean isUpExist) {
-        int index = this.sections.indexOf(findSection);
+        int index = sections.indexOf(findSection);
         int findDistance = findSection.getDistance();
         int newDistance = requestSection.getDistance();
 
@@ -80,14 +77,14 @@ public class Sections {
         // 추가해줄 구간 생성
         if(isUpExist){
             Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-            this.sections.add(index, newSection);
+            sections.add(index, newSection);
 
             // 기존 구간 정보 갱신
             findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
         } else {
             // 추가해줄 구간 생성
             Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-            this.sections.add(index + 1, newSection);
+            sections.add(index + 1, newSection);
 
             // 기존 구간 정보 갱신
             findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
