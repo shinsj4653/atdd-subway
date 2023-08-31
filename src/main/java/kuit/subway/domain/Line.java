@@ -49,7 +49,7 @@ public class Line extends BaseTimeEntity {
         this.name = name;
         this.color = color;
         this.distance = distance;
-        this.sections.getOrderSections().get(0).updateSection(upStation, downStation, sectionDistance);
+        this.sections.updateFirstSection(upStation, downStation, sectionDistance);
     }
 
     public List<StationReadResponse> getStations() {

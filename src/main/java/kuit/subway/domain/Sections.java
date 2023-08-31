@@ -155,7 +155,10 @@ public class Sections {
                     .findFirst()
                     .orElseThrow(() -> new NotFoundSectionHavingCycleException());
         }
+    }
 
+    public void updateFirstSection(Station upStation, Station downStation, int sectionDistance) {
+        sections.get(0).updateSection(upStation, downStation, sectionDistance);
     }
 
     private Map<Station, Section> getSectionRoute() {
