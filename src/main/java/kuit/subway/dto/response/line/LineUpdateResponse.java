@@ -24,7 +24,7 @@ public class LineUpdateResponse {
                 .name(line.getName())
                 .color(line.getColor())
                 .distance(line.getDistance())
-                .stations(line.getSections().getOrderStations())
+                .stations(line.getStationReadResponseList())
                 .build();
     }
 }

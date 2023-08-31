@@ -102,46 +102,29 @@ public class Sections {
         return sections.indexOf(findSection);
     }
 
-    // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 구간 리스트를 반환해주는 함수
-    public List<Section> getOrderSections() {
+    // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 역 리스트를 반환해주는 함수
+    public List<Station> getOrderStations() {
         Section startSection = findStartSection();
         List<Section> orderedSections = new ArrayList<>();
 
         if (sections.size() == 1) {
             orderedSections.add(startSection);
-            return orderedSections;
+            return getStations(orderedSections);
         } else {
             Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
             Section nextSection = startSection;
+
             while (nextSection != null) {
                 orderedSections.add(nextSection);
                 Station curDownStation = nextSection.getDownStation();
                 nextSection = upStationAndSectionRoute.get(curDownStation);
             }
-
-            return orderedSections;
+            return getStations(orderedSections);
         }
     }
 
-    // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 역 리스트를 반환해주는 함수
-    public List<StationReadResponse> getOrderStations() {
-        Section startSection = findStartSection();
-        List<Section> orderedSections = new ArrayList<>();
-
-        if (sections.size() == 1) {
-            orderedSections.add(startSection);
-            return getStations(orderedSections);
-        } else {
-            Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
-            Section nextSection = startSection;
-
-            while (nextSection != null) {
-                orderedSections.add(nextSection);
-                Station curDownStation = nextSection.getDownStation();
-                nextSection = upStationAndSectionRoute.get(curDownStation);
-            }
-            return getStations(orderedSections);
-        }
+    public Section getFirstSection() {
+        return sections.get(0);
     }
 
     private Section findStartSection() {
@@ -204,23 +187,20 @@ public class Sections {
             // 구간이 하나인 노선에서 구간 제거 불가
             throw new InvalidSectionDeleteOnlyTwoStationsException();
         }
-
-
     }
 
-    private List<StationReadResponse> getStations(List<Section> sections) {
+    private List<Station> getStations(List<Section> sections) {
 
-        List<StationReadResponse> result = new ArrayList<>();
-        Long nextUpStationId;
+        List<Station> result = new ArrayList<>();
 
         // 맨 처음 첫 구간은 상행, 하행 둘 다 삽입
         Station upStation = sections.get(0).getUpStation();
-        result.add(StationReadResponse.of(upStation));
-
         Station downStation = sections.get(0).getDownStation();
-        result.add(StationReadResponse.of(downStation));
 
-        nextUpStationId = downStation.getId();
+        result.add(upStation);
+        result.add(downStation);
+
+        Long nextUpStationId = downStation.getId();
 
         for (int i = 0; i < sections.size() - 1; i++) {
             Long finalNextUpStationId = nextUpStationId;
@@ -229,7 +209,7 @@ public class Sections {
                     .findFirst().get();
             System.out.println(findSection.getDownStation().getId());
             downStation = findSection.getDownStation();
-            result.add(StationReadResponse.of(downStation));
+            result.add(downStation);
             nextUpStationId = downStation.getId();
         }
 
@@ -286,14 +266,13 @@ public class Sections {
 
     // 새로운 구간의 상행역이 등록되어있는 하행 종점역이면, 새로운 역을 하행 종점으로 등록할 경우
     private Boolean validateSectionCreateFinalStation(Section section) {
+        Station lastStation = getOrderStations().get(this.sections.size());
         Section lastSection = getOrderSections().get(this.sections.size() - 1);
         if(lastSection.getDownStation().equals(section.getUpStation())) {
             System.out.println("create final station!");
-
             return true;
         } else {
             System.out.println("create nope station!");
-
             return false;
         }
     }

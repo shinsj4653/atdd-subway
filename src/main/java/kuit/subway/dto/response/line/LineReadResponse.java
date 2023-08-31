@@ -23,7 +23,7 @@ public class LineReadResponse {
                 .id(line.getId())
                 .name(line.getName())
                 .color(line.getColor())
-                .stations(line.getStations())
+                .stations(line.getStationReadResponseList())
                 .distance(line.getDistance())
                 .build();
     }

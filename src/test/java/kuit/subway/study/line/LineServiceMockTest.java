@@ -229,7 +229,6 @@ public class LineServiceMockTest {
                 assertEquals(2, allLines.size());
                 verify(lineRepository, times(1)).findAll();
             }
-
         }
     }
 

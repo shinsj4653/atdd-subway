@@ -3,6 +3,7 @@ package kuit.subway.study.section;
 import jakarta.transaction.Transactional;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
+import kuit.subway.domain.Sections;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
@@ -68,10 +69,10 @@ public class SectionServiceTest {
             lineService.addSection(line.getId(), req);
 
             // when
-            List<Section> orderSections = line.getSections().getOrderSections();
+            List<Station> orderStations = line.getStations();
 
             // then
-            assertEquals(station3.getId(), orderSections.get(0).getUpStation().getId());
+            assertEquals(station3.getId(), orderStations.get(0).getId());
 
         }
 
@@ -84,10 +85,10 @@ public class SectionServiceTest {
             lineService.addSection(line.getId(), req);
 
             // when
-            List<Section> orderSections = line.getSections().getOrderSections();
+            List<Station> orderStations = line.getStations();
 
             // then
-            assertEquals(station3.getId(), orderSections.get(orderSections.size() - 1).getDownStation().getId());
+            assertEquals(station3.getId(), orderStations.get(orderStations.size() - 1).getId());
 
         }
 
@@ -100,12 +101,12 @@ public class SectionServiceTest {
             lineService.addSection(line.getId(), req);
 
             // when
-            List<Section> orderSections = line.getSections().getOrderSections();
+            List<Station> orderStations = line.getStations();
 
             // then
-            assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
-            assertEquals(station2.getId(), orderSections.get(1).getDownStation().getId());
-            assertEquals(2, orderSections.size());
+            assertEquals(station3.getId(), orderStations.get(1).getId());
+            assertEquals(station2.getId(), orderStations.get(2).getId());
+            assertEquals(3, orderStations.size());
         }
 
         @Test
@@ -117,12 +118,12 @@ public class SectionServiceTest {
             lineService.addSection(line.getId(), req);
 
             // when
-            List<Section> orderSections = line.getSections().getOrderSections();
+            List<Station> orderStations = line.getStations();
 
             // then
-            assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
-            assertEquals(station2.getId(), orderSections.get(1).getDownStation().getId());
-            assertEquals(2, orderSections.size());
+            assertEquals(station3.getId(), orderStations.get(1).getId());
+            assertEquals(station2.getId(), orderStations.get(2).getId());
+            assertEquals(3, orderStations.size());
         }
 
         @Test
@@ -134,12 +135,12 @@ public class SectionServiceTest {
             lineService.addSection(line.getId(), req);
 
             // when
-            List<Section> orderSections = line.getSections().getOrderSections();
+            List<Station> orderStations = line.getStations();
 
             // then
-            assertEquals(station1.getId(), orderSections.get(0).getUpStation().getId());
-            assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
-            assertEquals(station2.getId(), orderSections.get(1).getDownStation().getId());
+            assertEquals(station1.getId(), orderStations.get(0).getId());
+            assertEquals(station3.getId(), orderStations.get(1).getId());
+            assertEquals(station2.getId(), orderStations.get(2).getId());
         }
     }
 
@@ -178,10 +179,10 @@ public class SectionServiceTest {
             lineService.deleteSection(line.getId(), req);
 
             // when
-            List<Section> orderSections = line.getSections().getOrderSections();
+            List<Station> orderStations = line.getStations();
 
             // then
-            assertEquals(station2.getId(), orderSections.get(orderSections.size() - 1).getDownStation().getId());
+            assertEquals(station2.getId(), orderStations.get(orderStations.size() - 1).getId());
 
         }
 
@@ -194,10 +195,10 @@ public class SectionServiceTest {
             lineService.deleteSection(line.getId(), req);
 
             // when
-            List<Section> orderSections = line.getSections().getOrderSections();
+            List<Station> orderStations = line.getStations();
 
             // then
-            assertEquals(station2.getId(), orderSections.get(0).getUpStation().getId());
+            assertEquals(station2.getId(), orderStations.get(0).getId());
 
         }
 
@@ -210,12 +211,13 @@ public class SectionServiceTest {
             lineService.deleteSection(line.getId(), req);
 
             // when
-            List<Section> orderSections = line.getSections().getOrderSections();
+            List<Station> orderStations = line.getStations();
+            Section firstSection = line.getFirstSection();
 
             // then
-            assertEquals(station1.getId(), orderSections.get(0).getUpStation().getId());
-            assertEquals(station3.getId(), orderSections.get(0).getDownStation().getId());
-            assertEquals(20, orderSections.get(0).getDistance());
+            assertEquals(station1.getId(), orderStations.get(0).getId());
+            assertEquals(station3.getId(), orderStations.get(1).getId());
+            assertEquals(20, firstSection.getDistance());
 
         }
 

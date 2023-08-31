@@ -27,7 +27,7 @@ public class SectionCreateResponse {
                 .message("지하철 구간 추가 완료")
                 .name(line.getName())
                 .color(line.getColor())
-                .stations(line.getStations())
+                .stations(line.getStationReadResponseList())
                 .build();
     }
 }

@@ -8,6 +8,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -42,6 +43,10 @@ public class Line extends BaseTimeEntity {
         this.sections.addSection(section);
     }
 
+    public Section getFirstSection() {
+        this.sections.getFirstSection();
+    }
+
     public void deleteSection(Station deleteStation) {
         this.sections.deleteSection(deleteStation);
     }
@@ -52,8 +57,14 @@ public class Line extends BaseTimeEntity {
         this.sections.updateFirstSection(upStation, downStation, sectionDistance);
     }
 
-    public List<StationReadResponse> getStations() {
+    public List<Station> getStations() {
         return this.sections.getOrderStations();
+    }
+
+    public List<StationReadResponse> getStationReadResponseList() {
+        return this.sections.getOrderStations().stream()
+                .map(station -> StationReadResponse.of(station))
+                .collect(Collectors.toList());
     }
 
     public GraphPath<Station, DefaultWeightedEdge> getGraphPath(Station startStation, Station endStation) {

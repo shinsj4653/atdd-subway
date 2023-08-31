@@ -24,7 +24,7 @@ public class SectionDeleteResponse {
                 .message("지하철 구간 삭제 완료")
                 .name(line.getName())
                 .color(line.getColor())
-                .stations(line.getStations())
+                .stations(line.getStationReadResponseList())
                 .build();
     }
 }
