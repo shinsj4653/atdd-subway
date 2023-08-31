@@ -55,18 +55,34 @@ public class Sections {
                     // 2 5 <= found
                     // 3 5 <= new
                     Optional<Section> upSectionOptional = findMatchUpSection(section.getUpStation());
-                    Optional<Section> downSectionOptional = findMatchUpSection(section.getDownStation());
+                    Optional<Section> downSectionOptional = findMatchDownSection(section.getDownStation());
 
-                    upSectionOptional.ifPresent(upSection -> adjustSectionBetweenStations(upSection, section, true));
-                    downSectionOptional.ifPresent(downSection -> adjustSectionBetweenStations(downSection, section, true));
+                    upSectionOptional.ifPresent(upSection -> updateUpExistSection(upSection, section));
+                    downSectionOptional.ifPresent(downSection -> updateDownExistSection(downSection, section));
                 }
-
             }
         }
     }
 
-    private void adjustSectionBetweenStations(Section findSection, Section requestSection, Boolean isUpExist) {
-        int index = sections.indexOf(findSection);
+    private void updateUpExistSection(Section findSection, Section requestSection) {
+        int index = findIndexOfSection(findSection);
+        int findDistance = findSection.getDistance();
+        int newDistance = requestSection.getDistance();
+
+        // 새롭게 추가할 상행역, 하행역
+        Station newUpStation = requestSection.getUpStation();
+        Station newDownStation = requestSection.getDownStation();
+
+        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
+        sections.add(index, newSection);
+
+        // 기존 구간 정보 갱신
+        findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
+
+    }
+
+    private void updateDownExistSection(Section findSection, Section requestSection) {
+        int index = findIndexOfSection(findSection);
         int findDistance = findSection.getDistance();
         int newDistance = requestSection.getDistance();
 
@@ -75,21 +91,15 @@ public class Sections {
         Station newDownStation = requestSection.getDownStation();
 
         // 추가해줄 구간 생성
-        if(isUpExist){
-            Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-            sections.add(index, newSection);
+        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
+        sections.add(index + 1, newSection);
 
-            // 기존 구간 정보 갱신
-            findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
-        } else {
-            // 추가해줄 구간 생성
-            Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-            sections.add(index + 1, newSection);
+        // 기존 구간 정보 갱신
+        findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
+    }
 
-            // 기존 구간 정보 갱신
-            findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
-        }
-
+    private int findIndexOfSection(Section findSection) {
+        return sections.indexOf(findSection);
     }
 
     // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 구간 리스트를 반환해주는 함수
@@ -111,9 +121,6 @@ public class Sections {
 
             return orderedSections;
         }
-
-
-
     }
 
     // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 역 리스트를 반환해주는 함수
@@ -126,17 +133,15 @@ public class Sections {
             return getStations(orderedSections);
         } else {
             Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
-
             Section nextSection = startSection;
+
             while (nextSection != null) {
                 orderedSections.add(nextSection);
                 Station curDownStation = nextSection.getDownStation();
                 nextSection = upStationAndSectionRoute.get(curDownStation);
             }
-
             return getStations(orderedSections);
         }
-
     }
 
     private Section findStartSection() {
