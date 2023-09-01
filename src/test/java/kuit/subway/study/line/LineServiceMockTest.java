@@ -11,6 +11,8 @@ import kuit.subway.dto.request.station.StationCreateRequest;
 import kuit.subway.dto.response.line.*;
 import kuit.subway.dto.response.section.SectionCreateResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
+import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
+import kuit.subway.exception.badrequest.line.InvalidPathSameStationException;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;
 import kuit.subway.exception.notfound.line.NotFoundLineException;
 import kuit.subway.exception.notfound.station.NotFoundStationException;
@@ -26,6 +28,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -353,9 +356,9 @@ public class LineServiceMockTest {
 
         @BeforeEach
         void setUp() {
-            station1 = Station.createStationUsingIdAndName(1L, "강남역");
-            station2 = Station.createStationUsingIdAndName(2L, "수서역");
-            station3 = Station.createStationUsingIdAndName(3L, "논현역");
+            station1 = Station.createStationWithId(1L, "강남역");
+            station2 = Station.createStationWithId(2L, "수서역");
+            station3 = Station.createStationWithId(3L, "논현역");
         }
 
         @Nested
@@ -367,19 +370,12 @@ public class LineServiceMockTest {
             void findLineSuccess() {
 
                 // given
-                given(stationRepository.findById(1L)).willReturn(Optional.ofNullable(station1));
-                given(stationRepository.findById(2L)).willReturn(Optional.ofNullable(station2));
-                given(stationRepository.findById(3L)).willReturn(Optional.ofNullable(station3));
+                given(stationRepository.findById(1L)).willReturn(Optional.of(station1));
+                given(stationRepository.findById(2L)).willReturn(Optional.of(station2));
+                given(stationRepository.findById(3L)).willReturn(Optional.of(station3));
 
-                Line line = Line.createLine("와우선", "green", 20);
-                given(lineRepository.save(line)).willReturn(line);
-                given(lineRepository.findById(1L)).willReturn(Optional.ofNullable(line));
-
-                Section section1 = Section.createSection(line, station1, station2, 10);
-                Section section2 = Section.createSection(line, station2, station3, 10);
-
-                given(lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10)))
-                        .willReturn(SectionCreateResponse.builder().build());
+                Line line = Line.createLineWithId(1L, "와우선", "green", 20);
+                given(lineRepository.findById(1L)).willReturn(Optional.of(line));
 
                 // when
                 lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
@@ -395,8 +391,8 @@ public class LineServiceMockTest {
                 assertThat(res).isNotNull();
                 assertThat(res.getStations()).containsExactly(stationRes1, stationRes2, stationRes3);
                 assertEquals(20.0, res.getTotalDistance());
-                verify(lineRepository, times(1)).findById(anyLong());
-                verify(stationRepository, times(3)).findById(anyLong());
+                verify(lineRepository, times(3)).findById(anyLong());
+                verify(stationRepository, times(6)).findById(anyLong());
             }
         }
 
@@ -407,19 +403,61 @@ public class LineServiceMockTest {
             @Test
             @DisplayName("출발역과 도착역이 같은 경우")
             void findLineFail1() {
+                given(stationRepository.findById(1L)).willReturn(Optional.of(station1));
+                given(stationRepository.findById(2L)).willReturn(Optional.of(station2));
+                given(stationRepository.findById(3L)).willReturn(Optional.of(station3));
 
+                Line line = Line.createLineWithId(1L, "와우선", "green", 20);
+                given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+
+                // when
+                lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
+                lineService.addSection(1L, new SectionCreateRequest(2L, 3L, 10));
+                PathReadRequest req = new PathReadRequest(1L, 1L);
+
+                // then
+                assertThatThrownBy(() -> lineService.findPath(line.getId(), req)).isInstanceOf(InvalidPathSameStationException.class);
+                verify(lineRepository, times(3)).findById(anyLong());
+                verify(stationRepository, times(6)).findById(anyLong());
             }
 
             @Test
             @DisplayName("출발역과 도착역이 연결이 되어 있지 않은 경우")
             void findLineFail2() {
+                given(stationRepository.findById(1L)).willReturn(Optional.of(station1));
+                given(stationRepository.findById(2L)).willReturn(Optional.of(station2));
+                given(stationRepository.findById(3L)).willReturn(Optional.of(station3));
 
+                Line line = Line.createLineWithId(1L, "와우선", "green", 20);
+                given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+
+                // when
+                lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
+                PathReadRequest req = new PathReadRequest(1L, 3L);
+
+                // then
+                assertThatThrownBy(() -> lineService.findPath(line.getId(), req)).isInstanceOf(InvalidPathNotConnectedException.class);
+                verify(lineRepository, times(2)).findById(anyLong());
+                verify(stationRepository, times(4)).findById(anyLong());
             }
 
             @Test
             @DisplayName("존재하지 않은 출발역이나 도착역을 조회할 경우")
             void findLineFail3() {
+                given(stationRepository.findById(1L)).willReturn(Optional.of(station1));
+                given(stationRepository.findById(2L)).willReturn(Optional.of(station2));
 
+                Line line = Line.createLineWithId(1L, "와우선", "green", 20);
+                given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+
+                // when
+                lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
+                PathReadRequest req = new PathReadRequest(1L, 3L);
+
+                // then
+                assertThatThrownBy(() -> lineService.findPath(line.getId(), req)).isInstanceOf(NotFoundStationException.class);
+                verify(lineRepository, times(1)).findById(anyLong());
+                verify(stationRepository, times(4)).findById(anyLong());
             }
 
         }

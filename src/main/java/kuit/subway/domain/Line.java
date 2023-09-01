@@ -39,6 +39,15 @@ public class Line extends BaseTimeEntity {
                 .distance(distance)
                 .build();
     }
+
+    public static Line createLineWithId(Long id, String name, String color, int distance) {
+        return Line.builder()
+                .id(id)
+                .name(name)
+                .color(color)
+                .distance(distance)
+                .build();
+    }
     // 연관관계 메서드
     public void addSection(Section section) {
         this.sections.addSection(section);
