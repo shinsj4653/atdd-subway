@@ -44,7 +44,7 @@ public class Line extends BaseTimeEntity {
     }
 
     public Section getFirstSection() {
-        this.sections.getFirstSection();
+        return this.sections.getFirstSection();
     }
 
     public void deleteSection(Station deleteStation) {

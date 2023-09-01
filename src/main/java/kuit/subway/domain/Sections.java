@@ -266,7 +266,7 @@ public class Sections {
 
     // 새로운 구간의 상행역이 등록되어있는 하행 종점역이면, 새로운 역을 하행 종점으로 등록할 경우
     private Boolean validateSectionCreateFinalStation(Section section) {
-        Station lastStation = getOrderStations().get(this.sections.size() - 1);
+        Station lastStation = getOrderStations().get(this.sections.size());
         if(lastStation.equals(section.getUpStation())) {
             return true;
         } else {
