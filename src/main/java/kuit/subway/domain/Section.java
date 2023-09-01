@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Builder
@@ -18,15 +16,15 @@ public class Section extends BaseTimeEntity {
     @Column(name = "section_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "line_id")
     private Line line;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "up_station_id")
     private Station upStation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "down_station_id")
     private Station downStation;
 

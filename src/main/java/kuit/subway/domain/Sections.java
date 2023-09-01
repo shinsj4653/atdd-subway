@@ -65,6 +65,7 @@ public class Sections {
     }
 
     private void updateUpExistSection(Section findSection, Section requestSection) {
+
         int index = findIndexOfSection(findSection);
         int findDistance = findSection.getDistance();
         int newDistance = requestSection.getDistance();
@@ -78,7 +79,6 @@ public class Sections {
 
         // 기존 구간 정보 갱신
         findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
-
     }
 
     private void updateDownExistSection(Section findSection, Section requestSection) {
@@ -123,10 +123,6 @@ public class Sections {
         }
     }
 
-    public Section getFirstSection() {
-        return sections.get(0);
-    }
-
     private Section findStartSection() {
         Set<Station> downStations = sections.stream()
                 .map(Section::getDownStation)
@@ -142,10 +138,6 @@ public class Sections {
         }
     }
 
-    public void updateFirstSection(Station upStation, Station downStation, int sectionDistance) {
-        sections.get(0).updateSection(upStation, downStation, sectionDistance);
-    }
-
     private Map<Station, Section> getSectionRoute() {
         return sections.stream()
                 .collect(
@@ -153,6 +145,32 @@ public class Sections {
                                 section -> section,
                                 (stationKey1, stationKey2) -> stationKey1,
                                 HashMap::new));
+    }
+
+    // 경로 조회 시, 거리값 적용을 해야하기 때문에 정렬된 역 정보가 아닌 정렬된 구간 정보가 필요!
+    private List<Section> getOrderSections() {
+        Section startSection = findStartSection();
+        List<Section> orderedSections = new ArrayList<>();
+
+        Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
+        Section nextSection = startSection;
+
+        while (nextSection != null) {
+            orderedSections.add(nextSection);
+            Station curDownStation = nextSection.getDownStation();
+            nextSection = upStationAndSectionRoute.get(curDownStation);
+        }
+        return orderedSections;
+    }
+
+    public Section getFirstSection() {
+        return sections.get(0);
+    }
+
+
+
+    public void updateFirstSection(Station upStation, Station downStation, int sectionDistance) {
+        sections.get(0).updateSection(upStation, downStation, sectionDistance);
     }
 
 
@@ -220,14 +238,19 @@ public class Sections {
     public GraphPath<Station, DefaultWeightedEdge> getGraphPath(Station startStation, Station endStation) {
 
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
-        boolean isFirst = true;
-        for (Section section : sections) {
-            if (isFirst) {
-                graph.addVertex(section.getUpStation());
-            }
-            graph.addVertex(section.getDownStation());
-            graph.setEdgeWeight(graph.addEdge(section.getUpStation(), section.getDownStation()), section.getDistance());
-            isFirst = false;
+        List<Station> stations = getOrderStations();
+
+        for (Station station : stations) {
+            graph.addVertex(station);
+        }
+
+        for (Station station : stations) {
+            Optional<Section> findSectionOptional = findMatchUpSection(station);
+
+            findSectionOptional.ifPresent(findSection ->
+                    graph.setEdgeWeight(
+                            graph.addEdge(findSection.getUpStation(), findSection.getDownStation()), findSection.getDistance())
+            );
         }
 
         DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
@@ -242,14 +265,14 @@ public class Sections {
 
     // 주어진 역을 이미 상행역으로 가지고 있는 구간 반환
     private Optional<Section> findMatchUpSection(Station upStation) {
-        return this.sections.stream()
+        return sections.stream()
                 .filter(s -> s.getUpStation().equals(upStation))
                 .findFirst();
     }
 
     // 주어진 역을 이미 하행역으로 가지고 있는 구간 반환
     private Optional<Section> findMatchDownSection(Station downStation) {
-        return this.sections.stream()
+        return sections.stream()
                 .filter(s -> s.getDownStation().equals(downStation))
                 .findFirst();
     }

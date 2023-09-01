@@ -27,6 +27,7 @@ public class Line extends BaseTimeEntity {
     private String color;
 
     private int distance;
+
     @Embedded
     @Builder.Default
     private Sections sections = new Sections();
