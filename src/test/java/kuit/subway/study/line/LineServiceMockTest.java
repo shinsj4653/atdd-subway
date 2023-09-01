@@ -7,6 +7,7 @@ import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.line.PathReadRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
+import kuit.subway.dto.request.station.StationCreateRequest;
 import kuit.subway.dto.response.line.*;
 import kuit.subway.dto.response.section.SectionCreateResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
@@ -352,9 +353,9 @@ public class LineServiceMockTest {
 
         @BeforeEach
         void setUp() {
-            station1 = Station.createStation("강남역");
-            station2 = Station.createStation("수서역");
-            station3 = Station.createStation("논현역");
+            station1 = Station.createStationUsingIdAndName(1L, "강남역");
+            station2 = Station.createStationUsingIdAndName(2L, "수서역");
+            station3 = Station.createStationUsingIdAndName(3L, "논현역");
         }
 
         @Nested
@@ -365,17 +366,14 @@ public class LineServiceMockTest {
             @DisplayName("출발역 id와 도착역 id로 요청하면 출발역, 도착역까지의 경로에 있는 역 목록, 그리고 경로 구간의 총 거리가 검색된다.")
             void findLineSuccess() {
 
-                Station station1 = Station.createStation("강남역");
-                Station station2 = Station.createStation("수서역");
-                Station station3 = Station.createStation("논현역");
                 // given
-                given(stationRepository.findById(1L)).willReturn(Optional.of(station1));
-                given(stationRepository.findById(2L)).willReturn(Optional.of(station2));
-                given(stationRepository.findById(3L)).willReturn(Optional.of(station3));
+                given(stationRepository.findById(1L)).willReturn(Optional.ofNullable(station1));
+                given(stationRepository.findById(2L)).willReturn(Optional.ofNullable(station2));
+                given(stationRepository.findById(3L)).willReturn(Optional.ofNullable(station3));
 
                 Line line = Line.createLine("와우선", "green", 20);
                 given(lineRepository.save(line)).willReturn(line);
-                given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+                given(lineRepository.findById(1L)).willReturn(Optional.ofNullable(line));
 
                 Section section1 = Section.createSection(line, station1, station2, 10);
                 Section section2 = Section.createSection(line, station2, station3, 10);

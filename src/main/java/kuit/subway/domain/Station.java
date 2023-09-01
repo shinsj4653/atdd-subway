@@ -20,7 +20,12 @@ public class Station extends BaseTimeEntity {
     @Column(length = 20, nullable = false)
     private String name;
 
-
+    public static Station createStationUsingIdAndName(Long id, String name) {
+        return Station.builder()
+                .id(id)
+                .name(name)
+                .build();
+    }
     public static Station createStation(String name) {
         return Station.builder()
                 .name(name)
