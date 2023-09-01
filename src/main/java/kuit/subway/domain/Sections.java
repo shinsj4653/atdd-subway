@@ -34,33 +34,31 @@ public class Sections {
             validateSectionCreateBothNotExist(section);
             validateSectionCreateBothExist(section);
             validateSectionCreateLengthLonger(section);
-            if (sections.size() > 0) {
-                // 구간 추가 시, 고려해야 할 예외사항 먼저 체크
-                if (validateSectionCreateFirstStation(section)) {
-                    // 새로운 역을 상행 종점으로 등록할 경우
-                    this.sections.add(0, section);
-                } else if (validateSectionCreateFinalStation(section)) {
-                    // 새로운 역을 하행 종점으로 등록할 경우
-                    this.sections.add(section);
-                } else {
-                    // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
 
-                    // 새로운 상행이 이미 존재하는 경우
-                    // 1 2
-                    // 2 3 <= new
-                    // 2 5 <= found
+            // 구간 추가 시, 고려해야 할 예외사항 먼저 체크
+            if (validateSectionCreateFirstStation(section)) {
+                // 새로운 역을 상행 종점으로 등록할 경우
+                this.sections.add(0, section);
+            } else if (validateSectionCreateFinalStation(section)) {
+                // 새로운 역을 하행 종점으로 등록할 경우
+                this.sections.add(section);
+            } else {
+                // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
 
-                    // 새로운 하행이 기존 하행으로 존재할 경우
-                    // 1 2
-                    // 2 5 <= found
-                    // 3 5 <= new
-                    Optional<Section> upSectionOptional = findMatchUpSection(section.getUpStation());
-                    Optional<Section> downSectionOptional = findMatchDownSection(section.getDownStation());
-
-                    upSectionOptional.ifPresent(upSection -> updateUpExistSection(upSection, section));
-                    downSectionOptional.ifPresent(downSection -> updateDownExistSection(downSection, section));
+                // 새로운 상행이 이미 존재하는 경우
+                // 1 2
+                // 2 3 <= new
+                // 2 5 <= found
+                // 새로운 하행이 기존 하행으로 존재할 경우
+                // 1 2
+                // 2 5 <= found
+                // 3 5 <= new
+                Optional<Section> upSectionOptional = findMatchUpSection(section.getUpStation());
+                Optional<Section> downSectionOptional = findMatchDownSection(section.getDownStation());
+                upSectionOptional.ifPresent(upSection -> updateUpExistSection(upSection, section));
+                downSectionOptional.ifPresent(downSection -> updateDownExistSection(downSection, section));
                 }
-            }
+
         }
     }
 
@@ -107,20 +105,15 @@ public class Sections {
         Section startSection = findStartSection();
         List<Section> orderedSections = new ArrayList<>();
 
-        if (sections.size() == 1) {
-            orderedSections.add(startSection);
-            return getStations(orderedSections);
-        } else {
-            Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
-            Section nextSection = startSection;
+        Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
+        Section nextSection = startSection;
 
-            while (nextSection != null) {
-                orderedSections.add(nextSection);
-                Station curDownStation = nextSection.getDownStation();
-                nextSection = upStationAndSectionRoute.get(curDownStation);
-            }
-            return getStations(orderedSections);
+        while (nextSection != null) {
+            orderedSections.add(nextSection);
+            Station curDownStation = nextSection.getDownStation();
+            nextSection = upStationAndSectionRoute.get(curDownStation);
         }
+        return getStations(orderedSections);
     }
 
     private Section findStartSection() {
@@ -128,14 +121,10 @@ public class Sections {
                 .map(Section::getDownStation)
                 .collect(Collectors.toSet());
         // 전체 상행역 중 하행역이 아닌 상행역 추출(=> 시작점)
-        if (sections.size() == 1) {
-            return sections.get(0);
-        } else {
-            return sections.stream()
-                    .filter(section -> !downStations.contains(section.getUpStation()))
-                    .findFirst()
-                    .orElseThrow(() -> new NotFoundSectionHavingCycleException());
-        }
+        return sections.stream()
+                .filter(section -> !downStations.contains(section.getUpStation()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundSectionHavingCycleException());
     }
 
     private Map<Station, Section> getSectionRoute() {
@@ -147,42 +136,23 @@ public class Sections {
                                 HashMap::new));
     }
 
-    // 경로 조회 시, 거리값 적용을 해야하기 때문에 정렬된 역 정보가 아닌 정렬된 구간 정보가 필요!
-    private List<Section> getOrderSections() {
-        Section startSection = findStartSection();
-        List<Section> orderedSections = new ArrayList<>();
-
-        Map<Station, Section> upStationAndSectionRoute = getSectionRoute();
-        Section nextSection = startSection;
-
-        while (nextSection != null) {
-            orderedSections.add(nextSection);
-            Station curDownStation = nextSection.getDownStation();
-            nextSection = upStationAndSectionRoute.get(curDownStation);
-        }
-        return orderedSections;
-    }
-
     public Section getFirstSection() {
         return sections.get(0);
     }
 
-
-
     public void updateFirstSection(Station upStation, Station downStation, int sectionDistance) {
         sections.get(0).updateSection(upStation, downStation, sectionDistance);
     }
-
 
     public void deleteSection(Station deleteStation) {
 
         if (sections.size() > 1) {
             validateSectionDeleteStationNotExist(deleteStation);
 
-            if (verfiyIsLastStationDelete(deleteStation)) {
+            if (isLastStationDelete(deleteStation)) {
                 // 하행 종점 제거
                 this.sections.remove(sections.size() - 1);
-            } else if (verifyIsFirstStationDelete(deleteStation)){
+            } else if (isFirstStationDelete(deleteStation)){
                 // 상행 종점 제거
                 this.sections.remove(0);
             } else {
@@ -201,7 +171,7 @@ public class Sections {
                 this.sections.remove(nextSection);
             }
 
-        } else if (sections.size() == 1){
+        } else {
             // 구간이 하나인 노선에서 구간 제거 불가
             throw new InvalidSectionDeleteOnlyTwoStationsException();
         }
@@ -225,7 +195,6 @@ public class Sections {
             Section findSection = sections.stream()
                     .filter(section -> section.getUpStation().getId().equals(finalNextUpStationId))
                     .findFirst().get();
-            System.out.println(findSection.getDownStation().getId());
             downStation = findSection.getDownStation();
             result.add(downStation);
             nextUpStationId = downStation.getId();
@@ -352,25 +321,13 @@ public class Sections {
         }
     }
 
-    // 역 사이에 새로운 역 등록할 경우, 상행역, 혹은 하행역 중 어느 쪽이 이미 존재하는지 판별
-    private Boolean verifyIsUpExist(Section section) {
-        Optional<Section> existUp = this.sections.stream()
-                .filter(s -> s.getUpStation().equals(section.getUpStation()))
-                .findAny();
-
-        if (existUp.isPresent()) {
-            return true;
-        } else
-            return false;
-    }
-
     // 하행 종점 제거인지 아닌지 판별해주는 함수
-    private Boolean verfiyIsLastStationDelete(Station deleteStation) {
+    private Boolean isLastStationDelete(Station deleteStation) {
         return this.sections.get(sections.size() - 1).getDownStation().equals(deleteStation);
     }
 
     // 상행 종점 제거인지 아닌지 판별해주는 함수
-    private Boolean verifyIsFirstStationDelete(Station deleteStation) {
+    private Boolean isFirstStationDelete(Station deleteStation) {
         return this.sections.get(0).getUpStation().equals(deleteStation);
     }
 

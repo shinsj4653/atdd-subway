@@ -151,8 +151,8 @@ public class LineServiceMockTest {
 
         @BeforeEach
         void setUp() {
-            upStation = Station.createStation("강남역");
-            downStation = Station.createStation("수서역");
+            upStation = Station.createStationWithId(1L,"강남역");
+            downStation = Station.createStationWithId(2L, "수서역");
         }
 
         @Nested
@@ -203,8 +203,8 @@ public class LineServiceMockTest {
 
         @BeforeEach
         void setUp() {
-            upStation = Station.createStation("강남역");
-            downStation = Station.createStation("수서역");
+            upStation = Station.createStationWithId(1L, "강남역");
+            downStation = Station.createStationWithId(2L, "수서역");
         }
 
         @Nested
@@ -245,8 +245,8 @@ public class LineServiceMockTest {
 
         @BeforeEach
         void setUp() {
-            upStation = Station.createStation("강남역");
-            downStation = Station.createStation("수서역");
+            upStation = Station.createStationWithId(1L,"강남역");
+            downStation = Station.createStationWithId(2L, "수서역");
         }
 
         @Nested
