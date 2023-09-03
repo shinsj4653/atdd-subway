@@ -74,7 +74,7 @@ public class Line extends BaseTimeEntity {
 
     public List<StationReadResponse> getStationReadResponseList() {
         return this.sections.getOrderStations().stream()
-                .map(station -> StationReadResponse.of(station))
+                .map(StationReadResponse::of)
                 .collect(Collectors.toList());
     }
 
