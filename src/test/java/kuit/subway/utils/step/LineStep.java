@@ -1,18 +1,15 @@
-package kuit.subway.utils.fixtures;
+package kuit.subway.utils.step;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.request.station.StationCreateRequest;
 
 import static kuit.subway.study.common.CommonRestAssured.*;
-import static kuit.subway.utils.fixtures.StationFixtures.STATION_PATH;
-import static kuit.subway.utils.fixtures.StationFixtures.지하철_역_등록;
-import static kuit.subway.utils.steps.LineStep.지하철_노선_생성_요청;
-import static kuit.subway.utils.steps.LineStep.지하철_노선_수정_요청;
+import static kuit.subway.utils.fixture.LineFixture.지하철_노선_생성_요청;
+import static kuit.subway.utils.fixture.LineFixture.지하철_노선_수정_요청;
 
-public class LineFixtures {
+public class LineStep {
 
     public static final String LINE_PATH = "/lines";
 

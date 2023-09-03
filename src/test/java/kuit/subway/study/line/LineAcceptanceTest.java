@@ -3,16 +3,12 @@ package kuit.subway.study.line;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.domain.Station;
-import kuit.subway.dto.request.line.LineCreateRequest;
-import kuit.subway.dto.request.station.StationCreateRequest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static kuit.subway.utils.fixtures.LineFixtures.*;
-import static kuit.subway.utils.fixtures.StationFixtures.지하철_역_등록;
-import static kuit.subway.utils.steps.LineStep.지하철_노선_수정_요청;
+import static kuit.subway.utils.step.LineStep.*;
+import static kuit.subway.utils.step.StationStep.지하철_역_등록;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("지하철 노선 인수 테스트")

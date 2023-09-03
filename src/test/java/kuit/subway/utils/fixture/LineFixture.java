@@ -1,11 +1,9 @@
-package kuit.subway.utils.steps;
+package kuit.subway.utils.fixture;
 
-import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.utils.fixtures.StationFixtures;
 
-public class LineStep {
+public class LineFixture {
 
     public static LineCreateRequest 지하철_노선_생성_요청(String name, String color, int lineDistance, Long upStationId, Long downStationId, int sectionDistance) {
         return new LineCreateRequest(name, color, lineDistance, upStationId, downStationId, sectionDistance);

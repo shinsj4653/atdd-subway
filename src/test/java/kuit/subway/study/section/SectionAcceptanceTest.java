@@ -3,15 +3,13 @@ package kuit.subway.study.section;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static kuit.subway.utils.fixtures.LineFixtures.지하철_노선_등록;
-import static kuit.subway.utils.fixtures.SectionFixtures.지하철_구간_등록;
-import static kuit.subway.utils.fixtures.SectionFixtures.지하철_구간_삭제;
-import static kuit.subway.utils.fixtures.StationFixtures.지하철_역_등록;
+import static kuit.subway.utils.step.LineStep.지하철_노선_등록;
+import static kuit.subway.utils.step.SectionStep.지하철_구간_등록;
+import static kuit.subway.utils.step.StationStep.지하철_역_등록;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
