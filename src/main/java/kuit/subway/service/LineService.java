@@ -167,7 +167,10 @@ public class LineService {
         // 출발역과 도착역이 같을 때 예외발생
         validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
 
-        GraphPath<Station, DefaultWeightedEdge> path = line.getGraphPath(startStation, endStation);
+        // 경로 조회 -> 모든 노선들이 하나의 그래프 형태로 되어 있어야 한다
+        List<LineReadResponse> allLines = findAllLines();
+
+        GraphPath<Station, DefaultWeightedEdge> path = line.getGraphPath(allLines, startStation, endStation);
 
         PathReadResponse res = PathReadResponse.of(getStationDtoPath(path.getVertexList()), path.getWeight());
 

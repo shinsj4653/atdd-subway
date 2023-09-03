@@ -2,6 +2,7 @@ package kuit.subway.domain;
 
 import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
+import kuit.subway.dto.response.line.LineReadResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
 import lombok.*;
 import org.jgrapht.GraphPath;
@@ -77,8 +78,8 @@ public class Line extends BaseTimeEntity {
                 .collect(Collectors.toList());
     }
 
-    public GraphPath<Station, DefaultWeightedEdge> getGraphPath(Station startStation, Station endStation) {
-        return this.sections.getGraphPath(startStation, endStation);
+    public GraphPath<Station, DefaultWeightedEdge> getGraphPath(List<LineReadResponse> lines, Station startStation, Station endStation) {
+        return this.sections.getGraphPath(lines, startStation, endStation);
     }
 
 }

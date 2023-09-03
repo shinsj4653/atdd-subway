@@ -3,7 +3,7 @@ package kuit.subway.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
-import kuit.subway.dto.response.station.StationReadResponse;
+import kuit.subway.dto.response.line.LineReadResponse;
 import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothExistException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothNotExistExcpetion;
@@ -16,7 +16,6 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -204,7 +203,7 @@ public class Sections {
     }
 
     // 경로 조회를 위한 함수 - 출발지점과 도착지점까지의 경로에 있는 역 목록, 총 거리
-    public GraphPath<Station, DefaultWeightedEdge> getGraphPath(Station startStation, Station endStation) {
+    public GraphPath<Station, DefaultWeightedEdge> getGraphPath(List<LineReadResponse> lines, Station startStation, Station endStation) {
 
         WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
         List<Station> stations = getOrderStations();
