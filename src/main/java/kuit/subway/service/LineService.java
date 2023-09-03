@@ -24,7 +24,6 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,20 +92,10 @@ public class LineService {
     public LineUpdateResponse updateLine(Long id, LineUpdateRequest req) {
         // 존재하지 않는 노선을 수정하려 했을때 예외처리
         Line line = validateLineExist(id);
-
-        // 존재하지 않는 station_id로 변경하려 했을 때 예외처리
-        Station downStation = validateStationExist(req.getDownStationId());
-        Station upStation = validateStationExist(req.getUpStationId());
-
-        List<Station> stations = new ArrayList<>();
-        stations.add(upStation);
-        stations.add(downStation);
-
         // 상행역과 하행역이 같으면 예외처리
-        validateSameStation(req.getDownStationId(), req.getUpStationId());
 
         // 모든 예외조건 패스할 시, request 대로 노선 수정
-        line.updateLine(req.getName(), req.getColor(), req.getLineDistance(), upStation, downStation, req.getSectionDistance());
+        line.updateLine(req.getName(), req.getColor(), req.getLineDistance());
 
         return LineUpdateResponse.of(line);
     }

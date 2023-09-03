@@ -131,10 +131,6 @@ public class Sections {
         return sections.get(0);
     }
 
-    public void updateFirstSection(Station upStation, Station downStation, int sectionDistance) {
-        sections.get(0).updateSection(upStation, downStation, sectionDistance);
-    }
-
     public void deleteSection(Station deleteStation) {
 
         if (sections.size() > 1) {

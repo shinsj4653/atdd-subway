@@ -61,11 +61,10 @@ public class Line extends BaseTimeEntity {
     public void deleteSection(Station deleteStation) {
         this.sections.deleteSection(deleteStation);
     }
-    public void updateLine(String name, String color, int distance, Station upStation, Station downStation, int sectionDistance) {
+    public void updateLine(String name, String color, int distance) {
         this.name = name;
         this.color = color;
         this.distance = distance;
-        this.sections.updateFirstSection(upStation, downStation, sectionDistance);
     }
 
     public List<Station> getStations() {

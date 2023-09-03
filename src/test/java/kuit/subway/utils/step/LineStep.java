@@ -27,8 +27,8 @@ public class LineStep {
         return get(LINE_PATH);
     }
 
-    public static ExtractableResponse<Response> 지하철_노선_수정(Long lineId, String name, String color, int lineDistance, Long upStationId, Long downStationId, int sectionDistance) {
-        LineUpdateRequest req = 지하철_노선_수정_요청(name, color, lineDistance, upStationId, downStationId, sectionDistance);
+    public static ExtractableResponse<Response> 지하철_노선_수정(Long lineId, String name, String color, int lineDistance) {
+        LineUpdateRequest req = 지하철_노선_수정_요청(name, color, lineDistance);
         return put(LINE_PATH + "/" + lineId, req);
     }
 

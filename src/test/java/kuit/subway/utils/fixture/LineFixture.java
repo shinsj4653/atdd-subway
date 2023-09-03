@@ -9,7 +9,7 @@ public class LineFixture {
         return new LineCreateRequest(name, color, lineDistance, upStationId, downStationId, sectionDistance);
     }
 
-    public static LineUpdateRequest 지하철_노선_수정_요청(String name, String color, int lineDistance, Long upStationId, Long downStationId, int sectionDistance) {
-        return new LineUpdateRequest(name, color, lineDistance, upStationId, downStationId, sectionDistance);
+    public static LineUpdateRequest 지하철_노선_수정_요청(String name, String color, int lineDistance) {
+        return new LineUpdateRequest(name, color, lineDistance);
     }
 }

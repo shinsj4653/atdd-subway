@@ -7,9 +7,7 @@ import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.line.PathReadRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
-import kuit.subway.dto.request.station.StationCreateRequest;
 import kuit.subway.dto.response.line.*;
-import kuit.subway.dto.response.section.SectionCreateResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
 import kuit.subway.exception.badrequest.line.InvalidPathSameStationException;
@@ -28,7 +26,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -255,8 +252,6 @@ public class LineServiceMockTest {
             @Test
             @DisplayName("노선 정보 수정")
             void updateLineSuccess() {
-                given(stationRepository.findById(1L)).willReturn(Optional.of(upStation));
-                given(stationRepository.findById(2L)).willReturn(Optional.of(downStation));
 
                 Line line = Line.createLine("와우선", "green", 20);
                 line.addSection(Section.createSection(line, upStation, downStation, 1));
@@ -264,7 +259,7 @@ public class LineServiceMockTest {
                 given(lineRepository.findById(line.getId())).willReturn(Optional.of(line));
 
                 // when
-                LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15, 2L, 1L, 7);
+                LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15);
                 LineUpdateResponse res = lineService.updateLine(line.getId(), req);
 
                 // then

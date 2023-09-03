@@ -81,7 +81,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
         // when
         ExtractableResponse<Response> 지하철_노선_수정_실패_결과 = 지하철_노선_식별자로_조회(lineId + 1);
-        ExtractableResponse<Response> 지하철_노선_수정_성공_결과 = 지하철_노선_수정(lineId, "신분당선", "red", 15,  station2Id, station1Id, 7);
+        ExtractableResponse<Response> 지하철_노선_수정_성공_결과 = 지하철_노선_수정(lineId, "신분당선", "red", 15);
 
         // then
         assertAll(
