@@ -5,10 +5,12 @@ import kuit.subway.domain.Section;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.request.line.PathReadRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
-import kuit.subway.dto.response.line.*;
+import kuit.subway.dto.response.line.LineCreateResponse;
+import kuit.subway.dto.response.line.LineDeleteResponse;
+import kuit.subway.dto.response.line.LineReadResponse;
+import kuit.subway.dto.response.line.LineUpdateResponse;
 import kuit.subway.dto.response.section.SectionCreateResponse;
 import kuit.subway.dto.response.section.SectionDeleteResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
@@ -19,8 +21,6 @@ import kuit.subway.exception.notfound.station.NotFoundStationException;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
-import org.jgrapht.GraphPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,7 +71,7 @@ public class LineService {
         List<Line> findLines = lineRepository.findAll();
 
         return findLines.stream()
-                .map(line -> LineReadResponse.of(line))
+                .map(LineReadResponse::of)
                 .collect(Collectors.toList());
     }
 
@@ -144,27 +144,26 @@ public class LineService {
         return SectionDeleteResponse.of(line);
     }
 
-    public PathReadResponse findPath(Long lineId, PathReadRequest req) {
-
-        // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
-        Station startStation = validateStationExist(req.getStartStationId());
-        Station endStation = validateStationExist(req.getEndStationId());
-
-        // 존재하지 않는 노선을 조회하려 했을때 예외처리
-        Line line = validateLineExist(lineId);
-
-        // 출발역과 도착역이 같을 때 예외발생
-        validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
-
-        // 경로 조회 -> 모든 노선들이 하나의 그래프 형태로 되어 있어야 한다
-        List<LineReadResponse> allLines = findAllLines();
-
-        GraphPath<Station, DefaultWeightedEdge> path = line.getGraphPath(allLines, startStation, endStation);
-
-        PathReadResponse res = PathReadResponse.of(getStationDtoPath(path.getVertexList()), path.getWeight());
-
-        return res;
-    }
+//    public PathReadResponse findPath(PathReadRequest req) {
+//
+//        // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
+//        Station startStation = validateStationExist(req.getStartStationId());
+//        Station endStation = validateStationExist(req.getEndStationId());
+//
+//
+//        // 출발역과 도착역이 같을 때 예외발생
+//        validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
+//
+//        // 경로 조회 -> 모든 노선들이 하나의 그래프 형태로 되어 있어야 한다
+////        List<Section> allSections =
+//
+//
+////        GraphPath<Station, DefaultWeightedEdge> path = getGraphPath(allLines, startStation, endStation);
+//
+////        PathReadResponse res = PathReadResponse.of(getStationDtoPath(path.getVertexList()), path.getWeight());
+//
+////        return res;
+//    }
 
     private List<StationReadResponse> getStationDtoPath(List<Station> path) {
         return path.stream()
@@ -189,8 +188,6 @@ public class LineService {
     private Line validateLineExist(Long id) {
         return lineRepository.findById(id)
                 .orElseThrow(NotFoundLineException::new);
-
-
     }
 
     // 경로 조회 - 출발역과 도착역이 같은 경우를 판별해주는 함수

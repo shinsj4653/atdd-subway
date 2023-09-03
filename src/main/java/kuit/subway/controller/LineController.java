@@ -67,9 +67,9 @@ public class LineController {
         return ResponseEntity.ok().body(res);
     }
 
-    @PostMapping("/{id}/path")
-    public ResponseEntity<PathReadResponse> getPath(@PathVariable("id") Long id, @RequestBody PathReadRequest req) {
-        return ResponseEntity.ok(lineService.findPath(id, req));
+    @PostMapping("/path")
+    public ResponseEntity<PathReadResponse> getPath(@RequestBody PathReadRequest req) {
+        return ResponseEntity.ok(lineService.findPath(req));
     }
 
 }
