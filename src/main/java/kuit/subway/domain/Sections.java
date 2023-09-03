@@ -56,16 +56,22 @@ public class Sections {
         // 1 2
         // 2 5 <= found
         // 3 5 <= new
-        Optional<Section> upSectionOptional = findMatchUpSection(section.getUpStation());
-        Optional<Section> downSectionOptional = findMatchDownSection(section.getDownStation());
-        upSectionOptional.ifPresent(upSection -> updateUpExistSection(upSection, section));
-        downSectionOptional.ifPresent(downSection -> updateDownExistSection(downSection, section));
-
+        insertSectionBetweenSections(section);
     }
 
-    private void updateUpExistSection(Section findSection, Section requestSection) {
+    private void insertSectionBetweenSections(Section requestSection) {
 
-        int index = findIndexOfSection(findSection);
+        Optional<Section> upSectionOptional = findMatchUpSection(requestSection.getUpStation());
+        Optional<Section> downSectionOptional = findMatchDownSection(requestSection.getDownStation());
+
+        Section findSection;
+
+        if (upSectionOptional.isPresent()) {
+            findSection = upSectionOptional.get();
+        } else {
+            findSection = downSectionOptional.get();
+        }
+
         int findDistance = findSection.getDistance();
         int newDistance = requestSection.getDistance();
 
@@ -73,32 +79,16 @@ public class Sections {
         Station newUpStation = requestSection.getUpStation();
         Station newDownStation = requestSection.getDownStation();
 
+        // 새로운 구간 추가
         Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-        sections.add(index, newSection);
+        sections.add(newSection);
 
-        // 기존 구간 정보 갱신
-        findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
-    }
-
-    private void updateDownExistSection(Section findSection, Section requestSection) {
-        int index = findIndexOfSection(findSection);
-        int findDistance = findSection.getDistance();
-        int newDistance = requestSection.getDistance();
-
-        // 새롭게 추가할 상행역, 하행역
-        Station newUpStation = requestSection.getUpStation();
-        Station newDownStation = requestSection.getDownStation();
-
-        // 추가해줄 구간 생성
-        Section newSection = Section.createSection(findSection.getLine(), newUpStation, newDownStation, newDistance);
-        sections.add(index + 1, newSection);
-
-        // 기존 구간 정보 갱신
-        findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
-    }
-
-    private int findIndexOfSection(Section findSection) {
-        return sections.indexOf(findSection);
+        // 기존에 존재한 구간 정보 갱신
+        if (upSectionOptional.isPresent()) {
+            findSection.updateSection(newDownStation, findSection.getDownStation(), findDistance - newDistance);
+        } else {
+            findSection.updateSection(findSection.getUpStation(), newUpStation, findDistance - newDistance);
+        }
     }
 
     // 구간들 상행 종점역 기준으로 정렬한 후, 정렬된 역 리스트를 반환해주는 함수
@@ -153,29 +143,31 @@ public class Sections {
             if (isLastStationDelete(deleteStation)) {
                 // 하행 종점 제거
                 this.sections.remove(sections.size() - 1);
-            } else if (isFirstStationDelete(deleteStation)){
+                return;
+            }
+            if (isFirstStationDelete(deleteStation)){
                 // 상행 종점 제거
                 this.sections.remove(0);
-            } else {
-                // 중간역 제거
-                // A B
-                // B C
-                Section findSection = findMatchDownSection(deleteStation).get();
-                
-                // 거리 계산을 위해 다음 구간 가져오기
-                Section nextSection = findMatchUpSection(deleteStation).get();
-                
-                // 거리 계산까지 하여 findSection 업데이트
-                findSection.updateSection(findSection.getUpStation(), nextSection.getDownStation(), findSection.getDistance() + nextSection.getDistance());
-
-                // 업데이트 구간의 다음 구간 삭제
-                this.sections.remove(nextSection);
+                return;
             }
+            // 중간역 제거
+            // A B
+            // B C
+            Section findSection = findMatchDownSection(deleteStation).get();
+                
+            // 거리 계산을 위해 다음 구간 가져오기
+            Section nextSection = findMatchUpSection(deleteStation).get();
+                
+            // 거리 계산까지 하여 findSection 업데이트
+            findSection.updateSection(findSection.getUpStation(), nextSection.getDownStation(), findSection.getDistance() + nextSection.getDistance());
 
-        } else {
-            // 구간이 하나인 노선에서 구간 제거 불가
-            throw new InvalidSectionDeleteOnlyTwoStationsException();
+            // 업데이트 구간의 다음 구간 삭제
+            this.sections.remove(nextSection);
+            return;
         }
+        // 구간이 하나인 노선에서 구간 제거 불가
+        throw new InvalidSectionDeleteOnlyTwoStationsException();
+
     }
 
     private List<Station> getStations(List<Section> sections) {
