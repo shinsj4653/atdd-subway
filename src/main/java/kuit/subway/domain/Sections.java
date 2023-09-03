@@ -29,36 +29,38 @@ public class Sections {
         // 구간을 처음 추가하는 경우는 validate 할 필요 X
         if (sections.size() == 0) {
             this.sections.add(section);
-        } else {
-            validateSectionCreateBothNotExist(section);
-            validateSectionCreateBothExist(section);
-            validateSectionCreateLengthLonger(section);
-
-            // 구간 추가 시, 고려해야 할 예외사항 먼저 체크
-            if (validateSectionCreateFirstStation(section)) {
-                // 새로운 역을 상행 종점으로 등록할 경우
-                this.sections.add(0, section);
-            } else if (validateSectionCreateFinalStation(section)) {
-                // 새로운 역을 하행 종점으로 등록할 경우
-                this.sections.add(section);
-            } else {
-                // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
-
-                // 새로운 상행이 이미 존재하는 경우
-                // 1 2
-                // 2 3 <= new
-                // 2 5 <= found
-                // 새로운 하행이 기존 하행으로 존재할 경우
-                // 1 2
-                // 2 5 <= found
-                // 3 5 <= new
-                Optional<Section> upSectionOptional = findMatchUpSection(section.getUpStation());
-                Optional<Section> downSectionOptional = findMatchDownSection(section.getDownStation());
-                upSectionOptional.ifPresent(upSection -> updateUpExistSection(upSection, section));
-                downSectionOptional.ifPresent(downSection -> updateDownExistSection(downSection, section));
-                }
-
+            return;
         }
+
+        validateSectionCreateBothNotExist(section);
+        validateSectionCreateBothExist(section);
+        validateSectionCreateLengthLonger(section);
+
+        // 구간 추가 시, 고려해야 할 예외사항 먼저 체크
+        if (validateSectionCreateFirstStation(section)) {
+            // 새로운 역을 상행 종점으로 등록할 경우
+            this.sections.add(0, section);
+            return;
+        }
+        if (validateSectionCreateFinalStation(section)) {
+            // 새로운 역을 하행 종점으로 등록할 경우
+            this.sections.add(section);
+            return;
+        }
+        // 상행역이 이미 존재하는 역인지, 혹은 하행역이 존재하는 역인지 판별
+        // 새로운 상행이 이미 존재하는 경우
+        // 1 2
+        // 2 3 <= new
+        // 2 5 <= found
+        // 새로운 하행이 기존 하행으로 존재할 경우
+        // 1 2
+        // 2 5 <= found
+        // 3 5 <= new
+        Optional<Section> upSectionOptional = findMatchUpSection(section.getUpStation());
+        Optional<Section> downSectionOptional = findMatchDownSection(section.getDownStation());
+        upSectionOptional.ifPresent(upSection -> updateUpExistSection(upSection, section));
+        downSectionOptional.ifPresent(downSection -> updateDownExistSection(downSection, section));
+
     }
 
     private void updateUpExistSection(Section findSection, Section requestSection) {
