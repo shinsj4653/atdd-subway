@@ -26,6 +26,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -372,9 +373,15 @@ public class LineServiceMockTest {
                 Line line = Line.createLineWithId(1L, "와우선", "green", 20);
                 given(lineRepository.findById(1L)).willReturn(Optional.of(line));
 
-                // when
+                List<Line> lines = new ArrayList<>();
+                lines.add(line);
+                given(lineRepository.findAll()).willReturn(lines);
+
                 lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
                 lineService.addSection(1L, new SectionCreateRequest(2L, 3L, 10));
+
+                // when
+
                 PathReadRequest req = new PathReadRequest(1L, 3L);
                 PathReadResponse res = lineService.findPath(req);
 
@@ -386,7 +393,8 @@ public class LineServiceMockTest {
                 assertThat(res).isNotNull();
                 assertThat(res.getStations()).containsExactly(stationRes1, stationRes2, stationRes3);
                 assertEquals(20.0, res.getTotalDistance());
-                verify(lineRepository, times(3)).findById(anyLong());
+                verify(lineRepository, times(2)).findById(anyLong());
+                verify(lineRepository, times(1)).findAll();
                 verify(stationRepository, times(6)).findById(anyLong());
             }
         }
@@ -412,7 +420,7 @@ public class LineServiceMockTest {
 
                 // then
                 assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(InvalidPathSameStationException.class);
-                verify(lineRepository, times(3)).findById(anyLong());
+                verify(lineRepository, times(2)).findById(anyLong());
                 verify(stationRepository, times(6)).findById(anyLong());
             }
 
@@ -432,7 +440,7 @@ public class LineServiceMockTest {
 
                 // then
                 assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(InvalidPathNotConnectedException.class);
-                verify(lineRepository, times(2)).findById(anyLong());
+                verify(lineRepository, times(1)).findById(anyLong());
                 verify(stationRepository, times(4)).findById(anyLong());
             }
 
