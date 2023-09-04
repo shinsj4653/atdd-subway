@@ -152,8 +152,19 @@ public class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(station1Id, station3Id);
 
         // then
-        assertThat(지하철_노선_경로_조회_결과.jsonPath().getList("stations")).hasSize(3)
-                .extracting("name")
-                .containsExactly("강남역", "성수역", "구디역");
+        assertAll(() -> {
+
+            assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(200);
+
+            assertThat(지하철_노선_경로_조회_결과.jsonPath().getList("stations")).hasSize(3)
+                    .extracting("name")
+                    .containsExactly("강남역", "성수역", "구디역");
+
+            assertThat(지하철_노선_경로_조회_결과.jsonPath().getDouble("totalDistance")).isEqualTo(2.0);
+        });
+
+
+
+
     }
 }
