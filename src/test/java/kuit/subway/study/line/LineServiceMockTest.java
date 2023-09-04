@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -349,12 +350,14 @@ public class LineServiceMockTest {
         Station station1;
         Station station2;
         Station station3;
+        Station station4;
 
         @BeforeEach
         void setUp() {
             station1 = Station.createStationWithId(1L, "강남역");
             station2 = Station.createStationWithId(2L, "수서역");
             station3 = Station.createStationWithId(3L, "논현역");
+            station4 = Station.createStationWithId(4L, "군자역");
         }
 
         @Nested
@@ -430,18 +433,25 @@ public class LineServiceMockTest {
                 given(stationRepository.findById(1L)).willReturn(Optional.of(station1));
                 given(stationRepository.findById(2L)).willReturn(Optional.of(station2));
                 given(stationRepository.findById(3L)).willReturn(Optional.of(station3));
+                given(stationRepository.findById(4L)).willReturn(Optional.of(station4));
 
-                Line line = Line.createLineWithId(1L, "와우선", "green", 20);
-                given(lineRepository.findById(1L)).willReturn(Optional.of(line));
+                Line line1 = Line.createLineWithId(1L, "와우선", "green", 20);
+                Line line2 = Line.createLineWithId(2L, "호우선", "blue", 20);
+
+                given(lineRepository.findById(1L)).willReturn(Optional.of(line1));
+                given(lineRepository.findById(2L)).willReturn(Optional.of(line2));
+
+                lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
+                lineService.addSection(2L, new SectionCreateRequest(3L, 4L, 10));
+                given(lineRepository.findAll()).willReturn(Arrays.asList(line1, line2));
 
                 // when
-                lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
-                PathReadRequest req = new PathReadRequest(1L, 3L);
+                PathReadRequest req = new PathReadRequest(1L, 4L);
 
                 // then
                 assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(InvalidPathNotConnectedException.class);
-                verify(lineRepository, times(1)).findById(anyLong());
-                verify(stationRepository, times(4)).findById(anyLong());
+                verify(lineRepository, times(2)).findById(anyLong());
+                verify(stationRepository, times(6)).findById(anyLong());
             }
 
             @Test

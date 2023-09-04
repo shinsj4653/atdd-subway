@@ -60,7 +60,8 @@ public class Graph {
     // 출발역과 도착역이 연결되어 있지 않은 경우, 예외 발생
     private void validateStationExistInGraph(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
                                              Station startStation, Station endStation) {
-        if(dijkstraShortestPath.getPath(startStation, endStation) == null)
+
+        if (dijkstraShortestPath.getPath(startStation, endStation) == null)
             throw new InvalidPathNotConnectedException();
     }
 
