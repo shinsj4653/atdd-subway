@@ -26,6 +26,12 @@ spring:
       settings:
         web-allow-others: true
 
+security:
+  jwt:
+    token:
+      secret-key: testtesttest
+      expire-length: 86400
+
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace
