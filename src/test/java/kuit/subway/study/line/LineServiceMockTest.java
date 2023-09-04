@@ -376,7 +376,7 @@ public class LineServiceMockTest {
                 lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
                 lineService.addSection(1L, new SectionCreateRequest(2L, 3L, 10));
                 PathReadRequest req = new PathReadRequest(1L, 3L);
-                PathReadResponse res = lineService.findPath(line.getId(), req);
+                PathReadResponse res = lineService.findPath(req);
 
                 StationReadResponse stationRes1 = res.getStations().get(0);
                 StationReadResponse stationRes2 = res.getStations().get(1);
@@ -411,7 +411,7 @@ public class LineServiceMockTest {
                 PathReadRequest req = new PathReadRequest(1L, 1L);
 
                 // then
-                assertThatThrownBy(() -> lineService.findPath(line.getId(), req)).isInstanceOf(InvalidPathSameStationException.class);
+                assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(InvalidPathSameStationException.class);
                 verify(lineRepository, times(3)).findById(anyLong());
                 verify(stationRepository, times(6)).findById(anyLong());
             }
@@ -431,7 +431,7 @@ public class LineServiceMockTest {
                 PathReadRequest req = new PathReadRequest(1L, 3L);
 
                 // then
-                assertThatThrownBy(() -> lineService.findPath(line.getId(), req)).isInstanceOf(InvalidPathNotConnectedException.class);
+                assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(InvalidPathNotConnectedException.class);
                 verify(lineRepository, times(2)).findById(anyLong());
                 verify(stationRepository, times(4)).findById(anyLong());
             }
@@ -450,7 +450,7 @@ public class LineServiceMockTest {
                 PathReadRequest req = new PathReadRequest(1L, 3L);
 
                 // then
-                assertThatThrownBy(() -> lineService.findPath(line.getId(), req)).isInstanceOf(NotFoundStationException.class);
+                assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(NotFoundStationException.class);
                 verify(lineRepository, times(1)).findById(anyLong());
                 verify(stationRepository, times(4)).findById(anyLong());
             }

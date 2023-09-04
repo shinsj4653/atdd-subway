@@ -11,6 +11,7 @@ import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateLengt
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyTwoStationsException;
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteStationNotExist;
 import kuit.subway.exception.notfound.section.NotFoundSectionHavingCycleException;
+import lombok.Getter;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -19,6 +20,7 @@ import org.jgrapht.graph.WeightedMultigraph;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Getter
 @Embeddable
 public class Sections {
 
@@ -188,7 +190,6 @@ public class Sections {
             result.add(downStation);
             nextUpStationId = downStation.getId();
         }
-
         return result;
     }
 

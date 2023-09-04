@@ -67,6 +67,10 @@ public class Line extends BaseTimeEntity {
         this.distance = distance;
     }
 
+    public List<Section> getSections() {
+        return this.sections.getSections();
+    }
+
     public List<Station> getStations() {
         return this.sections.getOrderStations();
     }
@@ -75,10 +79,6 @@ public class Line extends BaseTimeEntity {
         return this.sections.getOrderStations().stream()
                 .map(StationReadResponse::of)
                 .collect(Collectors.toList());
-    }
-
-    public GraphPath<Station, DefaultWeightedEdge> getGraphPath(List<LineReadResponse> lines, Station startStation, Station endStation) {
-        return this.sections.getGraphPath(lines, startStation, endStation);
     }
 
 }
