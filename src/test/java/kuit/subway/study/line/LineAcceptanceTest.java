@@ -137,34 +137,110 @@ public class LineAcceptanceTest extends AcceptanceTest {
         );
     }
 
-    @Test
-    @DisplayName("주어진 출발역과 도착역이 연결된 경로 중, 가장 최단 경로를 조회하고 200 OK를 반환한다.")
-    void getPath() {
-        // given
-        Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
-        Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
-        Long station3Id = 지하철_역_등록("구디역").jsonPath().getLong("id");
-        Long lineId1 = 지하철_노선_등록("와우선", "green", 10, station1Id, station2Id, 1).jsonPath().getLong("id");
-        지하철_노선_등록("호우선", "blue", 20, station1Id, station3Id, 10).jsonPath().getLong("id");
-        지하철_구간_등록(lineId1, station2Id, station3Id, 1);
+    @Nested
+    @DisplayName("지하철 경로 조회 인수테스트")
+    class GetPath {
 
-        // when
-        ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(station1Id, station3Id);
+        @Nested
+        @DisplayName("경로 조회 성공")
+        class SuccessCase {
+            @Test
+            @DisplayName("주어진 출발역과 도착역이 연결된 경로 중, 가장 최단 경로를 조회하고 200 OK를 반환한다.")
+            void getPathSuccess() {
+                // given
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long station3Id = 지하철_역_등록("구디역").jsonPath().getLong("id");
+                Long lineId1 = 지하철_노선_등록("와우선", "green", 10, station1Id, station2Id, 1).jsonPath().getLong("id");
+                지하철_노선_등록("호우선", "blue", 20, station1Id, station3Id, 10).jsonPath().getLong("id");
+                지하철_구간_등록(lineId1, station2Id, station3Id, 1);
 
-        // then
-        assertAll(() -> {
+                // when
+                ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(station1Id, station3Id);
 
-            assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(200);
+                // then
+                assertAll(() -> {
 
-            assertThat(지하철_노선_경로_조회_결과.jsonPath().getList("stations")).hasSize(3)
-                    .extracting("name")
-                    .containsExactly("강남역", "성수역", "구디역");
+                    assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(200);
 
-            assertThat(지하철_노선_경로_조회_결과.jsonPath().getDouble("totalDistance")).isEqualTo(2.0);
-        });
+                    assertThat(지하철_노선_경로_조회_결과.jsonPath().getList("stations")).hasSize(3)
+                            .extracting("name")
+                            .containsExactly("강남역", "성수역", "구디역");
 
+                    assertThat(지하철_노선_경로_조회_결과.jsonPath().getDouble("totalDistance")).isEqualTo(2.0);
+                });
 
+            }
+        }
+
+        @Nested
+        @DisplayName("경로 조회 실패")
+        class FailCase {
+            @Test
+            @DisplayName("출발역과 도착역이 같은 경우, 400 Bad Request Error를 반환한다.")
+            void getPathFail1() {
+                // given
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long station3Id = 지하철_역_등록("구디역").jsonPath().getLong("id");
+                Long lineId1 = 지하철_노선_등록("와우선", "green", 10, station1Id, station2Id, 1).jsonPath().getLong("id");
+                지하철_노선_등록("호우선", "blue", 20, station1Id, station3Id, 10).jsonPath().getLong("id");
+                지하철_구간_등록(lineId1, station2Id, station3Id, 1);
+
+                // when
+                ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(station1Id, station1Id);
+
+                // then
+                assertAll(() -> {
+                    assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(400);
+                });
+
+            }
+
+            @Test
+            @DisplayName("출발역과 도착역이 연결이 되어 있지 않은 경우, 400 Bad Request Error를 반환한다.")
+            void getPathFail2() {
+                // given
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long station3Id = 지하철_역_등록("구디역").jsonPath().getLong("id");
+                Long station4Id = 지하철_역_등록("군자역").jsonPath().getLong("id");
+                지하철_노선_등록("와우선", "green", 10, station1Id, station2Id, 10).jsonPath().getLong("id");
+                지하철_노선_등록("호우선", "blue", 20, station3Id, station4Id, 10).jsonPath().getLong("id");
+
+                // when
+                ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(station2Id, station4Id);
+
+                // then
+                assertAll(() -> {
+                    assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(400);
+                });
+
+            }
+
+            @Test
+            @DisplayName("존재하지 않은 출발역이나 도착역을 조회할 경우, 404 Not Found Error를 반환한다.")
+            void getPathFail3() {
+                // given
+                Long station1Id = 지하철_역_등록("강남역").jsonPath().getLong("id");
+                Long station2Id = 지하철_역_등록("성수역").jsonPath().getLong("id");
+                Long station3Id = 지하철_역_등록("구디역").jsonPath().getLong("id");
+                Long lineId1 = 지하철_노선_등록("와우선", "green", 10, station1Id, station2Id, 1).jsonPath().getLong("id");
+                지하철_노선_등록("호우선", "blue", 20, station1Id, station3Id, 10).jsonPath().getLong("id");
+                지하철_구간_등록(lineId1, station2Id, station3Id, 1);
+
+                // when
+                ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(1L, 4L);
+
+                // then
+                assertAll(() -> {
+                    assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(404);
+                });
+
+            }
+        }
 
 
     }
+
 }
