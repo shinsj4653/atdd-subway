@@ -193,34 +193,6 @@ public class Sections {
         return result;
     }
 
-    // 경로 조회를 위한 함수 - 출발지점과 도착지점까지의 경로에 있는 역 목록, 총 거리
-    public GraphPath<Station, DefaultWeightedEdge> getGraphPath(List<LineReadResponse> lines, Station startStation, Station endStation) {
-
-        WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph<>(DefaultWeightedEdge.class);
-        List<Station> stations = getOrderStations();
-
-        for (Station station : stations) {
-            graph.addVertex(station);
-        }
-
-        for (Station station : stations) {
-            Optional<Section> findSectionOptional = findMatchUpSection(station);
-
-            findSectionOptional.ifPresent(findSection ->
-                    graph.setEdgeWeight(
-                            graph.addEdge(findSection.getUpStation(), findSection.getDownStation()), findSection.getDistance())
-            );
-        }
-
-        DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
-
-        // 출발역과 도착역이 연결되어 있지 않은 경우 예외발생
-        validateStationExistInGraph(dijkstraShortestPath, startStation, endStation);
-
-        GraphPath<Station, DefaultWeightedEdge> path = dijkstraShortestPath.getPath(startStation, endStation);
-        return path;
-    }
-
 
     // 주어진 역을 이미 상행역으로 가지고 있는 구간 반환
     private Optional<Section> findMatchUpSection(Station upStation) {
@@ -299,16 +271,6 @@ public class Sections {
     private void validateSectionDeleteStationNotExist(Station deleteStation) {
         if (findMatchUpSection(deleteStation).isEmpty() && findMatchDownSection(deleteStation).isEmpty())
             throw new InvalidSectionDeleteStationNotExist();
-    }
-
-    //경로 조회 시, 출발역과 도착역이 연결이 되어 있지 않은 경우
-    private void validateStationExistInGraph(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
-                                       Station startStation, Station endStation) {
-        try {
-            dijkstraShortestPath.getPath(startStation, endStation);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidPathNotConnectedException();
-        }
     }
 
     // 하행 종점 제거인지 아닌지 판별해주는 함수
