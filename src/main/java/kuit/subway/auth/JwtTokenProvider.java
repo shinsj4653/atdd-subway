@@ -1,6 +1,8 @@
 package kuit.subway.auth;
 
 import io.jsonwebtoken.*;
+import kuit.subway.exception.unauthorized.InvalidTokenException;
+import kuit.subway.exception.unauthorized.TokenExpiredException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -36,9 +38,9 @@ public class JwtTokenProvider {
         try {
             jwtParser.parseClaimsJws(token);
         } catch (ExpiredJwtException e) {
-//            throw new TokenExpiredException();
+            throw new TokenExpiredException();
         } catch (JwtException e) {
-//            throw new InvalidTokenException();
+            throw new InvalidTokenException();
         }
     }
 
@@ -46,11 +48,11 @@ public class JwtTokenProvider {
         try {
             return jwtParser.parseClaimsJws(token).getBody().getSubject();
         } catch (ExpiredJwtException e) {
-//            throw new TokenExpiredException();
+            throw new TokenExpiredException();
         } catch (JwtException e) {
-//            throw new InvalidTokenException();
+            throw new InvalidTokenException();
         }
         // 임시
-        return "";
+        //return "";
     }
 }

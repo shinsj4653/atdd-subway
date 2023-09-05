@@ -26,6 +26,8 @@ public enum CustomExceptionContext implements ExceptionContext {
     INVALID_SECTION_DELETE_STATION_NOT_EXIST_ERROR("지하철 노선에 등록되어 있지 않은 역은 제거 불가", 1009),
 
     INVALID_BEARER_ERROR("유효하지 않은 Bearer 입니다.", 2010),
+    INVALID_TOKEN_ERROR("유효하지 않은 Token 입니다.", 2011),
+    TOKEN_EXPIRED_ERROR("이미 만료가 된 Token 입니다.", 2012),
 
     // NOT_FOUND
     NOT_FOUND_LINE_ERROR("존재하지 않는 노선입니다.", 2001),
