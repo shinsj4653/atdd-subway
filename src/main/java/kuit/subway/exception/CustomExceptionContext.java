@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum CustomExceptionContext implements ExceptionContext {
 
     // BAD_REQUEST
+    BLANK_TOKEN_ERROR("토큰이 비어있습니다.", 1010),
+
     INVALID_PATH_SAME_STATION_ERROR("출발역과 도착역이 같으면 안됩니다", 1010),
     INVALID_PATH_STATIONS_NOT_CONNECTED_ERROR("출발역과 도착역이 연결되어 있지 않습니다.", 1011),
 
@@ -22,6 +24,8 @@ public enum CustomExceptionContext implements ExceptionContext {
     INVALID_SECTION_DELETE_LAST_STATION_ERROR("지하철 노선에 등록된 역(하행 종점역)만 제거할 수 있다.", 1007),
     INVALID_SECTION_DELETE_ONLY_TWO_STATIONS_ERROR("지하철 노선에 상행 종점역과 하행 종점역만 있는 경우(구간이 1개인 경우) 역을 삭제할 수 없다.", 1008),
     INVALID_SECTION_DELETE_STATION_NOT_EXIST_ERROR("지하철 노선에 등록되어 있지 않은 역은 제거 불가", 1009),
+
+    INVALID_BEARER_ERROR("유효하지 않은 Bearer 입니다.", 2010),
 
     // NOT_FOUND
     NOT_FOUND_LINE_ERROR("존재하지 않는 노선입니다.", 2001),
