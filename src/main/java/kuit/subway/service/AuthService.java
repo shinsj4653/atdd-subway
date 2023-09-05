@@ -29,7 +29,7 @@ public class AuthService {
 
     private Member findMember(TokenRequest tokenRequest) {
         return memberRepository.findByEmail(tokenRequest.getEmail())
-                .orElseThrow(() -> new WrongEmailException());
+                .orElseThrow(() -> { throw new WrongEmailException(); });
     }
 
 }
