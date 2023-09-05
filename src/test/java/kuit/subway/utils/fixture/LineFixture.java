@@ -12,8 +12,4 @@ public class LineFixture {
     public static LineUpdateRequest 지하철_노선_수정_요청(String name, String color, int lineDistance) {
         return new LineUpdateRequest(name, color, lineDistance);
     }
-
-    public static PathReadRequest 지하철_경로_조회_요청(Long startStationId, Long endStationId) {
-        return new PathReadRequest(startStationId, endStationId);
-    }
 }

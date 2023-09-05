@@ -35,8 +35,7 @@ public class LineStep {
         return delete(LINE_PATH + "/" + id);
     }
     public static ExtractableResponse<Response> 지하철_노선_경로_조회(Long startStationId, Long endStationId) {
-        PathReadRequest req = 지하철_경로_조회_요청(startStationId, endStationId);
-        return post(LINE_PATH + "/path", req);
+        return get(LINE_PATH + "/path" + startStationId + "/" + endStationId);
     }
 
 
