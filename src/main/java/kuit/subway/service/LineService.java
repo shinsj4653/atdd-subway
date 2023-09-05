@@ -8,7 +8,7 @@ import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
-import kuit.subway.dto.response.common.LineReadResponse;
+import kuit.subway.dto.response.line.LineReadResponse;
 import kuit.subway.dto.response.line.*;
 import kuit.subway.exception.badrequest.line.InvalidPathSameStationException;
 import kuit.subway.exception.badrequest.station.InvalidLineStationException;

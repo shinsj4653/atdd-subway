@@ -1,4 +1,4 @@
-package kuit.subway.dto.request.auth;
+package kuit.subway.dto.response.auth;
 
 import lombok.Builder;
 import lombok.Getter;

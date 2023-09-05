@@ -1,19 +1,20 @@
-package kuit.subway.dto.response.auth;
+package kuit.subway.dto.response.member;
 
 import kuit.subway.domain.Member;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class MemberLoginResponse {
-
+@AllArgsConstructor
+public class MemberResponse {
     private Long id;
-    private int age;
+    private Integer age;
     private String email;
 
-    public static MemberLoginResponse of(Member member) {
-        return MemberLoginResponse.builder()
+    public static MemberResponse of(Member member) {
+        return MemberResponse.builder()
                 .id(member.getId())
                 .age(member.getAge())
                 .email(member.getEmail())

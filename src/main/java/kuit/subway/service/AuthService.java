@@ -3,11 +3,10 @@ package kuit.subway.service;
 import kuit.subway.auth.JwtTokenProvider;
 import kuit.subway.domain.Member;
 import kuit.subway.dto.request.auth.TokenRequest;
-import kuit.subway.dto.request.auth.TokenResponse;
-import kuit.subway.dto.response.auth.MemberLoginResponse;
+import kuit.subway.dto.response.auth.TokenResponse;
+import kuit.subway.dto.response.member.MemberResponse;
 import kuit.subway.exception.notfound.member.NotFoundMemberException;
 import kuit.subway.exception.unauthorized.InvalidPasswordException;
-import kuit.subway.exception.unauthorized.InvalidTokenException;
 import kuit.subway.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,14 +35,14 @@ public class AuthService {
                 .orElseThrow(() -> { throw new NotFoundMemberException(); });
     }
 
-    public MemberLoginResponse findLoginMemberByToken(String token) {
+    public MemberResponse findLoginMemberByToken(String token) {
         Long id = Long.valueOf(jwtTokenProvider.getPayload(token));
         Optional<Member> findMemberOptional = memberRepository.findById(id);
 
         if (findMemberOptional.isEmpty()) {
             throw new NotFoundMemberException();
         }
-        return MemberLoginResponse.of(findMemberOptional.get());
+        return MemberResponse.of(findMemberOptional.get());
     }
 
 }

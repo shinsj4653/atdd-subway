@@ -1,4 +1,4 @@
-package kuit.subway.dto.response.common;
+package kuit.subway.dto.response.line;
 
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Station;
