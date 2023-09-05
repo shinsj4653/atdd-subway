@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    @Transactional
     public MemberResponse createMember(MemberRequest request) {
         Member member = memberRepository.save(request.toMember());
         return MemberResponse.of(member);
@@ -36,12 +37,14 @@ public class MemberService {
         return MemberResponse.of(member);
     }
 
+    @Transactional
     public MemberResponse updateMember(Long id, MemberRequest memberRequest) {
         Member member = validateMemberExist(id);
         member.updateMember(memberRequest.toMember());
         return new MemberResponse(id, memberRequest.getAge(), memberRequest.getEmail());
     }
 
+    @Transactional
     public MemberResponse deleteMember(Long id) {
         Member member = validateMemberExist(id);
         memberRepository.delete(member);
