@@ -149,7 +149,7 @@ public class LineService {
 
         Graph graph = new Graph(lines);
 
-        return graph.shortestPath(startStation, endStation);
+        return graph.getShortestPath(startStation, endStation);
     }
 
     // 존재하는 역인지 판별해주는 함수

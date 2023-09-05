@@ -44,7 +44,7 @@ public class Graph {
     }
     
     // 그래프 경로 조회 응답 DTO 생성 함수
-    public PathReadResponse shortestPath(Station startStation, Station endStation) {
+    public PathReadResponse getShortestPath(Station startStation, Station endStation) {
         DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath = new DijkstraShortestPath<>(graph);
 
         // 경로 조회시, 출발역과 도착역이 연결되어 있지 않은 경우 판별
