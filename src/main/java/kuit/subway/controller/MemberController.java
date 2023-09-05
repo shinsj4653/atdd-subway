@@ -28,6 +28,10 @@ public class MemberController {
         return ResponseEntity.created(URI.create("/members/" + res.getId()))
                 .body(res);
     }
+    @GetMapping()
+    public ResponseEntity<List<MemberResponse>> findAllMembers() {
+        return ResponseEntity.ok(memberService.findAllMembers());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<MemberResponse> findMember(@PathVariable("id") Long memberId) {

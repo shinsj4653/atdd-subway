@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,13 @@ public class MemberService {
     public MemberResponse createMember(MemberRequest request) {
         Member member = memberRepository.save(request.toMember());
         return MemberResponse.of(member);
+    }
+
+    public List<MemberResponse> findAllMembers() {
+        List<Member> members = memberRepository.findAll();
+        return members.stream()
+                .map(MemberResponse::of)
+                .collect(Collectors.toList());
     }
 
     public MemberResponse findMember(Long id) {
