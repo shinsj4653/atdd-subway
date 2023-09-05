@@ -50,15 +50,11 @@ public class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 지하철_노선_조회_성공_결과 = 지하철_노선_식별자로_조회(lineId);
 
         // then
-        assertAll(
-                // 존재하지 않는 노선 조회 시 에러
-                () -> {
-                    assertEquals(404, 지하철_노선_조회_실패_결과.statusCode());
-                },
-                () -> {
-                    assertEquals(200, 지하철_노선_조회_성공_결과.statusCode());
-                }
-        );
+        assertAll(() -> {
+            // 존재하지 않는 노선 조회 시 에러
+            assertEquals(404, 지하철_노선_조회_실패_결과.statusCode());
+            assertEquals(200, 지하철_노선_조회_성공_결과.statusCode());
+        });
     }
 
     @Test
@@ -76,14 +72,10 @@ public class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 지하철_노선_전체목록_조회_결과 = 지하철_노선_전체목록_조회();
 
         // then
-        assertAll(
-                () -> {
-                    assertEquals(2, 지하철_노선_전체목록_조회_결과.jsonPath().getList("").size());
-                },
-                () -> {
-                    assertEquals(200, 지하철_노선_전체목록_조회_결과.statusCode());
-                }
-        );
+        assertAll(() -> {
+            assertEquals(2, 지하철_노선_전체목록_조회_결과.jsonPath().getList("").size());
+            assertEquals(200, 지하철_노선_전체목록_조회_결과.statusCode());
+        });
     }
 
     @Test
@@ -101,15 +93,11 @@ public class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 지하철_노선_수정_성공_결과 = 지하철_노선_수정(lineId, "신분당선", "red", 15);
 
         // then
-        assertAll(
-                // 존재하지 않는 노선 조회 시 에러
-                () -> {
-                    assertEquals(404, 지하철_노선_수정_실패_결과.statusCode());
-                },
-                () -> {
-                    assertEquals(200, 지하철_노선_수정_성공_결과.statusCode());
-                }
-        );
+        assertAll(() -> {
+            // 존재하지 않는 노선 조회 시 에러
+            assertEquals(404, 지하철_노선_수정_실패_결과.statusCode());
+            assertEquals(200, 지하철_노선_수정_성공_결과.statusCode());
+        });
     }
 
     @Test
@@ -126,15 +114,13 @@ public class LineAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> 지하철_노선_삭제_성공_결과 = 지하철_노선_삭제(lineId);
 
         // then
-        assertAll(
-                // 존재하지 않는 노선 조회 시 에러
-                () -> {
-                    assertEquals(404, 지하철_노선_삭제_실패_결과.statusCode());
-                },
-                () -> {
-                    assertEquals(200, 지하철_노선_삭제_성공_결과.statusCode());
-                }
-        );
+        assertAll(() -> {
+            // 존재하지 않는 노선 조회 시 에러
+            assertEquals(404, 지하철_노선_삭제_실패_결과.statusCode());
+            assertEquals(200, 지하철_노선_삭제_성공_결과.statusCode());
+        });
+
+
     }
 
     @Nested
@@ -160,16 +146,12 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
                 // then
                 assertAll(() -> {
-
                     assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(200);
-
                     assertThat(지하철_노선_경로_조회_결과.jsonPath().getList("stations")).hasSize(3)
-                            .extracting("name")
-                            .containsExactly("강남역", "성수역", "구디역");
-
+                                            .extracting("name")
+                                            .containsExactly("강남역", "성수역", "구디역");
                     assertThat(지하철_노선_경로_조회_결과.jsonPath().getDouble("totalDistance")).isEqualTo(2.0);
                 });
-
             }
         }
 
@@ -191,9 +173,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(station1Id, station1Id);
 
                 // then
-                assertAll(() -> {
-                    assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(400);
-                });
+                assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(400);
 
             }
 
@@ -212,10 +192,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(station2Id, station4Id);
 
                 // then
-                assertAll(() -> {
-                    assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(400);
-                });
-
+                assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(400);
             }
 
             @Test
@@ -233,10 +210,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> 지하철_노선_경로_조회_결과 = 지하철_노선_경로_조회(1L, 4L);
 
                 // then
-                assertAll(() -> {
-                    assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(404);
-                });
-
+                assertThat(지하철_노선_경로_조회_결과.statusCode()).isEqualTo(404);
             }
         }
 
