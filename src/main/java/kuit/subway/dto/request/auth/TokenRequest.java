@@ -1,15 +1,14 @@
 package kuit.subway.dto.request.auth;
 
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class TokenRequest {
     private String email;
     private String password;
-
-    public TokenRequest(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
 }

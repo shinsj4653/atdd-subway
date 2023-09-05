@@ -21,6 +21,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public TokenResponse createToken(TokenRequest tokenRequest) {
         Member member = findMember(tokenRequest);
         if (member.isInvalidPassword(tokenRequest.getPassword())) {
@@ -32,7 +33,7 @@ public class AuthService {
 
     private Member findMember(TokenRequest tokenRequest) {
         return memberRepository.findByEmail(tokenRequest.getEmail())
-                .orElseThrow(() -> { throw new NotFoundMemberException(); });
+                .orElseThrow(() -> new NotFoundMemberException());
     }
 
     public MemberResponse findLoginMemberByToken(String token) {

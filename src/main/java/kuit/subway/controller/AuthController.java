@@ -1,14 +1,14 @@
 package kuit.subway.controller;
 
+import kuit.subway.domain.Member;
 import kuit.subway.dto.request.auth.TokenRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
+import kuit.subway.dto.response.member.MemberResponse;
 import kuit.subway.service.AuthService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,4 +21,11 @@ public class AuthController {
         TokenResponse tokenResponse = authService.createToken(request);
         return ResponseEntity.ok().body(tokenResponse);
     }
+
+    @GetMapping("/member/{token}")
+    public ResponseEntity<MemberResponse> findLoginMemberByToken(@PathVariable("token") String token) {
+        MemberResponse memberResponse = authService.findLoginMemberByToken(token);
+        return ResponseEntity.ok().body(memberResponse);
+    }
+
 }
