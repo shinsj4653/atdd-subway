@@ -10,4 +10,8 @@ public class MemberRequest {
     private Integer age;
     private String email;
     private String password;
+
+    public Member toMember() {
+        return new Member(age, email, password);
+    }
 }

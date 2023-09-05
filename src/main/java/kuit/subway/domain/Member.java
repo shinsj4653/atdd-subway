@@ -8,7 +8,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member {
@@ -20,12 +19,16 @@ public class Member {
     private String email;
     private String password;
 
-    public static Member of(Member member) {
-        return Member.builder()
-                .age(member.age)
-                .email(member.email)
-                .password(member.password)
-                .build();
+    public Member(Integer age, String email, String password) {
+        this.age = age;
+        this.email = email;
+        this.password = password;
+    }
+
+    public void updateMember(Member member) {
+        this.age = member.getAge();
+        this.email = member.getEmail();
+        this.password = member.getPassword();
     }
 
     public boolean isInvalidPassword(String password) {

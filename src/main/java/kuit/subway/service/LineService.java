@@ -90,6 +90,7 @@ public class LineService {
 
         // 존재하지 않는 노선을 삭제하려고 할시, 예외처리
         Line line = validateLineExist(id);
+        lineRepository.delete(line);
         return LineDeleteResponse.of(line);
     }
 
