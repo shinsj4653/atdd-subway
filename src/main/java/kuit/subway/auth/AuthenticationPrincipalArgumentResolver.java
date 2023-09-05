@@ -1,6 +1,7 @@
 package kuit.subway.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kuit.subway.domain.Member;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -30,6 +31,9 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         // Hint : Authorization Extractor, JwtTokenProvider 이용
+        String token = AuthorizationExtractor.extractAccessToken((HttpServletRequest) webRequest.getNativeRequest());
+
+
         return 1L;
     }
 }
