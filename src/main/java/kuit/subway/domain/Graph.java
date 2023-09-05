@@ -3,29 +3,38 @@ package kuit.subway.domain;
 import kuit.subway.dto.response.line.PathReadResponse;
 import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.WeightedMultigraph;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Builder
+@AllArgsConstructor
 public class Graph {
+
     private final WeightedMultigraph<Station, DefaultWeightedEdge> graph = new WeightedMultigraph(DefaultWeightedEdge.class);
 
-    public Graph(List<Line> lines) {
-        for (Line line : lines) {
-            List<Section> sections = line.getSections();
-            initPath(sections);
-        }
+    @Builder.Default
+    private List<Line> lines = new ArrayList<>();
+
+    public static Graph of(List<Line> allLines) {
+        return Graph.builder()
+                .lines(allLines)
+                .build();
     }
 
     // 경로 초기화
-    private void initPath(List<Section> sections) {
-        for (Section section : sections) {
-            initEdge(section);
+    public void initPath() {
+        for (Line line : lines) {
+            List<Section> sections = line.getSections();
+            for (Section section : sections) {
+                initEdge(section);
+            }
         }
     }
 
@@ -60,9 +69,17 @@ public class Graph {
     // 출발역과 도착역이 연결되어 있지 않은 경우, 예외 발생
     private void validateStationExistInGraph(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
                                              Station startStation, Station endStation) {
-
-        if (dijkstraShortestPath.getPath(startStation, endStation) == null)
+        try {
+            if (dijkstraShortestPath.getPath(startStation, endStation) == null){
+                System.out.println("노선끼리 서로 연결안되어 있는 경우");
+                throw new InvalidPathNotConnectedException();
+            }
+                
+        } catch (IllegalArgumentException e) {
+            System.out.println("역은 생성되어 있지만, 노선에는 포함되어 있지 않다.");
             throw new InvalidPathNotConnectedException();
+        }
+
     }
 
 }

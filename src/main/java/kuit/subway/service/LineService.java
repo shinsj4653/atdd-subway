@@ -148,6 +148,7 @@ public class LineService {
 //        List<Section> mergedSectionList = new ArrayList<>(set);
 
         Graph graph = new Graph(lines);
+        graph.initPath();
 
         return graph.getShortestPath(startStation, endStation);
     }
