@@ -3,13 +3,13 @@ package kuit.subway.study.auth;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.domain.Member;
-import kuit.subway.utils.step.AuthStep;
-import kuit.subway.utils.step.MemberStep;
+import kuit.subway.dto.response.auth.TokenResponse;
 import org.junit.jupiter.api.*;
 
 import static kuit.subway.utils.step.AuthStep.로그인_회원_토근_생성;
+import static kuit.subway.utils.step.MemberStep.내_회원_정보_요청;
 import static kuit.subway.utils.step.MemberStep.회원_생성;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("로그인 및 개인정보 조회 인수 테스트")
 public class AuthAcceptanceTest extends AcceptanceTest {
@@ -41,7 +41,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> 토큰_생성_결과 = 로그인_회원_토근_생성(email, password);
 
                 // then
-                Assertions.assertEquals(201, 토큰_생성_결과.statusCode());
+                assertEquals(201, 토큰_생성_결과.statusCode());
             }
 
         }
@@ -62,7 +62,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> 로그인_결과 = 로그인_회원_토근_생성(email, password);
 
                 // then
-                Assertions.assertEquals(404, 로그인_결과.statusCode());
+                assertEquals(404, 로그인_결과.statusCode());
             }
 
             @Test
@@ -77,12 +77,52 @@ public class AuthAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> 로그인_결과 = 로그인_회원_토근_생성(email, password);
 
                 // then
-                Assertions.assertEquals(401, 로그인_결과.statusCode());
+                assertEquals(401, 로그인_결과.statusCode());
             }
 
         }
     }
 
     @Nested
-    @DisplayName("")
+    @DisplayName("내 정보 조회 인수 테스트")
+    class GetMyInfo {
+
+        TokenResponse token;
+        @BeforeEach
+        void setUp() {
+            회원_생성(20, "shin@gmail.com", "123");
+            ExtractableResponse<Response> tokenRes = 로그인_회원_토근_생성("shin@gmail.com", "123");
+            token = tokenRes.as(TokenResponse.class);
+        }
+
+        @Nested
+        @DisplayName("정보 조회 성공")
+        class SuccessCase {
+
+            @Test
+            @DisplayName("로그인 시 생성된 토큰을 이용하여 내 정보 조회")
+            void getMyInfoSuccess() {
+
+                // given
+                ExtractableResponse<Response> 내_회원_정보_요청_결과 = 내_회원_정보_요청(token);
+
+                // when
+                // then
+                assertAll(() -> {
+                    assertEquals(200, 내_회원_정보_요청_결과.statusCode());
+                    assertEquals(20, 내_회원_정보_요청_결과.jsonPath().getInt("age"));
+                    assertEquals("shin@gmail.com", 내_회원_정보_요청_결과.jsonPath().getString("email"));
+                });
+            }
+
+
+        }
+
+        @Nested
+        @DisplayName("정보 조회 실패")
+        class FailCase {
+
+        }
+
+    }
 }

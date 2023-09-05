@@ -3,11 +3,9 @@ package kuit.subway.utils.step;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.dto.request.auth.TokenRequest;
-import kuit.subway.dto.request.line.LineCreateRequest;
 
 import static kuit.subway.study.common.CommonRestAssured.post;
 import static kuit.subway.utils.fixture.AuthFixture.토큰_생성_요청;
-import static kuit.subway.utils.fixture.LineFixture.지하철_노선_생성_요청;
 
 public class AuthStep {
 
@@ -18,5 +16,7 @@ public class AuthStep {
         TokenRequest req = 토큰_생성_요청(email, password);
         return post(LOGIN_PATH + "/token", req);
     }
+
+
 
 }
