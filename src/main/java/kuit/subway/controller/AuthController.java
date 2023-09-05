@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/login")
@@ -19,6 +21,6 @@ public class AuthController {
     @PostMapping("/token")
     public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest request) {
         TokenResponse tokenResponse = authService.createToken(request);
-        return ResponseEntity.ok().body(tokenResponse);
+        return ResponseEntity.created(URI.create("/token")).body(tokenResponse);
     }
 }
