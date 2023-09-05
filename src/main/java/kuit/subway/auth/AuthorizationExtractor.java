@@ -24,15 +24,11 @@ public class AuthorizationExtractor {
                 return extractToken;
             }
         }
-        // TODO : 예외 처리
         throw new InvalidBearerException();
-        // 임시
-        //return "";
     }
 
     private static void validateExtractToken(String extractToken) {
         if (extractToken.isBlank()) {
-            // TODO : 예외 처리
             throw new BlankTokenException();
         }
     }
