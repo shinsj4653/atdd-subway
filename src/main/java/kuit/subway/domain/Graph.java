@@ -70,13 +70,13 @@ public class Graph {
     private void validateStationExistInGraph(DijkstraShortestPath<Station, DefaultWeightedEdge> dijkstraShortestPath,
                                              Station startStation, Station endStation) {
         try {
+            // 노선끼리 서로 연결되어 있지 않은 경우
             if (dijkstraShortestPath.getPath(startStation, endStation) == null){
-                System.out.println("노선끼리 서로 연결안되어 있는 경우");
                 throw new InvalidPathNotConnectedException();
             }
                 
         } catch (IllegalArgumentException e) {
-            System.out.println("역은 생성되어 있지만, 노선에는 포함되어 있지 않다.");
+            // 역은 생성되어 있지만, 노선에는 포함되어 있지 않다.
             throw new InvalidPathNotConnectedException();
         }
 
