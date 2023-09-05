@@ -2,7 +2,6 @@ package kuit.subway.utils.fixture;
 
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.request.line.PathReadRequest;
 
 public class LineFixture {
 

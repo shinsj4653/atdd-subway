@@ -2,7 +2,6 @@ package kuit.subway.controller;
 
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.request.line.PathReadRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.*;
@@ -67,9 +66,9 @@ public class LineController {
         return ResponseEntity.ok().body(res);
     }
 
-    @PostMapping("/path")
-    public ResponseEntity<PathReadResponse> getPath(@RequestBody PathReadRequest req) {
-        return ResponseEntity.ok(lineService.findPath(req));
+    @GetMapping("/path/{startStationId}/{endStationId}")
+    public ResponseEntity<PathReadResponse> getPath(@PathVariable("startStationId") Long startStationId, @PathVariable("endStationId") Long endStationId) {
+        return ResponseEntity.ok(lineService.findPath(startStationId, endStationId));
     }
 
 }

@@ -4,7 +4,6 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.request.line.PathReadRequest;
 
 import static kuit.subway.study.common.CommonRestAssured.*;
 import static kuit.subway.utils.fixture.LineFixture.*;

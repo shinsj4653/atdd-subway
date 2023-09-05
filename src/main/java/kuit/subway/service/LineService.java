@@ -6,7 +6,6 @@ import kuit.subway.domain.Section;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.request.line.PathReadRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
 import kuit.subway.dto.response.line.*;
@@ -20,15 +19,10 @@ import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.SectionRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
-import org.jgrapht.GraphPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -136,14 +130,14 @@ public class LineService {
         return SectionDeleteResponse.of(line);
     }
 
-    public PathReadResponse findPath(PathReadRequest req) {
+    public PathReadResponse findPath(Long startStationId, Long endStationId) {
 
         // 존재하지 않는 역을 경로 조회 요청으로 사용시 예외발생
-        Station startStation = validateStationExist(req.getStartStationId());
-        Station endStation = validateStationExist(req.getEndStationId());
+        Station startStation = validateStationExist(startStationId);
+        Station endStation = validateStationExist(endStationId);
 
         // 출발역과 도착역이 같을 때 예외발생
-        validateFindPathSameStations(req.getStartStationId(), req.getEndStationId());
+        validateFindPathSameStations(startStationId, endStationId);
 
         // 경로 조회 -> 모든 노선들이 하나의 그래프 형태로 되어 있어야 한다
         List<Line> lines = lineRepository.findAll();

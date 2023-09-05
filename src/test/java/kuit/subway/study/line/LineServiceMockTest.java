@@ -5,7 +5,6 @@ import kuit.subway.domain.Section;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
-import kuit.subway.dto.request.line.PathReadRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.response.line.*;
 import kuit.subway.dto.response.station.StationReadResponse;
@@ -26,7 +25,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -384,9 +382,7 @@ public class LineServiceMockTest {
                 lineService.addSection(1L, new SectionCreateRequest(2L, 3L, 10));
 
                 // when
-
-                PathReadRequest req = new PathReadRequest(1L, 3L);
-                PathReadResponse res = lineService.findPath(req);
+                PathReadResponse res = lineService.findPath(1L, 3L);
 
                 StationReadResponse stationRes1 = res.getStations().get(0);
                 StationReadResponse stationRes2 = res.getStations().get(1);
@@ -419,10 +415,9 @@ public class LineServiceMockTest {
                 // when
                 lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
                 lineService.addSection(1L, new SectionCreateRequest(2L, 3L, 10));
-                PathReadRequest req = new PathReadRequest(1L, 1L);
 
                 // then
-                assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(InvalidPathSameStationException.class);
+                assertThatThrownBy(() -> lineService.findPath(1L, 1L)).isInstanceOf(InvalidPathSameStationException.class);
                 verify(lineRepository, times(2)).findById(anyLong());
                 verify(stationRepository, times(6)).findById(anyLong());
             }
@@ -446,10 +441,8 @@ public class LineServiceMockTest {
                 given(lineRepository.findAll()).willReturn(Arrays.asList(line1, line2));
 
                 // when
-                PathReadRequest req = new PathReadRequest(1L, 4L);
-
                 // then
-                assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(InvalidPathNotConnectedException.class);
+                assertThatThrownBy(() -> lineService.findPath(1L, 4L)).isInstanceOf(InvalidPathNotConnectedException.class);
                 verify(lineRepository, times(2)).findById(anyLong());
                 verify(stationRepository, times(6)).findById(anyLong());
             }
@@ -465,10 +458,9 @@ public class LineServiceMockTest {
 
                 // when
                 lineService.addSection(1L, new SectionCreateRequest(1L, 2L, 10));
-                PathReadRequest req = new PathReadRequest(1L, 3L);
 
                 // then
-                assertThatThrownBy(() -> lineService.findPath(req)).isInstanceOf(NotFoundStationException.class);
+                assertThatThrownBy(() -> lineService.findPath(1L, 3L)).isInstanceOf(NotFoundStationException.class);
                 verify(lineRepository, times(1)).findById(anyLong());
                 verify(stationRepository, times(4)).findById(anyLong());
             }
