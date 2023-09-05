@@ -29,13 +29,13 @@ public enum CustomExceptionContext implements ExceptionContext {
     NOT_FOUND_LINE_ERROR("존재하지 않는 노선입니다.", 2001),
     NOT_FOUND_SECTION_HAVING_CYCLE_ERROR("해당 노선에 사이클이 존재합니다.", 2002),
     NOT_FOUND_STATION_ERROR("존재하지 않는 역입니다.", 2003),
+    NOT_FOUND_MEMBER_ERROR("존재하지 않는 회원입니다.", 2004),
 
     // UNAUTHORIZED
     INVALID_BEARER_ERROR("로그인이 필요한 서비스입니다.", 2010),
     INVALID_TOKEN_ERROR("유효하지 않은 Token 입니다. 다시 로그인 해주세요.", 2011),
     TOKEN_EXPIRED_ERROR("로그인 인증 유효기간이 만료되었습니다. 다시 로그인 해주세요.", 2012),
-    WRONG_EMAIL_ERROR("로그인에 실패하셨습니다. 이메일을 다시 확인해주세요.", 2021),
-    WRONG_PW_ERROR("로그인에 실패하셨습니다. 비밀번호를 다시 확인해주세요.", 2020);
+    INVALID_PW_ERROR("로그인에 실패하셨습니다. 비밀번호를 다시 확인해주세요.", 2020);
 
 
 

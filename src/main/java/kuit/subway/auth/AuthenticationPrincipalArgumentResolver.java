@@ -1,7 +1,9 @@
 package kuit.subway.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kuit.subway.domain.Member;
+
+import kuit.subway.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -9,15 +11,12 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-
 @Component
+@RequiredArgsConstructor
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
 
+    private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
-
-    public AuthenticationPrincipalArgumentResolver(final JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
 
     // LoginUserId 어노테이션이 붙은 파라미터를 가져온다.
     @Override
@@ -31,9 +30,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         // Hint : Authorization Extractor, JwtTokenProvider 이용
-        String token = AuthorizationExtractor.extractAccessToken((HttpServletRequest) webRequest.getNativeRequest());
-
-
-        return 1L;
+        String token = AuthorizationExtractor.extractAccessToken(request);
+        return authService.findLoginMemberByToken(token);
     }
 }
