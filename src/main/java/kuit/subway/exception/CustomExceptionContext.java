@@ -25,9 +25,9 @@ public enum CustomExceptionContext implements ExceptionContext {
     INVALID_SECTION_DELETE_ONLY_TWO_STATIONS_ERROR("지하철 노선에 상행 종점역과 하행 종점역만 있는 경우(구간이 1개인 경우) 역을 삭제할 수 없다.", 1008),
     INVALID_SECTION_DELETE_STATION_NOT_EXIST_ERROR("지하철 노선에 등록되어 있지 않은 역은 제거 불가", 1009),
 
-    INVALID_BEARER_ERROR("유효하지 않은 Bearer 입니다.", 2010),
-    INVALID_TOKEN_ERROR("유효하지 않은 Token 입니다.", 2011),
-    TOKEN_EXPIRED_ERROR("이미 만료가 된 Token 입니다.", 2012),
+    INVALID_BEARER_ERROR("로그인이 필요한 서비스입니다.", 2010),
+    INVALID_TOKEN_ERROR("유효하지 않은 Token 입니다. 다시 로그인 해주세요.", 2011),
+    TOKEN_EXPIRED_ERROR("로그인 인증 유효기간이 만료되었습니다. 다시 로그인 해주세요.", 2012),
 
     // NOT_FOUND
     NOT_FOUND_LINE_ERROR("존재하지 않는 노선입니다.", 2001),
