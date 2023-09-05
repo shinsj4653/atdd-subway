@@ -27,4 +27,8 @@ public class Member {
                 .password(member.password)
                 .build();
     }
+
+    public boolean isInvalidPassword(String password) {
+        return !this.password.equals(password);
+    }
 }
