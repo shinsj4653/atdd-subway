@@ -3,6 +3,7 @@ package kuit.subway.service;
 import kuit.subway.domain.Member;
 import kuit.subway.dto.request.member.MemberRequest;
 import kuit.subway.dto.response.member.MemberResponse;
+import kuit.subway.exception.badrequest.member.DuplicateEmailException;
 import kuit.subway.exception.notfound.member.NotFoundMemberException;
 import kuit.subway.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +21,10 @@ public class MemberService {
 
     @Transactional
     public MemberResponse createMember(MemberRequest request) {
+
+        // 중복되는 이메일이면 예외 발생
+        validateSameEmail(request);
+
         Member member = memberRepository.save(request.toMember());
         return MemberResponse.of(member);
     }
@@ -54,5 +58,10 @@ public class MemberService {
     private Member validateMemberExist(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundMemberException());
+    }
+
+    private void validateSameEmail(MemberRequest request) {
+        memberRepository.findByEmail(request.getEmail())
+                .ifPresent(findMember -> { throw new DuplicateEmailException(); });
     }
 }

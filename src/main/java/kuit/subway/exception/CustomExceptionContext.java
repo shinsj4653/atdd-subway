@@ -10,6 +10,8 @@ public enum CustomExceptionContext implements ExceptionContext {
     // BAD_REQUEST
     BLANK_TOKEN_ERROR("토큰이 비어있습니다.", 1010),
 
+    DUPLICATE_EMAIL_ERROR("중복되는 이메일입니다. 다른 이메일로 가입해주세요.", 1020),
+
     INVALID_PATH_SAME_STATION_ERROR("출발역과 도착역이 같으면 안됩니다", 1010),
     INVALID_PATH_STATIONS_NOT_CONNECTED_ERROR("출발역과 도착역이 연결되어 있지 않습니다.", 1011),
 

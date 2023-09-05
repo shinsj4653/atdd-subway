@@ -82,4 +82,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
         }
     }
+
+    @Nested
+    @DisplayName("")
 }
