@@ -1,5 +1,7 @@
 package kuit.subway.controller;
 
+import kuit.subway.auth.LoginUserId;
+import kuit.subway.domain.Member;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.member.MemberRequest;
@@ -46,5 +48,10 @@ public class MemberController {
     @DeleteMapping("/{id}")
     public ResponseEntity<MemberResponse> deleteMember(@PathVariable("id") Long memberId) {
         return ResponseEntity.ok(memberService.deleteMember(memberId));
+    }
+
+    @GetMapping("/myinfo")
+    public ResponseEntity<MemberResponse> findMyMemberInfo(@LoginUserId MemberResponse memberResponse) {
+        return ResponseEntity.ok(memberResponse);
     }
 }

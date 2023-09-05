@@ -21,11 +21,4 @@ public class AuthController {
         TokenResponse tokenResponse = authService.createToken(request);
         return ResponseEntity.ok().body(tokenResponse);
     }
-
-    @GetMapping("/member/{token}")
-    public ResponseEntity<MemberResponse> findLoginMemberByToken(@PathVariable("token") String token) {
-        MemberResponse memberResponse = authService.findLoginMemberByToken(token);
-        return ResponseEntity.ok().body(memberResponse);
-    }
-
 }
