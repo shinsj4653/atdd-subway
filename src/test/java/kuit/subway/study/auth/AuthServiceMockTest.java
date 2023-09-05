@@ -4,6 +4,7 @@ import kuit.subway.auth.JwtTokenProvider;
 import kuit.subway.domain.Member;
 import kuit.subway.dto.request.auth.TokenRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
+import kuit.subway.dto.response.member.MemberResponse;
 import kuit.subway.repository.MemberRepository;
 import kuit.subway.service.AuthService;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -57,6 +59,36 @@ public class AuthServiceMockTest {
 
                 // then
                 assertThat(token.getAccessToken()).isNotBlank();
+            }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("로그인 후, 회원 정보 조회 Mock 테스트")
+    class GetMyMemberInfo {
+
+        @Nested
+        @DisplayName("정상 케이스")
+        class SuccessCase {
+            @Test
+            @DisplayName("로그인 시 생성된 토큰을 이용하여 내 정보 조회")
+            void getMyMemberInfoSuccess() {
+
+                // given
+                Member member = new Member(AGE, EMAIL, PASSWORD);
+                given(memberRepository.findByEmail(anyString())).willReturn(Optional.of(member));
+                given(jwtTokenProvider.createToken(member.getId())).willReturn("TOKEN");
+
+                // when
+                MemberResponse findMember = authService.findLoginMemberByToken("TOKEN");
+
+                // then
+                assertAll(() -> {
+                    assertThat(findMember.getEmail()).isEqualTo(EMAIL);
+                    assertThat(findMember.getEmail()).isEqualTo(EMAIL);
+                });
+
             }
         }
 
