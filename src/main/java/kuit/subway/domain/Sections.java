@@ -3,8 +3,6 @@ package kuit.subway.domain;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
-import kuit.subway.dto.response.line.LineReadResponse;
-import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothExistException;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateBothNotExistExcpetion;
 import kuit.subway.exception.badrequest.section.create.InvalidSectionCreateLengthLongerException;
@@ -12,10 +10,6 @@ import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteOnlyT
 import kuit.subway.exception.badrequest.section.delete.InvalidSectionDeleteStationNotExist;
 import kuit.subway.exception.notfound.section.NotFoundSectionHavingCycleException;
 import lombok.Getter;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jgrapht.graph.WeightedMultigraph;
 
 import java.util.*;
 import java.util.stream.Collectors;

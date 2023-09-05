@@ -4,9 +4,8 @@ import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
 import kuit.subway.dto.request.section.SectionDeleteRequest;
+import kuit.subway.dto.response.common.LineReadResponse;
 import kuit.subway.dto.response.line.*;
-import kuit.subway.dto.response.section.SectionCreateResponse;
-import kuit.subway.dto.response.section.SectionDeleteResponse;
 import kuit.subway.service.LineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +41,7 @@ public class LineController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<LineUpdateResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineUpdateRequest req) {
+    public ResponseEntity<LineReadResponse> updateLine(@PathVariable("id") Long id, @RequestBody LineUpdateRequest req) {
         return ResponseEntity.ok(lineService.updateLine(id, req));
     }
 
@@ -52,17 +51,17 @@ public class LineController {
     }
 
     @PostMapping("/{id}/sections")
-    public ResponseEntity<SectionCreateResponse> addSection(@PathVariable("id") Long lineId, @RequestBody SectionCreateRequest request) {
+    public ResponseEntity<LineReadResponse> addSection(@PathVariable("id") Long lineId, @RequestBody SectionCreateRequest request) {
 
-        SectionCreateResponse res = lineService.addSection(lineId, request);
+        LineReadResponse res = lineService.addSection(lineId, request);
         return ResponseEntity.created(URI.create("/sections/" + res.getId()))
                 .body(res);
     }
 
     @DeleteMapping("/{id}/sections")
-    public ResponseEntity<SectionDeleteResponse> deleteSection(@PathVariable("id") Long lineId, @RequestBody SectionDeleteRequest request) {
+    public ResponseEntity<LineReadResponse> deleteSection(@PathVariable("id") Long lineId, @RequestBody SectionDeleteRequest request) {
 
-        SectionDeleteResponse res = lineService.deleteSection(lineId, request);
+        LineReadResponse res = lineService.deleteSection(lineId, request);
         return ResponseEntity.ok().body(res);
     }
 

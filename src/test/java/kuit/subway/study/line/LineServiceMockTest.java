@@ -6,6 +6,7 @@ import kuit.subway.domain.Station;
 import kuit.subway.dto.request.line.LineCreateRequest;
 import kuit.subway.dto.request.line.LineUpdateRequest;
 import kuit.subway.dto.request.section.SectionCreateRequest;
+import kuit.subway.dto.response.common.LineReadResponse;
 import kuit.subway.dto.response.line.*;
 import kuit.subway.dto.response.station.StationReadResponse;
 import kuit.subway.exception.badrequest.line.InvalidPathNotConnectedException;
@@ -260,7 +261,7 @@ public class LineServiceMockTest {
 
                 // when
                 LineUpdateRequest req = new LineUpdateRequest("경춘선", "blue", 15);
-                LineUpdateResponse res = lineService.updateLine(line.getId(), req);
+                LineReadResponse res = lineService.updateLine(line.getId(), req);
 
                 // then
                 assertThat(res).isNotNull();

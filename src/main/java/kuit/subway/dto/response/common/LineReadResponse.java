@@ -1,14 +1,19 @@
-package kuit.subway.dto.response.line;
+package kuit.subway.dto.response.common;
 
 import kuit.subway.domain.Line;
+import kuit.subway.domain.Station;
 import kuit.subway.dto.response.station.StationReadResponse;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class LineReadResponse {
     private Long id;
     private String name;
@@ -23,8 +28,14 @@ public class LineReadResponse {
                 .id(line.getId())
                 .name(line.getName())
                 .color(line.getColor())
-                .stations(line.getStationReadResponseList())
+                .stations(getStationDtos(line.getStations()))
                 .distance(line.getDistance())
                 .build();
+    }
+
+    private static List<StationReadResponse> getStationDtos(List<Station> stations) {
+        return stations.stream()
+                .map(StationReadResponse::of)
+                .collect(Collectors.toList());
     }
 }

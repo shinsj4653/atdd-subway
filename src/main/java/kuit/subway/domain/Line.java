@@ -2,14 +2,9 @@ package kuit.subway.domain;
 
 import jakarta.persistence.*;
 import kuit.subway.dto.BaseTimeEntity;
-import kuit.subway.dto.response.line.LineReadResponse;
-import kuit.subway.dto.response.station.StationReadResponse;
 import lombok.*;
-import org.jgrapht.GraphPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -73,12 +68,6 @@ public class Line extends BaseTimeEntity {
 
     public List<Station> getStations() {
         return this.sections.getOrderStations();
-    }
-
-    public List<StationReadResponse> getStationReadResponseList() {
-        return this.sections.getOrderStations().stream()
-                .map(StationReadResponse::of)
-                .collect(Collectors.toList());
     }
 
 }
