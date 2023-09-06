@@ -26,6 +26,10 @@ spring:
       settings:
         web-allow-others: true
 
+  thymeleaf:
+    prefix:
+      classpath: /templates
+    suffix: .html
 
 security:
   jwt:
