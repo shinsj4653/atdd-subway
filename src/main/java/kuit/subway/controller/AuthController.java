@@ -7,14 +7,16 @@ import kuit.subway.dto.response.member.MemberResponse;
 import kuit.subway.service.AuthService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/login")
+@RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
 
@@ -23,4 +25,11 @@ public class AuthController {
         TokenResponse tokenResponse = authService.createToken(request);
         return ResponseEntity.created(URI.create("/token")).body(tokenResponse);
     }
+
+    @GetMapping("/github/callback")
+    public ResponseEntity<String> getGithubToken(@RequestParam String code) throws IOException {
+        String token = authService.getGithubToken(code);
+        return ResponseEntity.ok().body(token);
+    }
+
 }
