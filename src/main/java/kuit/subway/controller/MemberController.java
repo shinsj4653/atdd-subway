@@ -49,7 +49,6 @@ public class MemberController {
     public ResponseEntity<MemberResponse> deleteMember(@PathVariable("id") Long memberId) {
         return ResponseEntity.ok(memberService.deleteMember(memberId));
     }
-
     @GetMapping("/myinfo")
     public ResponseEntity<MemberResponse> findMyMemberInfo(@LoginUserId Long memberId) {
         MemberResponse response = memberService.findMyInfo(memberId);

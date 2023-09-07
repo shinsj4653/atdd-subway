@@ -27,7 +27,7 @@ public class MemberService {
         // 중복되는 이메일이면 예외 발생
         validateSameEmail(request);
 
-        Member member = memberRepository.save(request.toMember());
+        Member member = memberRepository.save(request.toEntity());
         return MemberResponse.of(member);
     }
 
@@ -46,7 +46,7 @@ public class MemberService {
     @Transactional
     public MemberResponse updateMember(Long id, MemberRequest memberRequest) {
         Member member = validateMemberExist(id);
-        member.updateMember(memberRequest.toMember());
+        member.updateMember(memberRequest.toEntity());
         return new MemberResponse(id, memberRequest.getAge(), memberRequest.getEmail());
     }
 
