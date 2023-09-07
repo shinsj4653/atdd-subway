@@ -87,12 +87,12 @@ public class AuthAcceptanceTest extends AcceptanceTest {
     @DisplayName("내 정보 조회 인수 테스트")
     class GetMyInfo {
 
-        TokenResponse token;
+        String token;
         @BeforeEach
         void setUp() {
             회원_생성(20, "shin@gmail.com", "123");
             ExtractableResponse<Response> tokenRes = 로그인_회원_토근_생성("shin@gmail.com", "123");
-            token = tokenRes.as(TokenResponse.class);
+            token = tokenRes.as(TokenResponse.class).getAccessToken();
         }
 
         @Nested

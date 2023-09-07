@@ -19,7 +19,7 @@ public class MemberStep {
         return post(MEMBER_PATH, req);
     }
 
-    public static ExtractableResponse<Response> 내_회원_정보_요청(TokenResponse token) {
+    public static ExtractableResponse<Response> 내_회원_정보_요청(String token) {
         return getWithToken(MEMBER_PATH + "/myinfo", token);
     }
 }
