@@ -98,4 +98,10 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
         }
     }
+
+    @Nested
+    @DisplayName("Github 로그인 인수 테스트")
+    class GithubLogin {
+
+    }
 }

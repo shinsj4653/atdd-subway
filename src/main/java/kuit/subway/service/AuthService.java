@@ -59,7 +59,6 @@ public class AuthService {
         System.out.println(responseData);
 
         conn.disconnect();
-//        String accessData = access(responseData, redirectAttributes);
 
         // Map<String, String> 자료구조 타입으로 반환
         ObjectMapper objectMapper = new ObjectMapper();
