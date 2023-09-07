@@ -47,14 +47,6 @@ public class MemberAcceptanceTest extends AcceptanceTest {
                     assertEquals("shin@gmail.com", 내_회원_정보_요청_결과.jsonPath().getString("email"));
                 });
             }
-
-
-        }
-
-        @Nested
-        @DisplayName("정보 조회 실패")
-        class FailCase {
-
         }
 
     }
