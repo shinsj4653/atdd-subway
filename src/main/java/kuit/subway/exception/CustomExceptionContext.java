@@ -9,6 +9,7 @@ public enum CustomExceptionContext implements ExceptionContext {
 
     // BAD_REQUEST
     BLANK_TOKEN_ERROR("토큰이 비어있습니다.", 1010),
+    INVALID_PW_ERROR("로그인에 실패하셨습니다. 비밀번호를 다시 확인해주세요.", 2020),
 
     DUPLICATE_EMAIL_ERROR("중복되는 이메일입니다. 다른 이메일로 가입해주세요.", 1020),
 
@@ -36,9 +37,7 @@ public enum CustomExceptionContext implements ExceptionContext {
     // UNAUTHORIZED
     INVALID_BEARER_ERROR("로그인이 필요한 서비스입니다.", 2010),
     INVALID_TOKEN_ERROR("유효하지 않은 Token 입니다. 다시 로그인 해주세요.", 2011),
-    TOKEN_EXPIRED_ERROR("로그인 인증 유효기간이 만료되었습니다. 다시 로그인 해주세요.", 2012),
-    INVALID_PW_ERROR("로그인에 실패하셨습니다. 비밀번호를 다시 확인해주세요.", 2020);
-
+    TOKEN_EXPIRED_ERROR("로그인 인증 유효기간이 만료되었습니다. 다시 로그인 해주세요.", 2012);
 
 
     private final String message;

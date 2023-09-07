@@ -9,12 +9,12 @@ import static kuit.subway.utils.fixture.AuthFixture.토큰_생성_요청;
 
 public class AuthStep {
 
-    public static final String LOGIN_PATH = "/login";
+    public static final String AUTH_PATH = "/auth";
 
     public static ExtractableResponse<Response> 로그인_회원_토근_생성(String email, String password) {
 
         TokenRequest req = 토큰_생성_요청(email, password);
-        return post(LOGIN_PATH + "/token", req);
+        return post(AUTH_PATH + "/token", req);
     }
 
 

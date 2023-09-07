@@ -66,7 +66,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
             }
 
             @Test
-            @DisplayName("존재하지 않는 비밀번호로 로그인 시도 시, 401 Unauthorized를 반환한다.")
+            @DisplayName("존재하지 않는 비밀번호로 로그인 시도 시, 400 Bad Request를 반환한다.")
             void LoginFail2() {
 
                 // given
@@ -77,7 +77,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
                 ExtractableResponse<Response> 로그인_결과 = 로그인_회원_토근_생성(email, password);
 
                 // then
-                assertEquals(401, 로그인_결과.statusCode());
+                assertEquals(400, 로그인_결과.statusCode());
             }
 
         }
