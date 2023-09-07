@@ -28,8 +28,8 @@ public class AuthController {
         return ResponseEntity.created(URI.create("/token")).body(tokenResponse);
     }
 
-    @GetMapping("/github/oauth")
-    public ResponseEntity<TokenResponse> getGithubToken(@RequestParam("code") String code) throws IOException {
+    @GetMapping("/github/callback")
+    public ResponseEntity<TokenResponse> getGithubToken(@RequestParam String code) throws IOException {
         TokenResponse tokenResponse = authService.createGithubToken(code);
         return ResponseEntity.created(URI.create("/github/oauth")).body(tokenResponse);
     }

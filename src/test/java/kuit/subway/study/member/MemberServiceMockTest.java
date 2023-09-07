@@ -1,11 +1,13 @@
-package kuit.subway.study.auth;
+package kuit.subway.study.member;
 
 import kuit.subway.auth.JwtTokenProvider;
 import kuit.subway.domain.Member;
 import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
+import kuit.subway.dto.response.member.MemberResponse;
 import kuit.subway.repository.MemberRepository;
 import kuit.subway.service.AuthService;
+import kuit.subway.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,20 +20,22 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("로그인 후 회원 정보 조회 Mock 테스트")
-public class AuthServiceMockTest {
+public class MemberServiceMockTest {
 
     public static final String EMAIL = "shin@email.com";
     public static final String PASSWORD = "1234";
     public static final int AGE = 20;
 
-    @InjectMocks
-    private AuthService authService;
+    public static final String ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNjk0MDQ4Njc1LCJleHAiOjE2OTQwNTIyNzV9.3VKZXLJvnTaEk5Kf5Mko2tIkrd_ArocbH_hKhIN_V2Q";
 
+    @InjectMocks
+    private MemberService memberService;
     @Mock
     private MemberRepository memberRepository;
     @Mock
@@ -49,15 +53,14 @@ public class AuthServiceMockTest {
             void createTokenSuccess() {
 
                 // given
-                Member member = new Member(AGE, EMAIL, PASSWORD);
-                given(memberRepository.findByEmail(anyString())).willReturn(Optional.of(member));
-                given(jwtTokenProvider.createToken(member.getId())).willReturn("TOKEN");
+                Member member = new Member(1L, AGE, EMAIL, PASSWORD);
+                given(memberRepository.findById(anyLong())).willReturn(Optional.of(member));
 
                 // when
-                TokenResponse token = authService.createToken(new LoginRequest(EMAIL, PASSWORD));
+                MemberResponse myInfo = memberService.findMyInfo(member.getId());
 
                 // then
-                assertThat(token.getAccessToken()).isNotBlank();
+                assertThat(myInfo.getId()).isEqualTo(member.getId());
             }
         }
 
