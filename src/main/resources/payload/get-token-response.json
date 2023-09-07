@@ -1,4 +1,3 @@
-//token-response
 {
   "token_type":"bearer",
   "access_token":"accessToken",

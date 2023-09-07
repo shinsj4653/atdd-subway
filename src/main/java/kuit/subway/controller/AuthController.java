@@ -1,6 +1,5 @@
 package kuit.subway.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
@@ -8,13 +7,9 @@ import kuit.subway.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.*;
-import java.net.HttpURLConnection;
+import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,10 +28,10 @@ public class AuthController {
         TokenResponse tokenResponse = authService.createGithubToken(code);
         return ResponseEntity.created(URI.create("/github/oauth")).body(tokenResponse);
     }
-//    public String access(String response, RedirectAttributes redirectAttributes) throws IOException {
+//    public String access(String get-token-response.json, RedirectAttributes redirectAttributes) throws IOException {
 //
 //        ObjectMapper objectMapper = new ObjectMapper();
-//        Map<String, String> map = objectMapper.readValue(response, Map.class);
+//        Map<String, String> map = objectMapper.readValue(get-token-response.json, Map.class);
 //        String access_token = map.get("access_token");
 //
 //        URL url = new URL("https://api.github.com/user");

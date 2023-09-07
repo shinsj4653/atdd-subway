@@ -3,7 +3,6 @@ package kuit.subway.study.common;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import kuit.subway.dto.response.auth.TokenResponse;
 import org.springframework.http.MediaType;
 
 public class CommonRestAssured {
@@ -30,10 +29,20 @@ public class CommonRestAssured {
     public static ExtractableResponse<Response> getWithToken(String url, String token) {
 
         return RestAssured.given().log().all()
-                .auth().oauth2(token)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .auth().oauth2(token)
                 .when()
                 .get(url)
+                .then().log().all()
+                .extract();
+    }
+
+    public static ExtractableResponse<Response> getGithubOAuthToken(String url) {
+
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .post(url)
                 .then().log().all()
                 .extract();
     }
