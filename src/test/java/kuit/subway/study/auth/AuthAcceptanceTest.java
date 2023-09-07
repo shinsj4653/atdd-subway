@@ -5,7 +5,9 @@ import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
 import kuit.subway.dto.response.auth.TokenResponse;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.RestTemplate;
 
 import static kuit.subway.utils.step.AuthStep.로그인_회원_토근_생성;
 import static kuit.subway.utils.step.MemberStep.내_회원_정보_요청;
@@ -99,9 +101,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
         }
     }
 
-    @Nested
-    @DisplayName("Github 로그인 인수 테스트")
-    class GithubLogin {
 
-    }
+
+
 }
