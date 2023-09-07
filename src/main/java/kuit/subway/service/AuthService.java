@@ -49,14 +49,4 @@ public class AuthService {
                 .orElseThrow(() -> new NotFoundMemberException());
     }
 
-    public MemberResponse findLoginMemberByToken(String token) {
-        Long id = Long.valueOf(jwtTokenProvider.getPayload(token));
-        Optional<Member> findMemberOptional = memberRepository.findById(id);
-
-        if (findMemberOptional.isEmpty()) {
-            throw new NotFoundMemberException();
-        }
-        return MemberResponse.of(findMemberOptional.get());
-    }
-
 }

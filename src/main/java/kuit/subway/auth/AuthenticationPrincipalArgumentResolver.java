@@ -31,6 +31,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         // Hint : Authorization Extractor, JwtTokenProvider 이용
         String token = AuthorizationExtractor.extractAccessToken(request);
-        return authService.findLoginMemberByToken(token);
+        Long memberId = Long.parseLong(jwtTokenProvider.getPayload(token));
+        return memberId;
     }
 }

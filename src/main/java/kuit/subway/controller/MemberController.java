@@ -51,7 +51,8 @@ public class MemberController {
     }
 
     @GetMapping("/myinfo")
-    public ResponseEntity<MemberResponse> findMyMemberInfo(@LoginUserId MemberResponse memberResponse) {
-        return ResponseEntity.ok(memberResponse);
+    public ResponseEntity<MemberResponse> findMyMemberInfo(@LoginUserId Long memberId) {
+        MemberResponse response = memberService.findMyInfo(memberId);
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,5 +1,6 @@
 package kuit.subway.service;
 
+import kuit.subway.auth.JwtTokenProvider;
 import kuit.subway.domain.Member;
 import kuit.subway.dto.request.member.MemberRequest;
 import kuit.subway.dto.response.member.MemberResponse;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,5 +65,14 @@ public class MemberService {
     private void validateSameEmail(MemberRequest request) {
         memberRepository.findByEmail(request.getEmail())
                 .ifPresent(findMember -> { throw new DuplicateEmailException(); });
+    }
+
+    public MemberResponse findMyInfo(Long memberId) {
+        Optional<Member> findMemberOptional = memberRepository.findById(memberId);
+
+        if (findMemberOptional.isEmpty()) {
+            throw new NotFoundMemberException();
+        }
+        return MemberResponse.of(findMemberOptional.get());
     }
 }
