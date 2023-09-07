@@ -1,5 +1,6 @@
 package kuit.subway.controller;
 
+import jakarta.validation.Valid;
 import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
 import kuit.subway.service.AuthService;
@@ -16,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/token")
-    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
         TokenResponse tokenResponse = authService.createToken(request);
         return ResponseEntity.created(URI.create("/token")).body(tokenResponse);
     }

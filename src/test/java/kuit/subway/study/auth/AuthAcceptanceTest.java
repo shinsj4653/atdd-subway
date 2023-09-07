@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
 import kuit.subway.dto.response.auth.TokenResponse;
 import org.junit.jupiter.api.*;
+import org.springframework.http.HttpStatus;
 
 import static kuit.subway.utils.step.AuthStep.로그인_회원_토근_생성;
 import static kuit.subway.utils.step.MemberStep.내_회원_정보_요청;
@@ -22,7 +23,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
         @BeforeEach
         void setUp() {
-            memberCreateRes = 회원_생성(20, "shin@gmail.com", "123");
+            memberCreateRes = 회원_생성(20, "shin@gmail.com", "12345678!");
         }
 
         @Nested
@@ -35,7 +36,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
                 // given
                 String email = memberCreateRes.jsonPath().getString("email");
-                String password = "123";
+                String password = "12345678!";
 
                 // when
                 ExtractableResponse<Response> 토큰_생성_결과 = 로그인_회원_토근_생성(email, password);
@@ -56,7 +57,7 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
                 // given
                 String email = "wrong@gmail.com";
-                String password = "123";
+                String password = "12345678!";
 
                 // when
                 ExtractableResponse<Response> 로그인_결과 = 로그인_회원_토근_생성(email, password);
@@ -71,13 +72,28 @@ public class AuthAcceptanceTest extends AcceptanceTest {
 
                 // given
                 String email = memberCreateRes.jsonPath().getString("email");
-                String password = "1234";
+                String password = "12345678!!";
 
                 // when
                 ExtractableResponse<Response> 로그인_결과 = 로그인_회원_토근_생성(email, password);
 
                 // then
                 assertEquals(400, 로그인_결과.statusCode());
+            }
+
+            @Test
+            @DisplayName("로그인 시, 검증조건을 만족하지 못하는 경우 400 Bad Request를 반환한다.")
+            void LoginFail3() {
+
+                // given
+                String email = "test";
+                String password = "12345678";
+
+                // when
+                ExtractableResponse<Response> 로그인_결과 = 로그인_회원_토근_생성(email, password);
+
+                // then
+                assertEquals(HttpStatus.BAD_REQUEST.value(), 로그인_결과.statusCode());
             }
 
         }
