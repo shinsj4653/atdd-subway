@@ -1,18 +1,12 @@
 package kuit.subway.controller;
 
-import kuit.subway.domain.Member;
-import kuit.subway.dto.request.auth.TokenRequest;
+import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
-import kuit.subway.dto.response.member.MemberResponse;
 import kuit.subway.service.AuthService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -22,7 +16,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/token")
-    public ResponseEntity<TokenResponse> login(@RequestBody TokenRequest request) {
+    public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request) {
         TokenResponse tokenResponse = authService.createToken(request);
         return ResponseEntity.created(URI.create("/token")).body(tokenResponse);
     }

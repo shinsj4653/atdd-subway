@@ -2,9 +2,8 @@ package kuit.subway.study.auth;
 
 import kuit.subway.auth.JwtTokenProvider;
 import kuit.subway.domain.Member;
-import kuit.subway.dto.request.auth.TokenRequest;
+import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
-import kuit.subway.dto.response.member.MemberResponse;
 import kuit.subway.repository.MemberRepository;
 import kuit.subway.service.AuthService;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +54,7 @@ public class AuthServiceMockTest {
                 given(jwtTokenProvider.createToken(member.getId())).willReturn("TOKEN");
 
                 // when
-                TokenResponse token = authService.createToken(new TokenRequest(EMAIL, PASSWORD));
+                TokenResponse token = authService.createToken(new LoginRequest(EMAIL, PASSWORD));
 
                 // then
                 assertThat(token.getAccessToken()).isNotBlank();

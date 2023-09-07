@@ -2,7 +2,7 @@ package kuit.subway.service;
 
 import kuit.subway.auth.JwtTokenProvider;
 import kuit.subway.domain.Member;
-import kuit.subway.dto.request.auth.TokenRequest;
+import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
 import kuit.subway.exception.notfound.member.NotFoundMemberException;
 import kuit.subway.exception.badrequest.auth.InvalidPasswordException;
@@ -19,9 +19,9 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public TokenResponse createToken(TokenRequest tokenRequest) {
-        Member member = findMember(tokenRequest);
-        if (member.isInvalidPassword(tokenRequest.getPassword())) {
+    public TokenResponse createToken(LoginRequest loginRequest) {
+        Member member = findMember(loginRequest);
+        if (member.isInvalidPassword(loginRequest.getPassword())) {
             throw new InvalidPasswordException();
         }
         String accessToken = jwtTokenProvider.createToken(member.getId());
@@ -29,8 +29,8 @@ public class AuthService {
     }
 
 
-    private Member findMember(TokenRequest tokenRequest) {
-        return memberRepository.findByEmail(tokenRequest.getEmail())
+    private Member findMember(LoginRequest loginRequest) {
+        return memberRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundMemberException());
     }
 
