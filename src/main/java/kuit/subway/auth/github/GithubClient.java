@@ -2,6 +2,7 @@ package kuit.subway.auth.github;
 
 import kuit.subway.dto.request.github.GithubAccessTokenRequest;
 import kuit.subway.dto.response.github.GithubAccessTokenResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,14 +15,15 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class GithubClient {
-    @Value("${github.client.id}")
+
+    @Value("${github.client_id}")
     private String clientId;
-    @Value("${github.client.secret}")
+
+    @Value("${github.client_secret}")
     private String clientSecret;
+
     @Value("${github.url.access-token}")
     private String tokenUrl;
-    @Value("${github.url.profile}")
-    private String profileUrl;
 
     public String getAccessTokenFromGithub(String code) {
         GithubAccessTokenRequest githubAccessTokenRequest = new GithubAccessTokenRequest(

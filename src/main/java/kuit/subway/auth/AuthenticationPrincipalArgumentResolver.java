@@ -15,7 +15,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
 
     // LoginUserId 어노테이션이 붙은 파라미터를 가져온다.

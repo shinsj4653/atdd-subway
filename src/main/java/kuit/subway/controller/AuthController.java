@@ -20,13 +20,13 @@ public class AuthController {
     @PostMapping("/login/token")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
         TokenResponse tokenResponse = authService.createToken(request);
-        return ResponseEntity.created(URI.create("/token")).body(tokenResponse);
+        return ResponseEntity.created(URI.create("/login/token")).body(tokenResponse);
     }
 
     @GetMapping("/login/github")
-    public ResponseEntity<TokenResponse> getGithubToken(@RequestParam String code) throws IOException {
-        TokenResponse tokenResponse = authService.createGithubToken(code);
-        return ResponseEntity.created(URI.create("/github/oauth")).body(tokenResponse);
+    public ResponseEntity<TokenResponse> loginWithGithub(@RequestParam String code) {
+        TokenResponse tokenResponse = authService.createTokenFromGithub(code);
+        return ResponseEntity.created(URI.create("/login/github")).body(tokenResponse);
     }
 
 }

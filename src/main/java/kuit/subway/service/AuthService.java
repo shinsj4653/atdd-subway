@@ -2,6 +2,7 @@ package kuit.subway.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kuit.subway.auth.JwtTokenProvider;
+import kuit.subway.auth.github.GithubClient;
 import kuit.subway.domain.Member;
 import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
@@ -9,6 +10,7 @@ import kuit.subway.exception.notfound.member.NotFoundMemberException;
 import kuit.subway.exception.badrequest.auth.InvalidPasswordException;
 import kuit.subway.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.Token;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,8 @@ import java.net.HttpURLConnection;
 public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
+    private final GithubClient githubClient;
+
 
     public TokenResponse createToken(LoginRequest loginRequest) {
         Member member = findMember(loginRequest);
@@ -34,7 +38,12 @@ public class AuthService {
         return TokenResponse.of(accessToken);
     }
 
-    public TokenResponse createTokenFromGithub(String code) throws IOException {
+    public TokenResponse createTokenFromGithub(String code) {
+        String accessTokenFromGithub = githubClient.getAccessTokenFromGithub(code);
+        return TokenResponse.of(accessTokenFromGithub);
+    }
+
+    public TokenResponse createGithubToken(String code) throws IOException {
         URL url = new URL("https://github.com/login/oauth/access_token");
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
