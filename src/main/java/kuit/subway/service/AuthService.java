@@ -68,6 +68,30 @@ public class AuthService {
         return TokenResponse.of(result.get("access_token"));
     }
 
+    //    public String access(String get-token-response.json, RedirectAttributes redirectAttributes) throws IOException {
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Map<String, String> map = objectMapper.readValue(get-token-response.json, Map.class);
+//        String access_token = map.get("access_token");
+//
+//        URL url = new URL("https://api.github.com/user");
+//        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//        conn.setRequestMethod("GET");
+//        conn.setRequestProperty("Accept", "application/json");
+//        conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36");
+//        conn.setRequestProperty("Authorization", "token " + access_token);
+//
+//        int responseCode = conn.getResponseCode();
+//
+//        String result = getResponse(conn, responseCode);
+//        System.out.println(result);
+//
+//        conn.disconnect();
+//        redirectAttributes.addFlashAttribute("result", result);
+//        return result;
+//    }
+//
+
     private Member findMember(LoginRequest loginRequest) {
         return memberRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new NotFoundMemberException());

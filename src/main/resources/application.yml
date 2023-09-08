@@ -39,6 +39,9 @@ security:
   github:
     client_id: 67bb75be8f468a39c2d1
     client_secret: d9485c513f8595d1dd9c499eca6aa379221f9ad5
+    url:
+      access-token: https://github.com/login/oauth/access_token
+      profile: https://api.github.com/user
 
 
 logging.level:

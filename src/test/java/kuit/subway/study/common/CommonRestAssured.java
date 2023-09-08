@@ -37,12 +37,12 @@ public class CommonRestAssured {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> getGithubOAuthToken(String url) {
+    public static ExtractableResponse<Response> getGithubOAuthToken(String path) {
 
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when()
-                .post(url)
+                .get(path)
                 .then().log().all()
                 .extract();
     }
