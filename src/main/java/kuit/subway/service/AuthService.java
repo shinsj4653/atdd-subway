@@ -25,7 +25,6 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
 
-    @Transactional
     public TokenResponse createToken(LoginRequest loginRequest) {
         Member member = findMember(loginRequest);
         if (member.isInvalidPassword(loginRequest.getPassword())) {
@@ -35,8 +34,7 @@ public class AuthService {
         return TokenResponse.of(accessToken);
     }
 
-    @Transactional
-    public TokenResponse createGithubToken(String code) throws IOException {
+    public TokenResponse createTokenFromGithub(String code) throws IOException {
         URL url = new URL("https://github.com/login/oauth/access_token");
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
