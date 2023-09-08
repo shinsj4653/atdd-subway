@@ -6,6 +6,7 @@ import kuit.subway.auth.github.GithubClient;
 import kuit.subway.domain.Member;
 import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
+import kuit.subway.dto.response.github.GithubProfileResponse;
 import kuit.subway.exception.notfound.member.NotFoundMemberException;
 import kuit.subway.exception.badrequest.auth.InvalidPasswordException;
 import kuit.subway.repository.MemberRepository;
@@ -40,7 +41,10 @@ public class AuthService {
 
     public TokenResponse createTokenFromGithub(String code) {
         String accessTokenFromGithub = githubClient.getAccessTokenFromGithub(code);
-        return TokenResponse.of(accessTokenFromGithub);
+        Map<Object, Object> githubProfile = githubClient.getGithubProfileFromGithub(accessTokenFromGithub);
+
+        String token = jwtTokenProvider.createToken(String.valueOf(githubProfile.get("email")));
+        return TokenResponse.of(token);
     }
 
     public TokenResponse createGithubToken(String code) throws IOException {

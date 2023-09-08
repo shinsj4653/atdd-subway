@@ -2,6 +2,7 @@ package kuit.subway.controller;
 
 import jakarta.validation.Valid;
 import kuit.subway.dto.request.auth.LoginRequest;
+import kuit.subway.dto.request.github.GithubTokenRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
 import kuit.subway.service.AuthService;
 import lombok.RequiredArgsConstructor;

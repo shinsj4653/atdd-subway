@@ -47,6 +47,16 @@ public class CommonRestAssured {
                 .extract();
     }
 
+    public static ExtractableResponse<Response> startGithubLogin(String path) {
+
+        return RestAssured.given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get(path)
+                .then().log().all()
+                .extract();
+    }
+
     public static ExtractableResponse<Response> put(String url, Object params) {
 
         return RestAssured.given().log().all()

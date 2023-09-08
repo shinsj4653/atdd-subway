@@ -33,6 +33,19 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String createToken(String email) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+
+        return Jwts.builder()
+                .setSubject(String.valueOf(email))
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
+
+
     // TODO : 예외 처리
     public void validateToken(String token) {
         try {
