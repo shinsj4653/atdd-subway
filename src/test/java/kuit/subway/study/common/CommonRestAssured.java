@@ -3,6 +3,11 @@ package kuit.subway.study.common;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import kuit.subway.auth.github.GithubClient;
+import kuit.subway.dto.request.github.GithubAccessTokenRequest;
+import kuit.subway.dto.response.github.GithubAccessTokenResponse;
+import kuit.subway.utils.fixture.GithubFixture;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 public class CommonRestAssured {
@@ -37,24 +42,17 @@ public class CommonRestAssured {
                 .extract();
     }
 
-    public static ExtractableResponse<Response> getGithubOAuthToken(String path) {
+    public static GithubAccessTokenResponse getGithubOAuthToken(GithubFixture client) {
 
         return RestAssured.given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(new GithubAccessTokenRequest(client.getClientId(), client.getClientSecret(), client.getCode()))
                 .when()
-                .get(path)
+                .post("/api/auth/login/oauth/access_token")
                 .then().log().all()
-                .extract();
-    }
-
-    public static ExtractableResponse<Response> startGithubLogin(String path) {
-
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when()
-                .get(path)
-                .then().log().all()
-                .extract();
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .as(GithubAccessTokenResponse.class);
     }
 
     public static ExtractableResponse<Response> put(String url, Object params) {

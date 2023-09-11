@@ -3,6 +3,8 @@ package kuit.subway.utils.step;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.dto.request.auth.LoginRequest;
+import kuit.subway.dto.response.github.GithubAccessTokenResponse;
+import kuit.subway.utils.fixture.GithubFixture;
 
 import static kuit.subway.study.common.CommonRestAssured.getGithubOAuthToken;
 import static kuit.subway.study.common.CommonRestAssured.post;
@@ -18,8 +20,8 @@ public class AuthStep {
         return post(AUTH_PATH + "/login/token", req);
     }
 
-    public static ExtractableResponse<Response> 깃허브_로그인_요청(String path) {
-        return getGithubOAuthToken(path);
+    public static GithubAccessTokenResponse 깃허브_로그인_요청(GithubFixture client) {
+        return getGithubOAuthToken(client);
     }
 
 }
