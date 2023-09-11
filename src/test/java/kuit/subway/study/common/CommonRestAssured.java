@@ -42,19 +42,6 @@ public class CommonRestAssured {
                 .extract();
     }
 
-    public static GithubAccessTokenResponse getGithubOAuthToken(GithubFixture client) {
-
-        return RestAssured.given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(new GithubAccessTokenRequest(client.getClientId(), client.getClientSecret(), client.getCode()))
-                .when()
-                .post("/api/auth/login/oauth/access_token")
-                .then().log().all()
-                .statusCode(HttpStatus.OK.value())
-                .extract()
-                .as(GithubAccessTokenResponse.class);
-    }
-
     public static ExtractableResponse<Response> put(String url, Object params) {
 
         return RestAssured.given().log().all()

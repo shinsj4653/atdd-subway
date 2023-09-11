@@ -1,25 +1,25 @@
 package kuit.subway.study.auth;
 
-import kuit.subway.dto.request.github.GithubAccessTokenRequest;
 import kuit.subway.dto.response.github.GithubAccessTokenResponse;
 import kuit.subway.dto.response.github.GithubProfileResponse;
 import kuit.subway.utils.fixture.GithubFixture;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/auth")
 @RestController
-public class FakeGithubController {
-    @PostMapping("/login/oauth/access_token")
+public class ExampleGithubController {
+    @GetMapping("/auth/login/github")
     public ResponseEntity<GithubAccessTokenResponse> getAccessToken(
-            @RequestBody GithubAccessTokenRequest tokenRequest) {
-        try {
-            return ResponseEntity.ok(GithubFixture.getAccessToken(tokenRequest.getCode()));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.ok(null);
+            @RequestParam String code) {
+
+        if (!code.isBlank()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        GithubAccessTokenResponse response = new GithubAccessTokenResponse("token1");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/user")
