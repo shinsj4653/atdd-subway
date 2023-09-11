@@ -14,7 +14,7 @@ public class ExampleGithubController {
     public ResponseEntity<GithubAccessTokenResponse> getAccessToken(
             @RequestParam String code) {
 
-        if (!code.isBlank()) {
+        if (code.isBlank()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
