@@ -108,17 +108,17 @@ public class AuthService {
                 .orElseThrow(() -> new NotFoundMemberException());
     }
 
-    private String getResponse(HttpURLConnection conn, int responseCode) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        if (responseCode == 200) {
-            try (InputStream is = conn.getInputStream();
-                 BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-                for (String line = br.readLine(); line != null; line = br.readLine()) {
-                    sb.append(line);
-                }
-            }
-        }
-        return sb.toString();
-    }
+//    private String getResponse(HttpURLConnection conn, int responseCode) throws IOException {
+//        StringBuilder sb = new StringBuilder();
+//        if (responseCode == 200) {
+//            try (InputStream is = conn.getInputStream();
+//                 BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+//                for (String line = br.readLine(); line != null; line = br.readLine()) {
+//                    sb.append(line);
+//                }
+//            }
+//        }
+//        return sb.toString();
+//    }
 
 }
