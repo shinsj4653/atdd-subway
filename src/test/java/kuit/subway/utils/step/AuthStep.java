@@ -15,7 +15,7 @@ public class AuthStep {
     public static ExtractableResponse<Response> 로그인_회원_토근_생성(String email, String password) {
 
         LoginRequest req = 토큰_생성_요청(email, password);
-        return post(AUTH_PATH + "/token", req);
+        return post(AUTH_PATH + "/login/token", req);
     }
 
     public static ExtractableResponse<Response> 깃허브_로그인_요청(String path) {
