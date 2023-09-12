@@ -43,7 +43,6 @@ public class AuthService {
     public TokenResponse createTokenFromGithub(String code) {
         GithubAccessTokenResponse accessToken = githubClient.getAccessTokenFromGithub(code);
         GithubProfileResponse githubProfile = githubClient.getGithubProfileFromGithub(accessToken.getAccessToken());
-
         String token = jwtTokenProvider.createToken(Long.parseLong(githubProfile.getId()));
         return TokenResponse.of(token);
     }

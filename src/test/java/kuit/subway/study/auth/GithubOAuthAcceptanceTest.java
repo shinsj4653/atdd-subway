@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
 @DisplayName("Github OAuth 로그인 인수테스트")
-public class GithubOAuthAcceptanceTest extends AcceptanceTest {
+public class GithubOAuthAcceptanceTest {
 
     @Autowired
     private ExampleGithubClient exampleGithubClient;

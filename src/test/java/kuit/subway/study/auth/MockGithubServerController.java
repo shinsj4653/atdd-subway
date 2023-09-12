@@ -14,7 +14,7 @@ import java.util.Map;
 public class MockGithubServerController {
     @PostMapping(path = "/login/oauth/access_token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<GithubAccessTokenResponse> getAccessToken(
-            HttpEntity<GithubAccessTokenRequest> request) {
+            HttpEntity<String> request) {
 
         GithubAccessTokenResponse response = new GithubAccessTokenResponse("token1");
         return ResponseEntity.ok(response);
@@ -24,9 +24,7 @@ public class MockGithubServerController {
     public ResponseEntity<GithubProfileResponse> getGithubProfile(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION) String accessToken) {
 
-        Map<Object, Object> response = new HashMap<>();
-        response.put("id", 54321L);
-
+        GithubProfileResponse response = new GithubProfileResponse("1234", "shin@gmail.com", "싱준");
         return ResponseEntity.ok(response);
     }
 

@@ -42,12 +42,6 @@ github:
   url:
     access-token: https://github.com/login/oauth/access_token
     profile: https://api.github.com/user
-  test :
-    server:
-      port: 8888
-    url :
-      access-token : http://localhost:8888/login/oauth/access_token
-      profile: http://localhost:8888/user
 
 logging.level:
   org.hibernate.SQL: debug
