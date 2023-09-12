@@ -6,7 +6,6 @@ import io.restassured.response.Response;
 import kuit.subway.auth.github.GithubClient;
 import kuit.subway.dto.request.github.GithubAccessTokenRequest;
 import kuit.subway.dto.response.github.GithubAccessTokenResponse;
-import kuit.subway.utils.fixture.GithubFixture;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
