@@ -6,6 +6,7 @@ import kuit.subway.auth.github.GithubClient;
 import kuit.subway.domain.Member;
 import kuit.subway.dto.request.auth.LoginRequest;
 import kuit.subway.dto.response.auth.TokenResponse;
+import kuit.subway.dto.response.github.GithubAccessTokenResponse;
 import kuit.subway.dto.response.github.GithubProfileResponse;
 import kuit.subway.exception.notfound.member.NotFoundMemberException;
 import kuit.subway.exception.badrequest.auth.InvalidPasswordException;
@@ -40,12 +41,10 @@ public class AuthService {
     }
 
     public TokenResponse createTokenFromGithub(String code) {
-        String accessTokenFromGithub = githubClient.getAccessTokenFromGithub(code);
-        Map<Object, Object> githubProfile = githubClient.getGithubProfileFromGithub(accessTokenFromGithub);
+        GithubAccessTokenResponse accessToken = githubClient.getAccessTokenFromGithub(code);
+        GithubProfileResponse githubProfile = githubClient.getGithubProfileFromGithub(accessToken.getAccessToken());
 
-        Long githubId = Long.parseLong(String.valueOf(githubProfile.get("id")));
-
-        String token = jwtTokenProvider.createToken(githubId);
+        String token = jwtTokenProvider.createToken(Long.parseLong(githubProfile.getId()));
         return TokenResponse.of(token);
     }
 

@@ -6,12 +6,12 @@ import kuit.subway.dto.response.github.GithubProfileResponse;
 import java.util.Arrays;
 
 public enum GithubFixture {
-    주디("client_id_1", "client_secret_1", "1", "token1", "주디", "jurlring", "one@gmail.com", 20),
-    슬로("client_id_2", "client_secret_2", "2", "token2", "슬로", "hanull", "two@gmail.com", 21),
-    레넌("client_id_3", "client_secret_3", "3", "token3", "레넌", "brorae", "three@gmail.com", 22),
-    기론("client_id_4", "client_secret_4", "4", "token4", "기론", "gyuchool", "four@gmail.com", 25);
+    주디(1234L, "client_secret_1", "1", "token1", "주디", "jurlring", "one@gmail.com"),
+    슬로(1235L, "client_secret_2", "2", "token2", "슬로", "hanull", "two@gmail.com"),
+    레넌(1236L, "client_secret_3", "3", "token3", "레넌", "brorae", "three@gmail.com",),
+    기론(1238L, "client_secret_4", "4", "token4", "기론", "gyuchool", "four@gmail.com");
 
-    private final String clientId;
+    private final Long clientId;
 
     private final String clientSecret;
     private final String code;
@@ -19,10 +19,7 @@ public enum GithubFixture {
     private final String name;
     private final String githubId;
     private final String email;
-
-    private final int age;
-
-    GithubFixture(String clientId, String clientSecret, String code, String token, String name, String githubId, String email, int age) {
+    GithubFixture(Long clientId, String clientSecret, String code, String token, String name, String githubId, String email) {
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.code = code;
@@ -30,7 +27,6 @@ public enum GithubFixture {
         this.name = name;
         this.githubId = githubId;
         this.email = email;
-        this.age = age;
     }
     public static GithubAccessTokenResponse getAccessToken(String code) {
         GithubFixture client = Arrays.stream(values())
@@ -45,10 +41,10 @@ public enum GithubFixture {
                 .filter(value -> value.token.equals(token))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("로그인이 실패했습니다."));
-        return new GithubProfileResponse(client.email, client.age);
+        return new GithubProfileResponse(client.clientId, client.name, client.email);
     }
 
-    public String getClientId() {
+    public Long getClientId() {
         return clientId;
     }
 

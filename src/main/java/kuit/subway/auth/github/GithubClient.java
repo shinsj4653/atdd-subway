@@ -32,7 +32,7 @@ public class GithubClient {
     @Value("${github.url.profile}")
     private String profileUrl;
 
-    public String getAccessTokenFromGithub(String code) {
+    public GithubAccessTokenResponse getAccessTokenFromGithub(String code) {
         GithubAccessTokenRequest githubAccessTokenRequest = new GithubAccessTokenRequest(
                 clientId,
                 clientSecret,
@@ -46,17 +46,17 @@ public class GithubClient {
                 githubAccessTokenRequest, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        String accessToken = restTemplate
+        GithubAccessTokenResponse response = restTemplate
                 .exchange(tokenUrl, HttpMethod.POST, httpEntity, GithubAccessTokenResponse.class)
-                .getBody()
-                .getAccessToken();
-        if (accessToken == null) {
+                .getBody();
+
+        if (response.getAccessToken() == null) {
             throw new RuntimeException();
         }
-        return accessToken;
+        return response;
     }
 
-    public Map<Object, Object> getGithubProfileFromGithub(String accessToken) {
+    public GithubProfileResponse getGithubProfileFromGithub(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "token " + accessToken);
 
@@ -65,7 +65,7 @@ public class GithubClient {
 
         try {
             return restTemplate
-                    .exchange(profileUrl, HttpMethod.GET, httpEntity, Map.class)
+                    .exchange(profileUrl, HttpMethod.GET, httpEntity, GithubProfileResponse.class)
                     .getBody();
         } catch (HttpClientErrorException e) {
             throw new RuntimeException();
