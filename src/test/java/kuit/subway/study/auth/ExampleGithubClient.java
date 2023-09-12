@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "example", url = "http://localhost:9000" , configuration = {HeaderConfiguration.class})
+@FeignClient(value = "example", url = "http://localhost:9000/" , configuration = {HeaderConfiguration.class})
 public interface ExampleGithubClient {
 
     @GetMapping("/auth/login/github")

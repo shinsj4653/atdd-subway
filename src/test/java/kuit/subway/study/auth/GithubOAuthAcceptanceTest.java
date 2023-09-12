@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DisplayName("Github OAuth 로그인 인수테스트")
-public class GithubOAuthAcceptanceTest {
+public class GithubOAuthAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private ExampleGithubClient exampleGithubClient;
