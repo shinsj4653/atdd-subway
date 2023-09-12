@@ -2,6 +2,7 @@ package kuit.subway.study.auth;
 
 import kuit.subway.AcceptanceTest;
 import kuit.subway.dto.response.github.GithubAccessTokenResponse;
+import kuit.subway.dto.response.github.GithubProfileResponse;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.boot.test.context.SpringBootTest.*;
 
 @SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
@@ -18,7 +20,7 @@ import static org.springframework.boot.test.context.SpringBootTest.*;
 public class GithubOAuthAcceptanceTest {
 
     @Autowired
-    private ExampleGithubClient exampleGithubClient;
+    private FakeGithubClient fakeGithubClient;
     @Nested
     @DisplayName("Github 로그인 인수 테스트")
     class GithubLogin {
@@ -31,11 +33,15 @@ public class GithubOAuthAcceptanceTest {
             void githubLoginSuccess() {
 
                 // given
-                GithubAccessTokenResponse 깃허브_로그인_요청_결과 = exampleGithubClient.githubTokenRequest("code1");
+                GithubAccessTokenResponse 깃허브_토큰_요청_결과 = fakeGithubClient.getAccessTokenFromGithub("code1");
+                GithubProfileResponse 깃허브_프로필_요청_결과 = fakeGithubClient.getGithubProfileFromGithub(깃허브_토큰_요청_결과.getAccessToken());
 
                 // when
                 // then
-                assertThat(깃허브_로그인_요청_결과.getAccessToken()).isNotNull();
+                assertAll(() -> {
+                    assertThat(깃허브_토큰_요청_결과.getAccessToken()).isNotNull();
+                    assertThat(깃허브_프로필_요청_결과.getName()).isEqualTo("shin");
+                });
             }
 
         }
