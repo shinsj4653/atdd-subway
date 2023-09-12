@@ -43,7 +43,9 @@ public class AuthService {
         String accessTokenFromGithub = githubClient.getAccessTokenFromGithub(code);
         Map<Object, Object> githubProfile = githubClient.getGithubProfileFromGithub(accessTokenFromGithub);
 
-        String token = jwtTokenProvider.createToken(String.valueOf(githubProfile.get("email")));
+        Long githubId = Long.parseLong(String.valueOf(githubProfile.get("id")));
+
+        String token = jwtTokenProvider.createToken(githubId);
         return TokenResponse.of(token);
     }
 
