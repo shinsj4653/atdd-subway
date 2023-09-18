@@ -20,3 +20,4 @@
 
 1. `JWT 토큰을 이용한 로그인` 로직을 구현해보면서 SpringBoot 에서 Bearer Token 기반 로그인에 필요한 `JwtTokenProvider와 AuthConfig의 ArgumentResolver 의 역할`을 학습하였습니다.
 2. `Github OAuth 로그인 프로세스`를 공부하였고, 이를 프로젝트에서 구현하기 위해 Github 사이트 내 로그인 API의 활용 능력을 길렀습니다. 또한, OAuth를 사용하는 로직의 테스트를 외부 API에 의존하지 않게 하기 위해 `가짜 API Controller 및 Client를 설계`하여 활용하였습니다.
+3. AuthConfig 클래스를 구성하면서 스프링부트 내에서 로그인이 아닌 또 다른 Config 설정들을 찾아보면서, `Spring 공통 정책` 에 대해 알게되었고, 그 중 `Filter` 기능을 사용하여 `XSS 공격 방지 및 CORS 설정`을 현장실습 프로젝트에 적용해봤습니다. 
