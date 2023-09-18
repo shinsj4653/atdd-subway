@@ -4,7 +4,7 @@
 현장실습 프로젝트에 실제로 적용해본 개념
 
 1. RestControllerAdvice 및 ExceptionHandler 이용한 예외처리 핸들링
-2. Filter를 사용한 XSS 공격 방지 및 CORS 정책 적용
+2. Spring 공통 정책 수립을 위한 Filter 기반 XSS 공격 방지 및 CORS 정책 적용
 ```
 
 ## 1주차
