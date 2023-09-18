@@ -1,0 +1,9 @@
+server:
+  port: 8888
+
+github:
+  client_id: client_id
+  client_secret: client_secret
+  url :
+    access-token : http://localhost:8888/login/oauth/access_token
+    profile: http://localhost:8888/user

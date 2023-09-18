@@ -1,7 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:~/test;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    #    url: jdbc:h2:~/atdd-study4;MODE=MYSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;
+    url: jdbc:h2:tcp://localhost/~/atdd-study
     username: sa
+
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -23,3 +25,24 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
+
+  thymeleaf:
+    prefix:
+      classpath: /templates
+    suffix: .html
+
+security:
+  jwt:
+    token:
+      secret-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9ih1aovtQShabQ7l0cINw4k1fagApg3qLWiB8Kt59Lno
+      expire-length: 3600000
+github:
+  client_id: 67bb75be8f468a39c2d1
+  client_secret: d9485c513f8595d1dd9c499eca6aa379221f9ad5
+  url:
+    access-token: https://github.com/login/oauth/access_token
+    profile: https://api.github.com/user
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.orm.jdbc.bind: trace
