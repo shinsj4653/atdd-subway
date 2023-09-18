@@ -5,6 +5,7 @@
 
 1. RestControllerAdvice 및 ExceptionHandler를 이용한 예외처리 핸들링
 2. Spring 공통 정책 수립을 위한 Filter 기반 XSS 공격 방지 및 CORS 정책 적용
+3. MockMVC를 이용한 Controller 테스팅
 ```
 
 ## 1주차
