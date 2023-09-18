@@ -1,7 +1,9 @@
 # ATDD-Subway Study
 
 ```text
-@RestControllerAdvice 어노테이션을 이용한 AOP 예외처리 핸들링 및 Filter를 사용한 XSS 공격 방지 및 CORS 정책 적용은 현장실습 프로젝트에서 실제로 적용해봤습니다.
+현장실습 프로젝트에 실제로 적용해본 개념
+1. @RestControllerAdvice 어노테이션을 이용한 AOP 예외처리 핸들링
+2. Filter를 사용한 XSS 공격 방지 및 CORS 정책 적용
 ```
 
 ## 1주차
