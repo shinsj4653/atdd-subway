@@ -14,6 +14,7 @@
 1. `RestAssured API` 로 인수테스트 작성하는 방법을 익혔습니다. 해당 API의 응답 형태를 `ResponseEntity`를 사용하여 정의해줬습니다. 이를 통해, SpringBoot 내의 HTTP 요청 및 응답 처리 방식에 대해 공부할 수 있었습니다.
 2. `RestControllerAdvice`를 사용하여 @Controller 어노테이션이 적용된 모든 곳에서의 발생되는 예외에 대해 catch를 한 후, 해당 예외들을 `ExceptionHandler`를 통해 처리해줬습니다.
 3. 노선과 지하철 역은 Many to Many 관계이므로, 이를 구간이라는 `일급컬렉션 엔티티`를 활용하여 One To Many, Many To One 관계를 유지할 수 있도록 수정해줬습니다.
+4. 랜덤포트를 사용하여 인수 테스팅을 하는 이유를 학습하면서 자바의 스레드 및 트랜잭션의 개념에 대해 학습할 수 있었습니다.
 
 ## 2주차
 > 2차 과제의 목표는 JPA의 활용입니다.
