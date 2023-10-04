@@ -14,8 +14,9 @@
 1. `RestAssured API` 로 인수테스트 작성하는 방법을 익혔습니다. 해당 API의 응답 형태를 `ResponseEntity`를 사용하여 정의해줬습니다. 이를 통해, SpringBoot 내의 HTTP 요청 및 응답 처리 방식에 대해 공부할 수 있었습니다.
 2. `RestControllerAdvice`를 사용하여 @Controller 어노테이션이 적용된 모든 곳에서의 발생되는 예외에 대해 catch를 한 후, 해당 예외들을 `ExceptionHandler`를 통해 처리해줬습니다.
 3. 노선과 지하철 역은 Many to Many 관계이므로, 이를 구간이라는 `일급컬렉션 엔티티`를 활용하여 One To Many, Many To One 관계를 유지할 수 있도록 수정해줬습니다.
-4. DatabaseCleanup을 해주는 결정적인 이유 -> 
+4. DatabaseCleanup을 해주는 결정적인 이유 -> https://newwisdom.tistory.com/95
 5. 랜덤포트를 사용하여 인수 테스팅을 하는 이유를 학습하면서 자바의 스레드 및 트랜잭션의 개념에 대해 학습할 수 있었습니다.
+참고 : https://velog.io/@rg970604/%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85-SpringbootTest%EC%9D%98-RANDOMPORT-%ED%99%98%EA%B2%BD%EC%97%90%EC%84%9C-Transactional-%EC%96%B4%EB%85%B8%ED%85%8C%EC%9D%B4%EC%85%98%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%96%88%EC%9D%84-%EB%95%8C-RestAssured-GET-%EC%9A%94%EC%B2%AD%EC%9D%B4-%EC%88%98%ED%96%89%EB%90%98%EC%A7%80-%EC%95%8A%EB%8A%94-%EA%B2%BD%EC%9A%B0
 
 ## 2주차
 > 2차 과제의 목표는 JPA의 활용입니다.
