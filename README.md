@@ -1,5 +1,8 @@
 # ATDD-Subway Study
 
+매주마다 배정된 과제 진행 및 코드 리뷰를 통한 피드백 적용  
+ex) Week1 - Step3 : https://github.com/Konkuk-KUIT/KUIT1_atdd-subway/pull/14
+
 ```text
 현장실습 프로젝트에 실제로 적용해본 개념
 
